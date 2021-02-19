@@ -40,6 +40,34 @@ $posts = [
         'avatar' => 'userpic.jpg'
     ]
 ];
+
+function cutStr($str, $length = 300) {
+
+    if(mb_strlen($str) > $length) {
+
+        $arr_str = explode(" ", $str);
+   
+        $word_length = 0;
+
+        $str_out = [];
+
+        foreach($arr_str as $word) {
+
+            while($word_length < $length) {
+                $word_length += mb_strlen($word) + 1;
+                $str_out[] = $word;
+                break; 
+            };
+            
+                    
+        };
+        $cutting_str = implode(" ", $str_out) . "...";
+
+        return "<p>{$cutting_str}</p><a class='post-text__more-link' href='#'>Читать далее</a>";
+    };
+
+    return "<p>{$str}</p>";   
+};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -254,7 +282,7 @@ $posts = [
                     <cite>Неизвестный Автор</cite>
                 </blockquote>
                 <?php elseif($post['type'] === 'post-text'):?>
-                    <p><?=$post['content'];?></p>
+                    <p><?=cutStr($post['content']);?></p>
                 <?php elseif($post['type'] === 'post-photo'):?>
                     <div class="post-photo__image-wrapper"> 
                         <img src="img/<?=$post['content'];?>" alt="Фото от пользователя" width="360" height="240"> 
