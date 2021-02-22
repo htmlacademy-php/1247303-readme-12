@@ -48,7 +48,7 @@ $posts = [
 
 * Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
 */
-function cutStr(string $str, int $length = 300) : ыstring {
+function cutStr(string $str, int $length = 300) : string {
 
     if(mb_strlen($str) > $length) {
 
