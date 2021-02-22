@@ -40,30 +40,35 @@ $posts = [
         'avatar' => 'userpic.jpg'
     ]
 ];
+/**
+* Возращает урезанную строку. По умолчанию урезает строку до 300 символов и прибавляет ссылку "Читать далее".
+* Принимает два параметра:
+* @param  string $str Строка, которую необходима урезать
+* @param  int $length Число, количество символов до которого нужно урезать строку. Значение по умолчанию - 300
 
-function cutStr($str, $length = 300) {
+* Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
+*/
+function cutStr(string $str, int $length = 300) : ыstring {
 
     if(mb_strlen($str) > $length) {
 
-        $arr_str = explode(" ", $str);
+        $words = explode(" ", $str);
    
-        $word_length = 0;
+        $currentTextLength = 0;
 
-        $str_out = [];
+        $strOut = [];
 
-        foreach($arr_str as $word) {
+        foreach($words as $word) {
 
-            while($word_length < $length) {
-                $word_length += mb_strlen($word) + 1;
-                $str_out[] = $word;
-                break; 
-            };
-            
-                    
+            if($currentTextLength < $length) {
+                $currentTextLength += mb_strlen($word) + 1;
+                $strOut[] = $word;
+            }   
+
         };
-        $cutting_str = implode(" ", $str_out) . "...";
+        $cuttingStr = implode(" ", $strOut) . "...";
 
-        return "<p>{$cutting_str}</p><a class='post-text__more-link' href='#'>Читать далее</a>";
+        return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='#'>Читать далее</a>";
     };
 
     return "<p>{$str}</p>";   
@@ -282,7 +287,7 @@ function cutStr($str, $length = 300) {
                     <cite>Неизвестный Автор</cite>
                 </blockquote>
                 <?php elseif($post['type'] === 'post-text'):?>
-                    <p><?=cutStr($post['content']);?></p>
+                    <?=cutStr($post['content']);?>
                 <?php elseif($post['type'] === 'post-photo'):?>
                     <div class="post-photo__image-wrapper"> 
                         <img src="img/<?=$post['content'];?>" alt="Фото от пользователя" width="360" height="240"> 
