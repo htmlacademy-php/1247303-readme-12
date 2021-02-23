@@ -63,16 +63,19 @@ function cutStr(string $str, int $length = 300) : string {
             if($currentTextLength < $length) {
                 $currentTextLength += mb_strlen($word) + 1;
                 $strOut[] = $word;
-            }   
+            } 
+            else {
+                break;
+            }  
 
-        };
+        }
         $cuttingStr = implode(" ", $strOut) . "...";
 
         return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='#'>Читать далее</a>";
-    };
+    }
 
     return "<p>{$str}</p>";   
-};
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
