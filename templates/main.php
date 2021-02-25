@@ -135,6 +135,7 @@
                     </div> -->
                 <?php endif ?> 
                 </div>
+                <?php $publicationsDate = generate_random_date($key)?>
                 <footer class="post__footer">
                     <div class="post__author">
                         <a class="post__author-link" href="#" title="Автор">
@@ -143,7 +144,7 @@
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"><?=htmlspecialchars($post['author']); ?></b>
-                                <time class="post__time" datetime=""><?=relativeDate(generate_random_date($key)) ?></time>
+                                <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) ?></time>
                             </div>
                         </a>
                     </div>
