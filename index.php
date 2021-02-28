@@ -154,7 +154,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
 /**
  * Возвращает количество прошедшего времени от даты публикации поста
  *
- * @param string $date дата публикации поста Строка даты в формате 'Y-m-d H:i:s'
+ * @param string $date дата публикации поста, cтрока даты в формате 'Y-m-d H:i:s'
  * @return string Относительное количество времени в формате:
  *
  * если от $date до текущего времени прошло меньше 60 минут, то формат будет вида “% минут назад”;
@@ -174,29 +174,38 @@ function relativeDate(string $date): string
     $minutes = intval($interval->format("%i"));
     
     if($days > 35) { 
-        $monts = floor($days/30);
+        $monts = round($days/30);
         $declensionMonts = get_noun_plural_form($monts, "месяц", "месяца", "месяцев");
         return "{$monts} {$declensionMonts} назад";
     }
-    if($days > 7 & $days < 35) {
-        $weeks = floor($days/4);
-        $declensionWeeks = get_noun_plural_form($weeks, "неделя", "недели", "недель");
-        return "{$weeks} {$declensionWeeks} назад";
+    if($days >= 7 && $days < 35) {
+        if($weeks <= 10) {
+            return "1 неделю назад"; 
+        }
+        if($weeks <= 17) {
+            return "2 недели назад"; 
+        }
+        if($weeks <= 24) {
+            return "3 недели назад"; 
+        }
+        if($weeks <= 31) {
+            return "4 недели назад"; 
+        }
+
+        return "5 недель назад"; 
     }
     if($days < 7 && $days > 0) {
         $declensionDays = get_noun_plural_form($days, "день", "дня", "дней");
         return "{$days} {$declensionDays} назад";
     }
-    if ($days === 0) {
-        if($hours < 24 & $hours > 0) {
-            $declensionHours = get_noun_plural_form($hours, "час", "часа", "часов");
-            return "{$hours} {$declensionHours} назад";  
-        }
-        if($hours === 0) {
-            $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
-            return "{$minutes} минут назад";  
-        }
+
+    if($hours < 24 && $hours > 0) {
+        $declensionHours = get_noun_plural_form($hours, "час", "часа", "часов");
+        return "{$hours} {$declensionHours} назад";  
     }
+    
+    $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
+    return "{$minutes} минут назад";  
 }
 
 
