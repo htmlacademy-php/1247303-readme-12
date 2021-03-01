@@ -179,20 +179,9 @@ function relativeDate(string $date): string
         return "{$monts} {$declensionMonts} назад";
     }
     if($days >= 7 && $days < 35) {
-        if($days <= 10) {
-            return "1 неделю назад"; 
-        }
-        if($days <= 17) {
-            return "2 недели назад"; 
-        }
-        if($days<= 24) {
-            return "3 недели назад"; 
-        }
-        if($days <= 31) {
-            return "4 недели назад"; 
-        }
-
-        return "5 недель назад"; 
+        $weeks = floor($days/7);
+        $declensionWeeks = get_noun_plural_form($weeks, "неделя", "недели", "недель");
+        return "{$weeks} {$declensionWeeks} назад";
     }
     if($days < 7 && $days > 0) {
         $declensionDays = get_noun_plural_form($days, "день", "дня", "дней");
