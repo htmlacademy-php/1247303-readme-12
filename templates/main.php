@@ -135,7 +135,7 @@
                     </div> -->
                 <?php endif ?> 
                 </div>
-                <?php $publicationsDate = generate_random_date($key)?>
+                <?php $publicationsDate = "02.03.2021 22:53"?>
                 <footer class="post__footer">
                     <div class="post__author">
                         <a class="post__author-link" href="#" title="Автор">

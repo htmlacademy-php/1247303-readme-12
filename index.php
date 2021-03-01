@@ -172,11 +172,14 @@ function relativeDate(string $date): string
     $days = intval($interval->format("%a"));
     $hours = intval($interval->format("%H"));
     $minutes = intval($interval->format("%i"));
-    
-    if($days > 35) { 
-        $monts = floor($days/30);
-        $declensionMonts = get_noun_plural_form($monts, "месяц", "месяца", "месяцев");
-        return "{$monts} {$declensionMonts} назад";
+
+    if ($timePublication->getTimestamp() >= $today->getTimestamp()) {
+        return '0 минут назад';
+    }
+    if($days >= 35) { 
+        $months = floor($days/30);
+        $declensionmonths = get_noun_plural_form($months, "месяц", "месяца", "месяцев");
+        return "{$months} {$declensionmonths} назад";
     }
     if($days >= 7 && $days < 35) {
         $weeks = floor($days/7);
