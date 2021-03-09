@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 07 2021 г., 14:19
+-- Время создания: Мар 09 2021 г., 20:34
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.3.17
 
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL,
-  `publictation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `content` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `publictation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `content` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -45,7 +45,7 @@ CREATE TABLE `likes` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -55,10 +55,11 @@ CREATE TABLE `likes` (
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL,
-  `content` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `sender_user_id` int(11) NOT NULL,
-  `recipient_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `recipient_user_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -70,8 +71,8 @@ CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  `publictation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `relations_tags_id` int(11) NOT NULL,
+  `publictation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `title` text NOT NULL,
   `text` text,
   `author_quote` text,
@@ -84,6 +85,18 @@ CREATE TABLE `posts` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `relations_posts_tags`
+--
+
+CREATE TABLE `relations_posts_tags` (
+  `id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `tags_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `subscriptions`
 --
 
@@ -91,7 +104,7 @@ CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL,
   `follower_user_id` int(11) NOT NULL,
   `following_user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -101,8 +114,8 @@ CREATE TABLE `subscriptions` (
 
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL,
-  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -112,9 +125,9 @@ CREATE TABLE `tags` (
 
 CREATE TABLE `types` (
   `id` int(11) NOT NULL,
-  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `class_name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `class_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -124,13 +137,13 @@ CREATE TABLE `types` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `dt_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` char(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `avatar_path` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `token` char(32) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `dt_add` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` char(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar_path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `token` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Индексы сохранённых таблиц
@@ -151,8 +164,7 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `post_id` (`post_id`);
+  ADD UNIQUE KEY `user_id` (`user_id`,`post_id`);
 
 --
 -- Индексы таблицы `messages`
@@ -161,7 +173,8 @@ ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
   ADD KEY `content` (`content`),
   ADD KEY `sender_user_id` (`sender_user_id`),
-  ADD KEY `recipient_user_id` (`recipient_user_id`);
+  ADD KEY `recipient_user_id` (`recipient_user_id`),
+  ADD KEY `status` (`status`);
 
 --
 -- Индексы таблицы `posts`
@@ -171,14 +184,22 @@ ALTER TABLE `posts`
   ADD KEY `user_id` (`user_id`),
   ADD KEY `type_id` (`type_id`),
   ADD KEY `publictation_date` (`publictation_date`),
-  ADD KEY `tag_id` (`tag_id`),
   ADD KEY `img_path` (`img_path`),
   ADD KEY `video_path` (`video_path`),
   ADD KEY `site_path` (`site_path`),
-  ADD KEY `count_view` (`count_view`);
+  ADD KEY `count_view` (`count_view`),
+  ADD KEY `relations_tags_id` (`relations_tags_id`);
 ALTER TABLE `posts` ADD FULLTEXT KEY `title` (`title`);
 ALTER TABLE `posts` ADD FULLTEXT KEY `text` (`text`);
 ALTER TABLE `posts` ADD FULLTEXT KEY `author_quote` (`author_quote`);
+
+--
+-- Индексы таблицы `relations_posts_tags`
+--
+ALTER TABLE `relations_posts_tags`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `tags_id` (`tags_id`);
 
 --
 -- Индексы таблицы `subscriptions`
@@ -241,6 +262,12 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `relations_posts_tags`
+--
+ALTER TABLE `relations_posts_tags`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
