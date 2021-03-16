@@ -4,43 +4,44 @@ $is_auth = rand(0, 1);
 
 $user_name = ''; // укажите здесь ваше имя
 
-$posts = [
-    [
-        'title' => 'Цитата',
-        'type' => 'post-quote',
-        'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-        'author' => 'Лариса',
-        'avatar' => 'userpic-larisa-small.jpg'
-    ],
-    [
-        'title' => 'Игра престолов',
-        'type' => 'post-text',
-        'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
-        'author' => 'Владик',
-        'avatar' => 'userpic.jpg'
-    ],
-    [
-        'title' => 'Наконец, обработал фотки!',
-        'type' => 'post-photo',
-        'content' => 'rock-medium.jpg',
-        'author' => 'Виктор',
-        'avatar' => 'userpic-mark.jpg'
-    ],
-    [
-        'title' => 'Моя мечта',
-        'type' => 'post-photo',
-        'content' => 'coast-medium.jpg',
-        'author' => 'Лариса',
-        'avatar' => 'userpic-larisa-small.jpg'
-    ],
-    [
-        'title' => 'Лучшие курсы',
-        'type' => 'post-link',
-        'content' => 'www.htmlacademy.ru',
-        'author' => 'Владик',
-        'avatar' => 'userpic.jpg'
-    ]
-];
+$con = mysqli_connect("localhost", "root", "root", "schema");
+if ($con == false) {
+   print("Ошибка подключения: " . mysqli_connect_error());
+} 
+else { 
+    $sql_types = "SELECT type, class_name FROM types";
+
+    $types_content = mysqli_fetch_all(mysqli_query($con, $sql_types), MYSQLI_ASSOC);
+
+    $sql_posts = "SELECT 
+                        posts.content,
+                        posts.title, 
+                        posts.publictation_date,
+                        posts.author_quote, 
+                        posts.img_path, 
+                        posts.video_path,
+                        site_path,
+                        users.first_name, 
+                        users.last_name, 
+                        users.avatar_path, 
+                        types.class_name 
+
+                FROM `posts` 
+                    LEFT JOIN 
+                        `users` 
+                    ON 
+                    posts.user_id = users.id
+
+                    LEFT JOIN `types` 
+                    ON 
+                    posts.type_id = types.id 
+
+                order by `count_view` DESC";
+
+    $posts = mysqli_fetch_all(mysqli_query($con, $sql_posts), MYSQLI_ASSOC);
+
+}
+
 
 
 
@@ -81,29 +82,6 @@ function cutStr(string $str, int $length = 300) : string {
     return "<p>{$str}</p>";   
 }
 
-function generate_random_date($index)
-{
-    $deltas = [['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11]];
-    $dcnt = count($deltas);
-
-    if ($index < 0) {
-        $index = 0;
-    }
-
-    if ($index >= $dcnt) {
-        $index = $dcnt - 1;
-    }
-
-    $delta = $deltas[$index];
-    $timeval = rand(1, current($delta));
-    $timename = key($delta);
-
-    $ts = strtotime("$timeval $timename ago");
-    $dt = date('Y-m-d H:i:s', $ts);
-
-    return $dt;
-    
-}
 
 /**
  * Возвращает корректную форму множественного числа
@@ -219,7 +197,7 @@ function include_template($name, array $data = [])
     return $result;
 }
 
-$page_content = include_template('main.php', ['posts' => $posts]);
+$page_content = include_template('main.php', ['posts' => $posts, 'types_content' => $types_content]);
 
 $layout_content = include_template('layout.php', ['is_auth' => $is_auth,'content' => $page_content, 'title' => 'readme: блог, каким он должен быть']);
 
