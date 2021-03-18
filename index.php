@@ -1,19 +1,36 @@
 <?php 
+$config = require 'config.php';
 
 $is_auth = rand(0, 1);
 
 $user_name = ''; // укажите здесь ваше имя
 
-$con = mysqli_connect("localhost", "root", "root", "schema");
-if ($con == false) {
-   print("Ошибка подключения: " . mysqli_connect_error());
-} 
-else { 
-    $sql_types = "SELECT type, class_name FROM types";
+function db_connect(string $host, string $user, string $password, string $db) 
+{
+    $con = mysqli_connect($host, $user, $password, $db);
 
-    $types_content = mysqli_fetch_all(mysqli_query($con, $sql_types), MYSQLI_ASSOC);
+    if ($con == false) {
+       print("Ошибка подключения: " . mysqli_connect_error());
+       exit();
+    } 
+    else {
+        return $con;
+    }
 
-    $sql_posts = "SELECT 
+}
+
+$connection = db_connect($config["host"], $config["user"], $config["password"], $config["db"]);
+
+function get_array_db($connect, string $request) 
+{
+  $array = mysqli_fetch_all(mysqli_query($connect, $request), MYSQLI_ASSOC);
+
+  return $array;
+};
+
+$types_content = get_array_db($connection, "SELECT type, class_name FROM types");
+
+$sql_posts = "SELECT 
                         posts.content,
                         posts.title, 
                         posts.publictation_date,
@@ -38,11 +55,7 @@ else {
 
                 order by `count_view` DESC";
 
-    $posts = mysqli_fetch_all(mysqli_query($con, $sql_posts), MYSQLI_ASSOC);
-
-}
-
-
+$posts = get_array_db($connection, $sql_posts);
 
 
 /**
@@ -53,7 +66,8 @@ else {
 
 * Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
 */
-function cutStr(string $str, int $length = 300) : string {
+function cutStr(string $str, int $length = 300) : string 
+{
 
     if(mb_strlen($str) > $length) {
 
