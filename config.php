@@ -4,5 +4,5 @@ return [
     'host' => 'localhost',
     'user' => 'root',
     'password' => 'root',
-    'db' => 'schema'
+    'db' => 'readme'
 ];

@@ -1,62 +1,11 @@
 <?php 
 $config = require 'config.php';
 
+require_once('functions/db.php');
+
 $is_auth = rand(0, 1);
 
 $user_name = ''; // укажите здесь ваше имя
-
-function db_connect(string $host, string $user, string $password, string $db) 
-{
-    $con = mysqli_connect($host, $user, $password, $db);
-
-    if ($con == false) {
-       print("Ошибка подключения: " . mysqli_connect_error());
-       exit();
-    } 
-    else {
-        return $con;
-    }
-
-}
-
-$connection = db_connect($config["host"], $config["user"], $config["password"], $config["db"]);
-
-function get_array_db($connect, string $request) 
-{
-  $array = mysqli_fetch_all(mysqli_query($connect, $request), MYSQLI_ASSOC);
-
-  return $array;
-};
-
-$types_content = get_array_db($connection, "SELECT type, class_name FROM types");
-
-$sql_posts = "SELECT 
-                        posts.content,
-                        posts.title, 
-                        posts.publictation_date,
-                        posts.author_quote, 
-                        posts.img_path, 
-                        posts.video_path,
-                        site_path,
-                        users.first_name, 
-                        users.last_name, 
-                        users.avatar_path, 
-                        types.class_name 
-
-                FROM `posts` 
-                    LEFT JOIN 
-                        `users` 
-                    ON 
-                    posts.user_id = users.id
-
-                    LEFT JOIN `types` 
-                    ON 
-                    posts.type_id = types.id 
-
-                order by `count_view` DESC";
-
-$posts = get_array_db($connection, $sql_posts);
-
 
 /**
 * Возращает урезанную строку. По умолчанию урезает строку до 300 символов и прибавляет ссылку "Читать далее".
