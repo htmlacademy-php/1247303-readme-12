@@ -1,5 +1,4 @@
 
-<?php print_r(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)); ?>
 <div class="container">
         <h1 class="page__title page__title--popular">Популярное</h1>
     </div>
