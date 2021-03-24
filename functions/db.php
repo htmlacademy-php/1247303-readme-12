@@ -8,7 +8,7 @@
 * @param  string $password Пароль пользователя MySQL, 
 * @param  string $db Имя базы данных.
 */
-function db_connect( string $host, string $user, string $password, string $db): mysqli 
+function db_connect(string $host, string $user, string $password, string $db): mysqli 
 {
     $con = mysqli_connect($host, $user, $password, $db);
 
@@ -42,33 +42,51 @@ function get_array_db(mysqli $connect, string $request): array
   }  
 };
 
-$connection = db_connect($config["host"], $config["user"], $config["password"], $config["db"]);
+/**
+ * Функция получает типы контента из БД
+ * @param mysqli $connection объект соединения с БД
+ * @return array массив с типами контента
+ */
+function get_content_types(mysqli $connection): array
+{
+    $sql = "SELECT type, class_name FROM types";
+    return get_array_db($connection, $sql);
+}
 
-$types_content = get_array_db($connection, "SELECT type, class_name FROM types");
+/**
+ * Функция получает список постов из БД
+ * @param mysqli $connection объект соединения с БД
+ * @return array массив с списком постов
+ */
+function get_posts(mysqli $connection): array
+{
+    $sql = "SELECT 
+              posts.content,
+              posts.title, 
+              posts.publictation_date,
+              posts.author_quote, 
+              posts.img_path, 
+              posts.video_path,
+              site_path,
+              users.first_name, 
+              users.last_name, 
+              users.avatar_path, 
+              types.class_name
 
-$sql_posts = "SELECT 
-                        posts.content,
-                        posts.title, 
-                        posts.publictation_date,
-                        posts.author_quote, 
-                        posts.img_path, 
-                        posts.video_path,
-                        site_path,
-                        users.first_name, 
-                        users.last_name, 
-                        users.avatar_path, 
-                        types.class_name 
+            FROM `posts` 
 
-                FROM `posts` 
-                    LEFT JOIN 
-                        `users` 
-                    ON 
-                    posts.user_id = users.id
+            LEFT JOIN 
+              `users` 
+            ON 
+              posts.user_id = users.id
 
-                    LEFT JOIN `types` 
-                    ON 
-                    posts.type_id = types.id 
+            LEFT JOIN 
+              `types` 
+            ON 
+              posts.type_id = types.id 
 
-                order by `count_view` DESC";
+            order by `count_view` DESC";
+    return get_array_db($connection, $sql);
+}
 
-$posts = get_array_db($connection, $sql_posts);
+

@@ -7,6 +7,12 @@ $is_auth = rand(0, 1);
 
 $user_name = ''; // укажите здесь ваше имя
 
+$connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
+
+$types_content = get_content_types($connection);
+
+$posts = get_posts($connection);
+
 /**
 * Возращает урезанную строку. По умолчанию урезает строку до 300 символов и прибавляет ссылку "Читать далее".
 * Принимает два параметра:
