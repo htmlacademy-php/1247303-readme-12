@@ -44,7 +44,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
         default:
             return $many;
     }
-}
+};
 
 /**
  * Возвращает количество прошедшего времени от даты публикации поста
@@ -93,4 +93,4 @@ function relativeDate(string $date): string
     
     $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
     return "{$minutes} {$declensionMinutes} назад";  
-}
+};

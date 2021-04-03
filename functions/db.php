@@ -43,6 +43,27 @@ function get_array_db(mysqli $connect, string $request): array
 };
 
 /**
+* Возвращает 1-ый строку массива данных из БД, на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  string $request Строка запроса к базе данных.
+*/
+function get_count(mysqli $connect, string $request) 
+{
+  $query =  mysqli_query($connect, $request); 
+
+  if($query == false) {
+    print("Ошибка запроса в БД: " .  mysqli_error($connect));
+    exit();
+  }
+  else {
+    $array = mysqli_fetch_array($query);
+
+    return $array[0];
+  } 
+};
+
+/**
  * Функция получает типы контента из БД
  * @param mysqli $connection объект соединения с БД
  * @return array массив с типами контента
@@ -51,15 +72,16 @@ function get_content_types(mysqli $connection): array
 {
     $sql = "SELECT type, id, class_name FROM types";
     return get_array_db($connection, $sql);
-}
+};
 
 /**
  * Функция получает список постов из БД, и фильтрует список по запросу
  * @param mysqli $connection объект соединения с БД
- * @param ?int $request запрос на сортировку постов
+ * @param ?int $type_id id категории типа контента
+ * @param ?int $post_id id поста
  * @return array массив с списком постов
  */
-function get_posts(mysqli $connection, ?int $types_id = NULL, ?int $post_id = NULL): array
+function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL): array
 {
 
     $sql = "SELECT 
@@ -90,35 +112,15 @@ function get_posts(mysqli $connection, ?int $types_id = NULL, ?int $post_id = NU
             ON 
               posts.type_id = types.id ";
 
-      if($types_id) {
-        $sql .= "WHERE types.id = {$types_id}";
+      if($type_id) {
+        $sql .= "WHERE types.id = {$type_id}";
       }
       if($post_id) {
         $sql .= "WHERE posts.id = {$post_id}";
       }
 
     return get_array_db($connection, $sql);
-}
-/**
- * Функция возвращает из БД количество строк по запросу
- * @param mysqli $connection объект соединения с БД
- * @param ?int $request запрос, формирующий таблицу по нужным параметрам
- * @return $count_rows число, количество строк
- */
-function get_count_rows(mysqli $connect, string $request):int
-{
-  $query =  mysqli_query($connect, $request); 
-  
-  if($query == false) {
-    print("Ошибка запроса в БД: " .  mysqli_error($connect));
-    exit();
-  }
-  else {
-    $count_rows = mysqli_num_rows($query);
-
-    return $count_rows;
-  } 
-}
+};
 
 /**
  * Функция возвращает из БД количество лайков к посту
@@ -127,10 +129,10 @@ function get_count_rows(mysqli $connect, string $request):int
  */
 function get_count_likes(mysqli $connection, int $post_id):int
 {
-  $sql = "SELECT id FROM `likes` WHERE post_id = {$post_id}";
+  $sql = "SELECT COUNT(id) AS total_count FROM `likes` WHERE post_id = {$post_id}";
 
-  return get_count_rows($connection,$sql);
-}
+  return get_count($connection,$sql);
+};
 
 /**
  * Функция получает из БД количество комментариев к посту
@@ -139,10 +141,10 @@ function get_count_likes(mysqli $connection, int $post_id):int
  */
 function get_count_comments(mysqli $connection, int $post_id):int
 {
-  $sql = "SELECT id FROM `comments` WHERE post_id = {$post_id}";
+  $sql = "SELECT COUNT(id) AS total_count FROM `comments` WHERE post_id = {$post_id}";
 
-  return get_count_rows($connection,$sql);
-}
+  return get_count($connection,$sql);
+};
 
 /**
  * Функция получает из БД количество публикаций (постов) пользователя
@@ -151,10 +153,10 @@ function get_count_comments(mysqli $connection, int $post_id):int
  */
 function get_quantity_post(mysqli $connection, int $user_id):int
 {
-  $sql = "SELECT id FROM `posts` WHERE user_id = {$user_id}";
+  $sql = "SELECT COUNT(id) AS total_count FROM `posts` WHERE user_id = {$user_id}";
 
-  return get_count_rows($connection,$sql);
-}
+  return get_count($connection,$sql);
+};
 
 /**
  * Функция получает из БД количество подписчиков пользователя
@@ -163,10 +165,10 @@ function get_quantity_post(mysqli $connection, int $user_id):int
  */
 function get_quantity_followers(mysqli $connection, int $user_id):int
 {
-  $sql = "SELECT id FROM `subscriptions` WHERE user_id = {$user_id}";
+  $sql = "SELECT COUNT(id) AS total_count FROM `subscriptions` WHERE user_id = {$user_id}";
 
-  return get_count_rows($connection,$sql);
-}
+  return get_count($connection,$sql);
+};
 
 /**
  * Функция получает из БД количество просмотров публикации (поста)
@@ -177,18 +179,8 @@ function get_count_views(mysqli $connection, int $post_id):int
 {
   $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = {$post_id}";
 
-  $query =  mysqli_query($connection, $sql); 
-
-  if($query == false) {
-    print("Ошибка запроса в БД: " .  mysqli_error($connect));
-    exit();
-  }
-  else {
-    $array = mysqli_fetch_array($query);
-
-    return $array[0];
-  } 
-}
+  return get_count($connection,$sql);
+};
 
 /**
  * Функция получает список комментариев из БД к конкретной публикации
@@ -223,7 +215,7 @@ function get_comments(mysqli $connection, ?int $post_id = NULL): array
             WHERE posts.id = {$post_id}";
 
     return get_array_db($connection, $sql);
-}
+};
 
 /**
  * Функция получает список тэгов из БД к конкретной публикации
@@ -253,4 +245,5 @@ function get_tags(mysqli $connection, ?int $post_id = NULL): array
   WHERE posts.id = {$post_id}";
 
   return get_array_db($connection, $sql);
-}
+};
+

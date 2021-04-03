@@ -4,20 +4,17 @@
  * @param string $parametr параметр, по которому необходимо получить данные из GET-запроса 
  * @return int число из запроса
  */
-function get_data_from_params(string $parametr):?int
+function get_data_from_params(string $param):?int
 {
-    $data = $_GET["{$parametr}"];
+    $data = $_GET[$param]?? NULL;
 
-    if(isset($data)) {
-
-        if(is_numeric($data)) {
-            return (int) $data;
-        }
-        else {
-            exit('Неверный параметр в запросе');
-        }
+    if(is_null($data)) {
+        return NULL;
+    };
+    if(is_numeric($data)) {
+        return (int) $data;
     }
     else {
-        return NULL;
-    }
+        exit('Неверный параметр в запросе');  
+    };
 };

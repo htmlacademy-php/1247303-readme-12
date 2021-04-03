@@ -1,7 +1,5 @@
 <?php
 
-$is_auth = rand(0, 1);
-
 function include_template($name, array $data = [])
 {
     $name = 'templates/' . $name;
@@ -18,7 +16,7 @@ function include_template($name, array $data = [])
     $result = ob_get_clean();
 
     return $result;
-}
+};
 
 /**
 * Возращает урезанную строку. По умолчанию урезает строку до 300 символов и прибавляет ссылку "Читать далее".
@@ -56,4 +54,5 @@ function cutStr(string $str, int $length = 300) : string
     }
 
     return "<p>{$str}</p>";   
-}
+};
+

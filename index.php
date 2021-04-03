@@ -7,7 +7,7 @@ require_once('functions/template.php');
 require_once('functions/request.php');
 require_once('functions/date.php');
 
-
+$is_auth = rand(0, 1);
 
 $user_name = ''; // укажите здесь ваше имя
 
