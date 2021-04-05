@@ -37,13 +37,13 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                        <a class="filters__button filters__button--ellipse filters__button--all <?= (!$get_id) ? 'filters__button--active' : '' ?>" href="/1247303-readme-12">
                             <span>Все</span>
                         </a>
                     </li>
-                    <?php foreach ($types_content as $key => $type): ?>
+                    <?php foreach ($types_content as $key => $type):?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?=$type['class_name']; ?> button" href="#">
+                        <a class="filters__button filters__button--<?=$type['class_name'];?> button <?= ((int) $type['id'] === $get_id) ? 'filters__button--active' : '' ?>" href="index.php?categories-id=<?=$type['id'];?>">
                             <span class="visually-hidden"><?=$type['type']; ?></span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-<?=$type['class_name']; ?>"></use>
@@ -55,10 +55,13 @@
             </div>
         </div>
         <div class="popular__posts">
-            <?php foreach ($posts as $key => $post): ?>
+            <?php foreach ($posts as $key => $post):?>
+                
             <article class="popular__post post post-<?=htmlspecialchars($post['class_name']); ?>">
                 <header class="post__header">
-                    <h2><?=htmlspecialchars($post['title']); ?></h2>
+                    <a href="post.php?post-id=<?=($post['id']); ?>">
+                        <h2><?=htmlspecialchars($post['title']); ?></h2>
+                    </a>
                 </header>
                 <div class="post__main">
                 <?php if($post['class_name'] === 'quote'):?>
@@ -126,14 +129,14 @@
                                 <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                     <use xlink:href="#icon-heart-active"></use>
                                 </svg>
-                                <span>0</span>
-                                <span class="visually-hidden">количество лайков</span>
+                                <span><?=get_count_likes($connection, $post['id']); ?></span>
+                                <span class="visually-hidden">Количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                                 <svg class="post__indicator-icon" width="19" height="17">
                                     <use xlink:href="#icon-comment"></use>
                                 </svg>
-                                <span>0</span>
+                                <span><?=get_count_comments($connection, $post['id']); ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
                         </div>
