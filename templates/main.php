@@ -1,4 +1,3 @@
-
 <div class="container">
         <h1 class="page__title page__title--popular">Популярное</h1>
     </div>
@@ -82,7 +81,7 @@
                     <a class="post-link__external" href="<?=htmlspecialchars($post['site_path']);?>" title="Перейти по ссылке">
                         <div class="post-link__info-wrapper">
                             <div class="post-link__icon-wrapper">
-                                <img src="<?=htmlspecialchars($post['img_path']);?>" alt="Иконка">
+                                <img src="https://www.google.com/s2/favicons?domain=<?= $post['site_path'] ?>" alt="Иконка">
                             </div>
                             <div class="post-link__info">
                                 <h3><?=$post['title']; ?></h3>
@@ -92,18 +91,19 @@
                     </a>
                 </div>
                 <?php 
-                    elseif($post['type'] === 'post-video'):?>
+                    elseif($post['class_name'] === 'video'):?>
                     <div class="post-video__block">
                         <div class="post-video__preview">
-                            <?=htmlspecialchars($post['video_path']);?>
-                            <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
+                        <?= embed_youtube_video($post['video_path']); ?>
+                            <!-- embed_youtube_video($post['video_path']) -->
+                            <!-- <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188"> -->
                         </div>
-                        <a href="post-details.html" class="post-video__play-big button">
+                        <!-- <a href="post-details.html" class="post-video__play-big button">
                             <svg class="post-video__play-big-icon" width="14" height="14">
                                 <use xlink:href="#icon-video-play-big"></use>
                             </svg>
                             <span class="visually-hidden">Запустить проигрыватель</span>
-                        </a> 
+                        </a>  -->
                     </div>
                 <?php endif ?> 
                 </div>

@@ -9,7 +9,7 @@ require_once('functions/date.php');
 
 $is_auth = rand(0, 1);
 
-$user_name = ''; // укажите здесь ваше имя
+$user_name = 'Иван Тестов'; // укажите здесь ваше имя
 
 
 $connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
@@ -33,6 +33,7 @@ $page_content = include_template('main.php',
 
 $layout_content = include_template('layout.php', 
     [
+     'user_name' => $user_name,
      'is_auth' => $is_auth,
      'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть'

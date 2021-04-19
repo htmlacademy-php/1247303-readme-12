@@ -6,6 +6,9 @@ require_once('functions/template.php');
 require_once('functions/request.php');
 require_once('functions/date.php');
 
+$is_auth = rand(0, 1);
+
+$user_name = 'Иван Тестов';
 
 $post_id = get_data_from_params('post-id');
 
@@ -19,7 +22,7 @@ $quantity_comments = get_count_comments($connection, $post_id);
 
 $comments = get_comments($connection, $post_id);
 
-$tags = get_tags($connection, $post_id);
+$tags = get_tags_post($connection, $post_id);
 
 $quantity_post_author = get_quantity_post($connection, $post[0]["user_id"]);
 
@@ -28,6 +31,9 @@ $followers_author = get_quantity_followers($connection, $post[0]["user_id"]);
 $count_views = get_count_views($connection, $post[0]["user_id"]);
 
 $post_content = include_template("post-{$post[0]["class_name"]}.php",['post' => $post]);
+
+$title = $post[0]["title"];
+
 
 $post = include_template('post-details.php', 
     [
@@ -45,9 +51,10 @@ $post = include_template('post-details.php',
 
 $layout_content = include_template('layout.php', 
     [
+     'user_name' => $user_name,
      'is_auth' => $is_auth,
      'content' => $post,
-     'title' => 'readme: блог, каким он должен быть'
+     'title' => $title
     ]
 );
 
