@@ -91,7 +91,6 @@ $add_post_form = include_template("add-post-form-{$get_type_name}.php",
     [
         'get_id' => $get_id,
         'filter_form_data' => $filter_form_data,
-        'filling_errors' => $filling_errors,
         'form_errors' => $form_errors
     ]
 );
