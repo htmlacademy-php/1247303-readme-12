@@ -1,18 +1,7 @@
 <?php 
-$config = require 'config.php';
-
-require_once('functions/db.php');
-require_once('functions/template.php');
-require_once('functions/request.php');
-require_once('functions/date.php');
-
-$is_auth = rand(0, 1);
-
-$user_name = 'Иван Тестов';
+require_once('bootstrap.php');
 
 $post_id = get_data_from_params('post-id');
-
-$connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
 
 $post = get_posts($connection,NULL,$post_id);
 
