@@ -19,7 +19,7 @@ function db_connect(string $host, string $user, string $password, string $db): m
     else {
         return $con;
     }
-};
+}
 
 
 /**
@@ -41,7 +41,7 @@ function set_request_db(mysqli $connect, string $request)
 
     return true;
   }  
-};
+}
 
 /**
 * Возвращает массив с данными из базы данных, к которой уже произведено подключение на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
@@ -62,7 +62,7 @@ function get_array_db(mysqli $connect, string $request): array
 
     return $array;
   }  
-};
+}
 
 /**
 * Возвращает значение из массива данных из БД по нулевому индексу, на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
@@ -84,7 +84,7 @@ function get_first_value(mysqli $connect, string $request)
   
     return $array[0];
   } 
-};
+}
 
 /**
  * Функция получает типы контента из БД
@@ -95,7 +95,7 @@ function get_content_types(mysqli $connection): array
 {
     $sql = "SELECT type, id, class_name FROM types";
     return get_array_db($connection, $sql);
-};
+}
 
 
 //TODO переписать несколько аргументов на один(массив)
@@ -145,7 +145,7 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
       }
 
     return get_array_db($connection, $sql);
-};
+}
 
 /**
  * Функция возвращает из БД количество лайков к посту
@@ -157,7 +157,7 @@ function get_count_likes(mysqli $connection, int $post_id):int
   $sql = "SELECT COUNT(id) AS total_count FROM `likes` WHERE post_id = {$post_id}";
 
   return get_first_value($connection,$sql);
-};
+}
 
 /**
  * Функция получает из БД количество комментариев к посту
@@ -169,7 +169,7 @@ function get_count_comments(mysqli $connection, int $post_id):int
   $sql = "SELECT COUNT(id) AS total_count FROM `comments` WHERE post_id = {$post_id}";
 
   return get_first_value($connection,$sql);
-};
+}
 
 /**
  * Функция получает из БД количество публикаций (постов) пользователя
@@ -180,8 +180,8 @@ function get_quantity_post(mysqli $connection, int $user_id):int
 {
   $sql = "SELECT COUNT(id) AS total_count FROM `posts` WHERE user_id = {$user_id}";
 
-  return get_first_value($connection,$sql);
-};
+  return get_first_value($connection, $sql);
+}
 
 /**
  * Функция получает из БД количество подписчиков пользователя
@@ -193,7 +193,7 @@ function get_quantity_followers(mysqli $connection, int $user_id):int
   $sql = "SELECT COUNT(id) AS total_count FROM `subscriptions` WHERE user_id = {$user_id}";
 
   return get_first_value($connection,$sql);
-};
+}
 
 /**
  * Функция получает из БД количество просмотров публикации (поста)
@@ -205,7 +205,7 @@ function get_count_views(mysqli $connection, int $post_id):int
   $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = {$post_id}";
 
   return get_first_value($connection,$sql);
-};
+}
 
 /**
  * Функция получает список комментариев из БД к конкретной публикации
@@ -240,7 +240,7 @@ function get_comments(mysqli $connection, ?int $post_id = NULL): array
             WHERE posts.id = {$post_id}";
 
     return get_array_db($connection, $sql);
-};
+}
 
 /**
  * Функция получает список тэгов из БД к конкретной публикации
@@ -270,7 +270,7 @@ function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
   WHERE posts.id = {$post_id}";
 
   return get_array_db($connection, $sql);
-};
+}
 
 /**
  * Возвращает id тэга из БД по текстовому запросу. Если совпадение в БД не найдено возвращет 0
@@ -278,12 +278,12 @@ function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
  * @param string $tag строка запроса (тега, id которого, нужно получить)
  * @return int id тэга или 0, если совпадения не найдены
  */
-$get_tags_id = function (mysqli $connection, string $tag):int
+function get_tags_id(mysqli $connection, string $tag):int
 {  
   $sql = "SELECT id FROM `tags` WHERE title = '{$tag}'";
 
   return (int) get_first_value($connection, $sql);
-};
+}
 
 
 /**
@@ -292,13 +292,13 @@ $get_tags_id = function (mysqli $connection, string $tag):int
  * @param string $name_table Имя таблицы, 
  * @return int id последнего записи
  */
-$get_last_id = function(mysqli $connection, string $name_table):int
+function get_last_id(mysqli $connection, string $name_table):int
 {
 
   $sql = "SELECT MAX(id) FROM `{$name_table}`";
 
   return get_first_value($connection,$sql);
-};
+}
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост).
@@ -333,7 +333,7 @@ function add_post_db(mysqli $connect, array $form_data, string $type_content, in
 
     return set_request_db($connect, $request);
 
-};
+}
 
 /**
 * Сохраняет в таблицу БД `tags` запись - тег.
@@ -343,7 +343,7 @@ function add_post_db(mysqli $connect, array $form_data, string $type_content, in
 * @param  int $tag_last_id id последней записи в таблице `tags` БД.
 * В случае успешной отправки возвращает true
 */
-$add_tag_db = function(mysqli $connect, string $tag_title, int $tag_last_id)
+function add_tag_db(mysqli $connect, string $tag_title, int $tag_last_id)
 {
     $tag_id = $tag_last_id + 1;
 
@@ -359,7 +359,7 @@ $add_tag_db = function(mysqli $connect, string $tag_title, int $tag_last_id)
 
         return set_request_db($connect, $request);
 
-};
+}
 
 /**
 * Сохраняет в таблицу БД `relations_posts_tags` запись - связь поста и тега.
@@ -370,7 +370,7 @@ $add_tag_db = function(mysqli $connect, string $tag_title, int $tag_last_id)
 * @param  int $relation_last_id id последней записи в таблице `relations_posts_tags` БД.
 * В случае успешной отправки возвращает true
 */
-$add_relatios_db = function(mysqli $connect, int $tag_id, int $post_id, int $relation_last_id)
+function add_relatios_db(mysqli $connect, int $tag_id, int $post_id, int $relation_last_id)
 {
     $relation_id = $relation_last_id + 1;
 
@@ -386,29 +386,27 @@ $add_relatios_db = function(mysqli $connect, int $tag_id, int $post_id, int $rel
         )";
 
         return set_request_db($connect, $request);
-};
+}
 
 /**
 * Сохраняет в таблицу БД `tags` массив записей тегов.
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных, 
 * @param  array $tags_arr массив наименований тегов
-* @param  function $add_tag_db функция для добавления 1 записи в `tags`, используется как функция обратного вызова
-* @param  function $get_last_id функция для получения id последней записи в `tags`, используется как функция обратного вызова
 */
-function add_new_tags_db(mysqli $connection, array $tags_arr, $add_tag_db, $get_last_id, $get_tags_id) 
+function add_new_tags_db(mysqli $connection, array $tags_arr) 
 {
 
     foreach($tags_arr as $tag){
 
-      if($get_tags_id($connection, $tag) === 0 && $tag){
+      if(get_tags_id($connection, $tag) === 0 && $tag){
 
-        $last_tags_id = $get_last_id($connection, "tags");
+        $last_tags_id = get_last_id($connection, "tags");
 
-        $add_tag_db($connection, $tag, $last_tags_id);
+        add_tag_db($connection, $tag, $last_tags_id);
       };
     };
-};
+}
 
 /**
 * Сохраняет в таблицу БД 'relations_posts_tags' массив записей, связей тегов и постов.
@@ -416,21 +414,18 @@ function add_new_tags_db(mysqli $connection, array $tags_arr, $add_tag_db, $get_
 * @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $post_id id поста, к которому нужно привязать теги
 * @param  array $tags_arr массив наименований тегов, которые нужно привязать к посту
-* @param  function $get_tags_id функция для получения id в таблице `tags`, используется как функция обратного вызова
-* @param  function $get_last_id функция для получения id последней записи в 'relations_posts_tags', используется как функция обратного вызова
-* @param  function $add_relatios_db функция для внесения записи в 'relations_posts_tags', используется как функция обратного вызова
 */
-function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr, $get_tags_id, $get_last_id, $add_relatios_db) 
+function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr) 
 {
     foreach($tags_arr as $tag) {
 
-        $tag_id = $get_tags_id($connection, $tag);
+        $tag_id = get_tags_id($connection, $tag);
 
-        $last_relation_id = $get_last_id($connection, 'relations_posts_tags') + 1;
+        $last_relation_id = get_last_id($connection, 'relations_posts_tags') + 1;
 
-        $add_relatios_db($connection, $tag_id, $post_id, $last_relation_id);
+        add_relatios_db($connection, $tag_id, $post_id, $last_relation_id);
     };
-};
+}
 
 
 

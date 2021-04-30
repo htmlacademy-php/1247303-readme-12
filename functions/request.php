@@ -17,4 +17,4 @@ function get_data_from_params(string $param):?int
     else {
         exit('Неверный параметр в запросе');  
     };
-};
+}

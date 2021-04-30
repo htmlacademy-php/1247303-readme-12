@@ -10,7 +10,7 @@ function get_last_elem(string $str, string $separ):string
     $parts = explode($separ, $str);
 
     return array_pop($parts);
-};
+}
 
 /**
  * Скачивает внешний файл по ссылке в папку 'uploads'. При успешном скачивании возвращает внутренную ссылку на файл. 
@@ -27,8 +27,6 @@ function download_out_files($link)
 
     $file_name = $random_name . '.'. $type_file;
 
-    $file_path = "uploads/";
-
     $file_url = "uploads/" . $file_name;
 
     $current = file_get_contents($link);
@@ -39,7 +37,7 @@ function download_out_files($link)
         return ["file-link" => "{$file_url}"];
     }
     return false;
-};
+}
 
 
 /**
@@ -54,33 +52,35 @@ function upload_files($files_arr)
     $file_type = get_last_elem($_FILES["file-photo"]["name"], ".");
 
     $file_name = $random_name .".". $file_type;
-    
-    $file_path = "uploads/";
 
     $file_url = "uploads/" . $file_name;
   
-    $result = move_uploaded_file($files_arr['file-photo']['tmp_name'], $file_path . $file_name);
+    $result = move_uploaded_file($files_arr['file-photo']['tmp_name'], $file_url);
  
     if($result) {
         return ["file-link" => "{$file_url}"];
     }
     return false;
-};
+}
 
 
 /**
- * Возвращает подстроки из строки в массиве данных с формы добавления поста, трансформируя заглавные буквы в строчные. Разделить - пробел 
+ * Возвращает подстроки из строки в массиве данных с формы добавления поста, трансформируя заглавные буквы в строчные. Разделить - пробел.
+ * Если $form_data - пуст - возвращает null
  * @param array $form_data массив данных из формы
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
  */
-function get_tags_form(array $form_data, string $type_form):array
+function get_tags_form(array , string $type_form):?array
 {
     $tags_str = $form_data["{$type_form}-tags"];
 
     $tag_low = mb_convert_case($tags_str , MB_CASE_LOWER, "UTF-8");
 
-    $tags_arr = explode(" ", $tag_low);
+    if($tag_low) {
+        $tags_arr = explode(" ", $tag_low);
+        return $tags_arr;
+    };
 
-    return $tags_arr;
-};
+    return null; 
+}
 

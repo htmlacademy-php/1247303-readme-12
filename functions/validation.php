@@ -9,14 +9,13 @@ $form_errors= [];
  * @param string $str строка, которую необходимо проверить
  * @param int $length_str максимальное количество символов в строке
  */
-function check_length_str(string $str, int $length_str)
+function check_length_str(string $str, int $length_str):?string
 {
-
     if(mb_strlen($str) > $length_str) {
         return "Количество символов не должен превышать {$length_str} знаков.";
-    };
-
-};
+    }
+    return null;
+}
 
 
 /**
@@ -31,7 +30,7 @@ function check_link(string $link, string $type_fields):array
         return ["{$type_fields}" => "Введенные данные не являются валидной ссылкой"];
     }
     return [];  
-};
+}
 
 
 /**
@@ -52,7 +51,7 @@ function check_link_file(string $str_url):array
         restore_error_handler();
     }
     return ['photo-url' => 'Введенные данные не являются валидной ссылкой'];
-};
+}
 
 /**
  * Проверяет MIME тип файла, если тип файл не 'gif', 'jpeg', 'png' вернет текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
@@ -70,7 +69,7 @@ function check_type_file(string $type_file):array
         default:
             return ['file-photo' => 'Недопустимый тип файла. Поддерживаемые форматы изображений: png, jpeg, gif.']; 
     };
-};
+}
 
 /**
  * Проверяет данные из формы добавления поста "ВИДЕО",если данные не корректны
@@ -85,7 +84,7 @@ function check_video_form(array $text_inputs):array
     }
 
     return ['video-url' => 'Введенные данные не являются валидной ссылкой'];
-};
+}
 
 /**
  * Проверяет данные из формы добавления поста "ФОТО", если данные не корректны -
@@ -116,85 +115,70 @@ function check_photo_form(array $files_arr, array $text_inputs):array
     };
       
     return [];
-};
+}
+
+
+/**
+ * Проверяет строку на наличие допустимых символов. Массив с недопустимы символоми в константе UNALLOWABLE_SYMBOLS
+ * @param string $value строка
+ * @return string возвращает строку с найденными недопустими символами или null если недопустимых символов не обнаружено
+ */
+function check_symbols(string $value):?string
+{
+    $tags_form = str_split($value);
+
+    $finded_symbols = array_filter($tags_form, function($value){
+
+        foreach(UNALLOWABLE_SYMBOLS as $symbol) {
+
+            if($value === $symbol){
+                return true; 
+            };
+        };
+    });
+
+    if($finded_symbols){
+
+        $finded_symbols_str = implode(" ", $finded_symbols);
+
+        return $finded_symbols_str;
+    };
+
+    return null;
+}
 
 /**
  * Проверяет заполнены ли все обязательные поля в форме добавления постов. 
- * Если поля не заполнены, или заполнены некорректно - возвращает текст ошибки в виде массива. 
+ * Если поля не заполнены - возвращает текст ошибки в виде массива. 
  * Если ошибок нет - возвращает пустой массив.
- * список обязательных поле в массиве $required_fields
+ * массив обязательных поле в константе массиве REQUIRED_FIELDS
  * @param array $text_inputs массив с данным из формы добавления поста
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
  */
 function check_filled_value(array $text_inputs, string $type_form):array
 {
-    $errors= [];
+    $errors = [];
 
-    $required_fields = [
-        'text' => [
-            'text-heading' => 'Заголовок. Это поле должно быть заполнено.',
-            'post-text' => 'Текст поста. Это поле должно быть заполнено.'
-        ],
-        'quote'=> [
-            'quote-heading' => 'Заголовок. Это поле должно быть заполнено.',
-            'post-quote' => 'Цитата. Это поле должно быть заполнено.',
-            'quote-author' => 'Автор цитаты. Это поле должно быть заполнено.'
-        ],
-        'photo' => [
-            'photo-heading' => 'Заголовок. Это поле должно быть заполнено.'
-        ],
-        'video' => [
-            'video-heading' => 'Заголовок. Это поле должно быть заполнено.',
-            'video-url' => 'Ссылка Youtube. Это поле должно быть заполнено.'
-        ],
-        'link' => [
-            'link-heading' => 'Заголовок. Это поле должно быть заполнено.',
-            'post-link' => 'Ссылка. Это поле должно быть заполнено.'
-        ]
-    ];
-
-    foreach($required_fields[$type_form] as $key => $field) {
+    foreach(REQUIRED_FIELDS[$type_form] as $key => $field) {
         if(!$text_inputs[$key]) {
             $errors += [$key => $field];
         };
     };
-
-    $error_length_str = check_length_str($text_inputs["{$type_form}-heading"], 50);
-
-     
-    if(isset($error_length_str)) {
-
-        $errors += ["{$type_form}-heading" => "Заголовок. {$error_length_str}"];
-    };
-
-    $check_symbols = function($value)
-    {
-    $symbols = [",", "/", ".", "#", "!", "?","_"];//Todo - дополнить массив недопустимых символов
-
-        foreach($symbols as $symbol) {
-            if($value === $symbol){
-                return true; 
-            };
-        };
-    };
-
-    $tags_form = str_split($text_inputs["{$type_form}-tags"]);
-
-    $unallowable_symbols = array_filter($tags_form, $check_symbols);
-
-    $unallowable_symbols_str = implode(" ", $unallowable_symbols);
-
-    if($unallowable_symbols_str) {
-        $errors += ["{$type_form}-tags" => "Символы:  {$unallowable_symbols_str}  недопустимы для тегов"];
-    };
     
     return $errors;
-};
+}
+
 
 /**
- * Функция-обертка для htmlspecialchars();
+ * Фильтрует текстовые данные
+ * Если строка пустая - присваивает null + работа htmlspecialchars
+ * @param string $value 
  */
-$no_html = function($value) 
+function filtered_form_data(?string $value):string
 {
-    return htmlspecialchars($value);
-};
+    $data = $value ?? null;
+
+    $filtered = htmlspecialchars($data);
+
+    return $filtered;
+}

@@ -16,7 +16,7 @@ function include_template($name, array $data = [])
     $result = ob_get_clean();
 
     return $result;
-};
+}
 
 /**
 * Возращает урезанную строку. По умолчанию урезает строку до 300 символов и прибавляет ссылку "Читать далее".
@@ -54,7 +54,7 @@ function cutStr(string $str, int $length = 300) : string
     }
 
     return "<p>{$str}</p>";   
-};
+}
 
 /**
  * Возвращает код iframe для вставки youtube видео на страницу
@@ -72,7 +72,7 @@ function embed_youtube_video($youtube_url)
     }
 
     return $res;
-};
+}
 
 
 /**
@@ -98,7 +98,7 @@ function extract_youtube_id(string $youtube_url)
     }
 
     return $id;
-};
+}
 
 
 /**
@@ -126,7 +126,7 @@ function check_youtube_url(string $url):array
     }
 
     return [];
-};
+}
 
 /**
  * Возвращает наименование типа контента ('text','quote', 'photo', 'video', 'link')
@@ -140,4 +140,4 @@ function get_type_from_id(array $types_content, ?int $id):string
           return $type['class_name'];
       }
   }
-};
+}
