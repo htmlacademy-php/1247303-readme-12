@@ -1,21 +1,21 @@
-<?php 
+<?php
 
 /**
 * Выполняет подключение к базе данных, возвращает объект подключения к серверу MySQL, в случае ошибки подключения, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  string $host имя хоста или IP-адрес, 
-* @param  string $user Имя пользователя MySQL, 
-* @param  string $password Пароль пользователя MySQL, 
+* @param  string $host имя хоста или IP-адрес,
+* @param  string $user Имя пользователя MySQL,
+* @param  string $password Пароль пользователя MySQL,
 * @param  string $db Имя базы данных.
 */
-function db_connect(string $host, string $user, string $password, string $db): mysqli 
+function db_connect(string $host, string $user, string $password, string $db): mysqli
 {
     $con = mysqli_connect($host, $user, $password, $db);
 
     if ($con == false) {
        print("Ошибка подключения: " . mysqli_connect_error());
        exit();
-    } 
+    }
     else {
         return $con;
     }
@@ -25,14 +25,14 @@ function db_connect(string $host, string $user, string $password, string $db): m
 /**
 * Сохраняет данные в БД, к которой уже произведено подключение на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 * В случае успешной отправки возвращает true
 */
 function set_request_db(mysqli $connect, string $request)
 {
-  $query =  mysqli_query($connect, $request); 
-  
+  $query =  mysqli_query($connect, $request);
+
   if($query == false) {
     print("Ошибка запроса в БД: " .  mysqli_error($connect));
     exit();
@@ -40,19 +40,19 @@ function set_request_db(mysqli $connect, string $request)
   else {
 
     return true;
-  }  
+  }
 }
 
 /**
 * Возвращает массив с данными из базы данных, к которой уже произведено подключение на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 */
 function get_array_db(mysqli $connect, string $request): array
 {
-  $query =  mysqli_query($connect, $request); 
-  
+  $query =  mysqli_query($connect, $request);
+
   if($query == false) {
     print("Ошибка запроса в БД: " .  mysqli_error($connect));
     exit();
@@ -61,19 +61,19 @@ function get_array_db(mysqli $connect, string $request): array
     $array = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
     return $array;
-  }  
+  }
 }
 
 /**
 * Возвращает значение из массива данных из БД по нулевому индексу, на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 * TODO - Узнать у наставника, какой тип данных установить если функции может возвращать как данные, так и NULL
 */
 function get_first_value(mysqli $connect, string $request)
 {
-  $query =  mysqli_query($connect, $request); 
+  $query =  mysqli_query($connect, $request);
 
   if($query == false) {
     print("Ошибка запроса в БД: " .  mysqli_error($connect));
@@ -81,9 +81,9 @@ function get_first_value(mysqli $connect, string $request)
   }
   else {
     $array = mysqli_fetch_array($query);
-  
+
     return $array[0];
-  } 
+  }
 }
 
 /**
@@ -109,32 +109,32 @@ function get_content_types(mysqli $connection): array
 function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL): array
 {
 
-    $sql = "SELECT 
+    $sql = "SELECT
               posts.id,
               posts.content,
-              posts.title, 
+              posts.title,
               posts.publictation_date,
               posts.user_id,
-              posts.author_quote, 
-              posts.img_path, 
+              posts.author_quote,
+              posts.img_path,
               posts.video_path,
               site_path,
               users.dt_add,
-              users.first_name, 
-              users.last_name, 
-              users.avatar_path, 
+              users.first_name,
+              users.last_name,
+              users.avatar_path,
               types.class_name
 
-            FROM `posts` 
+            FROM `posts`
 
-            LEFT JOIN 
-              `users` 
-            ON 
+            LEFT JOIN
+              `users`
+            ON
               posts.user_id = users.id
 
-            LEFT JOIN 
-              `types` 
-            ON 
+            LEFT JOIN
+              `types`
+            ON
               posts.type_id = types.id ";
 
       if($type_id) {
@@ -216,26 +216,26 @@ function get_count_views(mysqli $connection, int $post_id):int
 function get_comments(mysqli $connection, ?int $post_id = NULL): array
 {
 
-    $sql = "SELECT 
+    $sql = "SELECT
               comments.id,
               comments.publictation_date,
-              comments.content, 
+              comments.content,
               comments.publictation_date,
-              users.first_name, 
-              users.last_name, 
+              users.first_name,
+              users.last_name,
               users.avatar_path
 
-            FROM `comments` 
+            FROM `comments`
 
-            LEFT JOIN 
-              `users` 
-            ON 
+            LEFT JOIN
+              `users`
+            ON
               comments.user_id = users.id
 
-            LEFT JOIN 
-              `posts` 
-            ON 
-              posts.id = comments.post_id 
+            LEFT JOIN
+              `posts`
+            ON
+              posts.id = comments.post_id
 
             WHERE posts.id = {$post_id}";
 
@@ -250,22 +250,22 @@ function get_comments(mysqli $connection, ?int $post_id = NULL): array
  */
 function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
 {
-  
-  $sql = "SELECT 
+
+  $sql = "SELECT
     tags.id,
     tags.title
-    
-  FROM `tags` 
 
-  LEFT JOIN 
-    `relations_posts_tags` 
-  ON 
+  FROM `tags`
+
+  LEFT JOIN
+    `relations_posts_tags`
+  ON
   relations_posts_tags.tags_id = tags.id
 
-  LEFT JOIN 
-    `posts` 
-  ON 
-    posts.id = relations_posts_tags.post_id 
+  LEFT JOIN
+    `posts`
+  ON
+    posts.id = relations_posts_tags.post_id
 
   WHERE posts.id = {$post_id}";
 
@@ -279,82 +279,207 @@ function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
  * @return int id тэга или 0, если совпадения не найдены
  */
 function get_tags_id(mysqli $connection, string $tag):int
-{  
+{
   $sql = "SELECT id FROM `tags` WHERE title = '{$tag}'";
 
   return (int) get_first_value($connection, $sql);
 }
 
-
 /**
- * Функция получает id последней записи таблицы из БД 
- * @param mysqli $connection объект соединения с БД
- * @param string $name_table Имя таблицы, 
- * @return int id последнего записи
- */
-function get_last_id(mysqli $connection, string $name_table):int
-{
-
-  $sql = "SELECT MAX(id) FROM `{$name_table}`";
-
-  return get_first_value($connection,$sql);
-}
-
-/**
-* Сохраняет в таблицу БД `posts` запись - публикацию (пост).
+* Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом text(Текст).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_db(mysqli $connect, array $form_data, string $type_content, int $post_id)
+function add_post_text_db(mysqli $connect, ?array $form_data)
 {
-  
+
     $today = new DateTime('now');
 
     $request = "
-        INSERT INTO 
-            `posts` 
-
-        VALUES 
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `content`,
+          `count_view`
+        )
+        VALUES
         (
-         {$post_id},
-         2, 
-         {$form_data['submit']}, 
-         '{$today->format('Y-m-d H:i:s')}', 
-         '{$form_data["{$type_content}-heading"]}',
-         '{$form_data["post-{$type_content}"]}',
-         '{$form_data["quote-author"]}', 
-         '{$form_data["file-link"]}', 
-         '{$form_data["video-url"]}', 
-         '{$form_data["post-link"]}', 
-         15 
+         2,
+          {$form_data['submit']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["text-heading"]}',
+         '{$form_data["post-text"]}',
+         15
         )";
 
     return set_request_db($connect, $request);
+}
 
+
+/**
+* Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом quote(Цитата).
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $form_data массив данных из формы добавления поста.
+* В случае успешной отправки возвращает true
+*/
+function add_post_quote_db(mysqli $connect, ?array $form_data)
+{
+
+    $today = new DateTime('now');
+
+    $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `content`,
+          `author_quote`,
+          `count_view`
+        )
+        VALUES
+        (
+         2,
+          {$form_data['submit']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["quote-heading"]}',
+         '{$form_data["post-quote"]}',
+         '{$form_data["quote-author"]}',
+         15
+        )";
+
+    return set_request_db($connect, $request);
+}
+
+/**
+* Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом photo(Фото).
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $form_data массив данных из формы добавления поста.
+* В случае успешной отправки возвращает true
+*/
+function add_post_photo_db(mysqli $connect, ?array $form_data)
+{
+
+    $today = new DateTime('now');
+
+    $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `img_path`,
+          `count_view`
+        )
+        VALUES
+        (
+         2,
+          {$form_data['submit']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["photo-heading"]}',
+         '{$form_data["file-link"]}',
+         15
+        )";
+
+    return set_request_db($connect, $request);
+}
+
+/**
+* Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом video(Видео).
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $form_data массив данных из формы добавления поста.
+* В случае успешной отправки возвращает true
+*/
+function add_post_video_db(mysqli $connect, ?array $form_data)
+{
+
+    $today = new DateTime('now');
+
+    $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `video_path`,
+          `count_view`
+        )
+        VALUES
+        (
+         2,
+          {$form_data['submit']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["video-heading"]}',
+         '{$form_data["video-url"]}',
+         15
+        )";
+
+    return set_request_db($connect, $request);
+}
+
+/**
+* Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом link(Ссылка).
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $form_data массив данных из формы добавления поста.
+* В случае успешной отправки возвращает true
+*/
+function add_post_link_db(mysqli $connect, ?array $form_data)
+{
+
+    $today = new DateTime('now');
+
+    $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `site_path`,
+          `count_view`
+        )
+        VALUES
+        (
+         2,
+          {$form_data['submit']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["link-heading"]}',
+         '{$form_data["post-link"]}',
+         15
+        )";
+
+    return set_request_db($connect, $request);
 }
 
 /**
 * Сохраняет в таблицу БД `tags` запись - тег.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $tag_title наименование тега
 * @param  int $tag_last_id id последней записи в таблице `tags` БД.
 * В случае успешной отправки возвращает true
 */
-function add_tag_db(mysqli $connect, string $tag_title, int $tag_last_id)
+function add_tag_db(mysqli $connect, string $tag_title)
 {
-    $tag_id = $tag_last_id + 1;
-
     $request = "
-        INSERT INTO 
-            `tags` 
+        INSERT INTO
+            `tags`(`title`)
 
-        VALUES 
+        VALUES
         (
-         {$tag_id},
-         '{$tag_title}'  
+         '{$tag_title}'
         )";
 
         return set_request_db($connect, $request);
@@ -364,25 +489,26 @@ function add_tag_db(mysqli $connect, string $tag_title, int $tag_last_id)
 /**
 * Сохраняет в таблицу БД `relations_posts_tags` запись - связь поста и тега.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  int $tag_id id тега, которого необходимо связать с постом
 * @param  int $post_id id поста, которого необходимо связать с тегом
-* @param  int $relation_last_id id последней записи в таблице `relations_posts_tags` БД.
 * В случае успешной отправки возвращает true
 */
-function add_relatios_db(mysqli $connect, int $tag_id, int $post_id, int $relation_last_id)
+function add_relations_db(mysqli $connect, int $tag_id, int $post_id)
 {
-    $relation_id = $relation_last_id + 1;
 
     $request = "
-        INSERT INTO 
+        INSERT INTO
             `relations_posts_tags` 
+            (
+              `post_id`, 
+              `tags_id`
+            )
 
-        VALUES 
+        VALUES
         (
-         {$relation_id},
          {$post_id},
-         {$tag_id}  
+         {$tag_id}
         )";
 
         return set_request_db($connect, $request);
@@ -391,19 +517,17 @@ function add_relatios_db(mysqli $connect, int $tag_id, int $post_id, int $relati
 /**
 * Сохраняет в таблицу БД `tags` массив записей тегов.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных, 
+* @param  mysqli $connect обьект подключения к базе данных,
 * @param  array $tags_arr массив наименований тегов
 */
-function add_new_tags_db(mysqli $connection, array $tags_arr) 
+function add_new_tags_db(mysqli $connection, array $tags_arr)
 {
 
     foreach($tags_arr as $tag){
 
       if(get_tags_id($connection, $tag) === 0 && $tag){
 
-        $last_tags_id = get_last_id($connection, "tags");
-
-        add_tag_db($connection, $tag, $last_tags_id);
+        add_tag_db($connection, $tag);
       };
     };
 }
@@ -415,15 +539,13 @@ function add_new_tags_db(mysqli $connection, array $tags_arr)
 * @param  int $post_id id поста, к которому нужно привязать теги
 * @param  array $tags_arr массив наименований тегов, которые нужно привязать к посту
 */
-function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr) 
+function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr)
 {
     foreach($tags_arr as $tag) {
 
         $tag_id = get_tags_id($connection, $tag);
 
-        $last_relation_id = get_last_id($connection, 'relations_posts_tags') + 1;
-
-        add_relatios_db($connection, $tag_id, $post_id, $last_relation_id);
+        add_relations_db($connection, $tag_id, $post_id);
     };
 }
 

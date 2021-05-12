@@ -43,7 +43,8 @@ $layout_content = include_template('layout.php',
      'user_name' => $user_name,
      'is_auth' => $is_auth,
      'content' => $post,
-     'title' => $title
+     'title' => $title,
+     'button_close' => ''
     ]
 );
 

@@ -1,10 +1,18 @@
 <?php
+
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 $config = require 'config.php';
 
 require_once('functions/db.php');
 require_once('functions/template.php');
 require_once('functions/request.php');
 require_once('functions/date.php');
+require_once('functions/template.php');
+require_once('functions/validation.php');
+require_once('functions/actions.php');
 
 $is_auth = rand(0, 1);
 

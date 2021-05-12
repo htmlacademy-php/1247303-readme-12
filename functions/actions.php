@@ -70,7 +70,7 @@ function upload_files($files_arr)
  * @param array $form_data массив данных из формы
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
  */
-function get_tags_form(array , string $type_form):?array
+function get_tags_form(array $form_data, string $type_form):?array
 {
     $tags_str = $form_data["{$type_form}-tags"];
 

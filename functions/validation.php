@@ -1,6 +1,6 @@
 <?php
 
-require_once('functions/template.php');
+require_once('bootstrap.php');
 
 $form_errors= [];
 

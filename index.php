@@ -23,7 +23,8 @@ $layout_content = include_template('layout.php',
      'user_name' => $user_name,
      'is_auth' => $is_auth,
      'content' => $page_content, 
-     'title' => 'readme: блог, каким он должен быть'
+     'title' => 'readme: блог, каким он должен быть',
+     'button_close' => ''
     ]
 );
 
