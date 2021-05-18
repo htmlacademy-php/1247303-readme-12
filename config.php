@@ -1,4 +1,3 @@
-
 <?php 
 return [
     'db' => [
@@ -8,4 +7,3 @@ return [
         'name' => 'readme'
     ]
 ];
-?>

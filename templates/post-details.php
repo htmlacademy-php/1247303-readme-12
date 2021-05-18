@@ -38,7 +38,7 @@
           </div>
           <ul class="post__tags">
             <?php foreach($tags as $tag): ?>
-            <li><a href="#"><?=$tag['title']?></a></li>
+            <li><a href="#"><?="#" . $tag['title']?></a></li>
             <?php endforeach ?>
           </ul>
           <div class="comments">

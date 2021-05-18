@@ -6,7 +6,7 @@
             </div>
             <div class="post-link__info">
                 <h3><?= $post[0]['title'] ?></h3>
-                <p><?= $post[0]['site_path']) ?></p>
+                <p><?= $post[0]['site_path'] ?></p>
                 <span><?= $post[0]['site_path'] ?></span>
             </div>
             <svg class="post-link__arrow" width="11" height="16">

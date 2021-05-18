@@ -1,18 +1,5 @@
 <?php 
-$config = require 'config.php';
-
-
-require_once('functions/db.php');
-require_once('functions/template.php');
-require_once('functions/request.php');
-require_once('functions/date.php');
-
-$is_auth = rand(0, 1);
-
-$user_name = ''; // укажите здесь ваше имя
-
-
-$connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
+require_once('bootstrap.php');
 
 $types_content = get_content_types($connection);
 
@@ -33,9 +20,11 @@ $page_content = include_template('main.php',
 
 $layout_content = include_template('layout.php', 
     [
+     'user_name' => $user_name,
      'is_auth' => $is_auth,
      'content' => $page_content, 
-     'title' => 'readme: блог, каким он должен быть'
+     'title' => 'readme: блог, каким он должен быть',
+     'button_close' => ''
     ]
 );
 

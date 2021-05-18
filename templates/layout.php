@@ -63,7 +63,7 @@
                             </div>
                             <div class="header__profile-name">
                                 <span>
-                                    <!--здесь должно быть имя пользователя-->
+                                    <?=$user_name?>
                                 </span>
                                 <svg class="header__link-arrow" width="10" height="6">
                                     <use xlink:href="#icon-arrow-right-ad"></use>
@@ -101,7 +101,11 @@
                         </div>
                     </li>
                     <li>
-                        <a class="header__post-button button button--transparent" href="adding-post.html">Пост</a>
+                        <?= (!$button_close) ?
+                        "<a class='header__post-button button button--transparent' href='add.php?categories-id=3'>Пост</a>":
+                       
+                        "<a class='header__post-button button header__post-button--active button--transparent' href='/1247303-readme-12'>{$button_close}</a>"
+                        ?>
                     </li>
                 </ul>
             </nav>
@@ -168,8 +172,8 @@
         </div>
     </div>
 </footer>
-<script src="libs/dropzone.js"></script>
-<script src="js/dropzone-settings.js"></script>
+<!-- <script src="libs/dropzone.js"></script>
+<script src="js/dropzone-settings.js"></script> -->
 <script src="js/main.js"></script>
 </body>
 </html>
