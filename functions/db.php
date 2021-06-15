@@ -286,6 +286,19 @@ function get_tags_id(mysqli $connection, string $tag):int
 }
 
 /**
+ * Проверяет есть ли пользователь в БД (табл. `users`) по текстовому запросу (email). Если совпадение в БД не найдено возвращет true, если нет - false
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email строка запроса (e-mail, наличие которого нужно проверить в БД)
+ * @return bool true, если пользователь с таким email есть, false если e-mail нет
+ */
+function get_user_by_mail(mysqli $connection, string $email):bool
+{
+  $sql = "SELECT id FROM `users` WHERE email = '{$email}'";
+
+  return (bool) get_first_value($connection, $sql);
+}
+
+/**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом text(Текст).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
@@ -547,6 +560,46 @@ function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr)
 
         add_relations_db($connection, $tag_id, $post_id);
     };
+}
+
+
+
+/**
+* Сохраняет в таблицу БД `users` запись - учетную запись нового пользователя.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $form_data массив данных из формы регистрации пользователя.
+* @return bool В случае успешной отправки возвращает true
+*/
+function add_user_db(mysqli $connect, ?array $form_data)
+{
+
+    $today = new DateTime('now');
+
+    $request = "
+        INSERT INTO
+        `users`
+        (
+          `dt_add`,
+          `email`,
+          `login`,
+          `password`,
+          `avatar_path`,
+          `first_name`,
+          `last_name`
+        )
+        VALUES
+        (
+          '{$today->format('Y-m-d H:i:s')}',
+          '{$form_data["email"]}',
+          '{$form_data["login"]}',
+          '{$form_data["password"]}',
+          '{$form_data["file-link"]}',
+          '{$form_data["first_name"]}',
+          '{$form_data["last_name"]}'
+        )";
+
+    return set_request_db($connect, $request);
 }
 
 

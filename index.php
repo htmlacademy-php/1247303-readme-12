@@ -21,10 +21,10 @@ $page_content = include_template('main.php',
 $layout_content = include_template('layout.php', 
     [
      'user_name' => $user_name,
-     'is_auth' => $is_auth,
+     'is_auth' => 1,
      'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть',
-     'button_close' => ''
+     'neader_user_nav' => ADD_POST
     ]
 );
 

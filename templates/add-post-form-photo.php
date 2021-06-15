@@ -1,4 +1,3 @@
-<?php //var_dump($_FILES)?>
 <section class="adding-post__photo tabs__content tabs__content--active">
                 <h2 class="visually-hidden">Форма добавления фото</h2>
                 <form class="adding-post__form form" action="<?= ($get_id) ? "add.php?categories-id={$get_id}": ""?>" method="post" enctype="multipart/form-data">

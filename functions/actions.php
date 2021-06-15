@@ -1,6 +1,29 @@
 <?php 
 
 /**
+ * Возвращает массив, содержащий хеш пароля обернутый в принятую в проекте структуру данных. 
+ * В случае ошибки формирования хеша пароля выводит на экран ошибку.
+ * @param string $password Строка, содержащая пользовательский пароль
+ * @return array
+ * 
+ */
+function set_password_hash(string $password):string
+{
+   $hash = password_hash($password, PASSWORD_DEFAULT);
+    //var_dump($hash);
+   if($hash) {
+        return $hash;
+   }
+   else{
+    print("Ошибка формирования пароля");
+    exit();
+   }; 
+}
+
+
+
+
+/**
  * Возвращает подстроку идущую после заданного символа. 
  * @param string $str Строка, из которую нужно извлечь подстроку
  * @param string $separ разделитель
