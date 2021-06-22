@@ -12,21 +12,11 @@ if($_POST){
 
     $form_errors = validate_registration_form($filter_form_data, $_FILES, $connection);
 
-
-
     if(!$form_errors) {
-        $filter_form_data['password'] = set_password_hash($filter_form_data['password']);
 
-        $filter_form_data['password-repeat'] = null;
-
-        $filter_form_data += ['file-link' => ''];
-
-        add_user_db($connection, $filter_form_data);
+        register($connection, $filter_form_data);
     };
 };
-
-
-
 
 $registration_form = include_template('registration-new-user.php',
     [
@@ -40,7 +30,7 @@ $layout_content = include_template('layout.php',
      'user_name' => $user_name,
      'is_auth' => 0,
      'content' => $registration_form,
-     'title' => 'Добавить публикацию',
+     'title' => 'Регистрация',
      'neader_user_nav' => HEADER_AUTH_REG
     ]
 );

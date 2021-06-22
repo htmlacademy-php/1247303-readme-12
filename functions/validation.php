@@ -239,12 +239,13 @@ function validate_registration_form(array $filter_form_data, array $files, mysql
 
     $form_errors += check_password($filter_form_data['password'], $filter_form_data['password-repeat']);
 
-    if(!$_FILES["file-photo"]["error"]){
+    if(!$files["file-photo"]["error"]){
 
-        $form_errors += check_type_file($_FILES["file-photo"]["type"]);
+        $form_errors += check_type_file($files["file-photo"]["type"]);
 
-        (!$form_errors) ? $filter_form_data += upload_files($_FILES) : $filter_form_data;
+        //(!$form_errors) ? $filter_form_data += upload_files($files) : $filter_form_data;
     };
 
     return $form_errors;
 }
+
