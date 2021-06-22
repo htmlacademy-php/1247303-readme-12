@@ -1,0 +1,16 @@
+{
+    "name": "petr-ko/readme",
+    "authors": [
+        {
+            "name": "Petr Ko",
+            "email": "p.kondrashin@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "kahlan/kahlan": "^5.1"
+    },
+    "scripts": {
+        "test": "vendor/bin/kahlan --config=bootstrap.php"
+	}
+    
+}
