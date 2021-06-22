@@ -10,18 +10,9 @@ if($_POST){
 
     $filter_form_data = array_map('filtered_form_data', $_POST);
 
-    $form_errors = check_filled_value($filter_form_data, 'registration');
-    
-    $form_errors += check_email($connection, $filter_form_data['email']);
+    $form_errors = validate_registration_form($filter_form_data, $_FILES, $connection);
 
-    $form_errors += check_password($filter_form_data['password'], $filter_form_data['password-repeat']);
 
-    if(!$_FILES["file-photo"]["error"]){
-
-        $form_errors += check_type_file($_FILES["file-photo"]["type"]);
-
-        (!$form_errors) ? $filter_form_data += upload_files($_FILES) : $filter_form_data;
-    };
 
     if(!$form_errors) {
         $filter_form_data['password'] = set_password_hash($filter_form_data['password']);

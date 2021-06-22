@@ -219,3 +219,32 @@ function filtered_form_data(?string $value):string
 
     return $filtered;
 }
+
+
+/**
+ * Осуществляет валидацию формы обратной связи - регистрации нового пользователя. 
+ * Если при валидации возникли ошибки, возвращает их в виде массива с установленной в проекте структурой. 
+ * Если ошибок нет - возвращает пустой массив.
+ * @param array $filter_form_data массив с данным из формы добавления регистрации пользователя
+ * @param array глобальный массив $_FILES
+ * @param mysqli $connection объект соединения с БД
+ * @return array массив с ошибками, или пустой массив, если ошибок нет
+ */
+function validate_registration_form(array $filter_form_data, array $files, mysqli $connection):array
+{
+
+    $form_errors = check_filled_value($filter_form_data, 'registration');
+    
+    $form_errors += check_email($connection, $filter_form_data['email']);
+
+    $form_errors += check_password($filter_form_data['password'], $filter_form_data['password-repeat']);
+
+    if(!$_FILES["file-photo"]["error"]){
+
+        $form_errors += check_type_file($_FILES["file-photo"]["type"]);
+
+        (!$form_errors) ? $filter_form_data += upload_files($_FILES) : $filter_form_data;
+    };
+
+    return $form_errors;
+}
