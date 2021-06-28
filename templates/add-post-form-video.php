@@ -5,7 +5,7 @@
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["video-heading"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["video-heading"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="video-heading" type="text" name="video-heading" placeholder="Введите заголовок" value="<?= ($filter_form_data["video-heading"] && $form_errors) ? $filter_form_data["video-heading"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -16,7 +16,7 @@
                       </div>
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["video-url"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["video-url"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="video-url" type="text" name="video-url" placeholder="Введите ссылку" value="<?= ($filter_form_data["video-url"] && $form_errors) ? $filter_form_data["video-url"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -27,7 +27,7 @@
                       </div>
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="video-tags">Теги</label>
-                        <div class="form__input-section <?=($form_errors["video-tags"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["video-tags"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="video-tags" type="text" name="video-tags" placeholder="Введите теги" value="<?= ($filter_form_data["video-tags"] && $form_errors) ? $filter_form_data["video-tags"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">

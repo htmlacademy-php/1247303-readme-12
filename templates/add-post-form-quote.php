@@ -5,7 +5,7 @@
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="quote-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["quote-heading"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["quote-heading"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="quote-heading" type="text" name="quote-heading" placeholder="Введите заголовок" value="<?= ($filter_form_data['quote-heading'] && $form_errors) ? $filter_form_data['quote-heading'] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -16,7 +16,7 @@
                       </div>
                       <div class="adding-post__input-wrapper form__textarea-wrapper">
                         <label class="adding-post__label form__label" for="post-quote">Текст цитаты <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["post-quote"] || $form_errors["quote-length-err"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["post-quote"]) || isset($form_errors["quote-length-err"])) ? "form__input-section--error":""?>">
                           <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="post-quote" name="post-quote" placeholder="Текст цитаты"><?= ($filter_form_data['post-quote'] && $form_errors) ? $filter_form_data['post-quote'] : '' ?></textarea>
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -27,7 +27,7 @@
                       </div>
                       <div class="adding-post__textarea-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="quote-author">Автор <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["quote-author"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["quote-author"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="quote-author" type="text" name="quote-author" placeholder="Автор цитаты" value="<?= ($filter_form_data['quote-author'] && $form_errors) ? $filter_form_data['quote-author'] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">

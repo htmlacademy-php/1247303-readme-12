@@ -5,7 +5,7 @@
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="link-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["link-heading"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["link-heading"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="link-heading" type="text" name="link-heading" placeholder="Введите заголовок" value="<?= ($filter_form_data["link-heading"] && $form_errors) ? $filter_form_data["link-heading"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -16,7 +16,7 @@
                       </div>
                       <div class="adding-post__textarea-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="post-link">Ссылка <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=($form_errors["post-link"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["post-link"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="post-link" type="text" name="post-link" value="<?= ($filter_form_data["post-link"] && $form_errors) ? $filter_form_data["post-link"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
@@ -27,7 +27,7 @@
                       </div>
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="link-tags">Теги</label>
-                        <div class="form__input-section <?=($form_errors["link-tags"]) ? "form__input-section--error":""?>">
+                        <div class="form__input-section <?=(isset($form_errors["link-tags"])) ? "form__input-section--error":""?>">
                           <input class="adding-post__input form__input" id="link-tags" type="text" name="link-tags" placeholder="Введите теги" value="<?= ($filter_form_data["link-tags"] && $form_errors) ? $filter_form_data["link-tags"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
