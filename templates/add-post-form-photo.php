@@ -6,7 +6,7 @@
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="photo-heading">Заголовок <span class="form__input-required">*</span></label>
                         <div class="form__input-section <?=(isset($form_errors["photo-heading"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="photo-heading" type="text" name="photo-heading" placeholder="Введите заголовок" value="<?= ($filter_form_data["photo-heading"] && $form_errors) ? $filter_form_data["photo-heading"] : '' ?>">
+                          <input class="adding-post__input form__input" id="photo-heading" type="text" name="photo-heading" placeholder="Введите заголовок" value="<?= ($form_errors && $filter_form_data["photo-heading"]) ? $filter_form_data["photo-heading"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
@@ -17,7 +17,7 @@
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="photo-url">Ссылка из интернета</label>
                         <div class="form__input-section <?=(isset($form_errors["photo-url"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-url" placeholder="Введите ссылку" value="<?= ($filter_form_data["photo-url"] && $form_errors) ? $filter_form_data["photo-url"] : '' ?>">
+                          <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-url" placeholder="Введите ссылку" value="<?= ($form_errors && $filter_form_data["photo-url"]) ? $filter_form_data["photo-url"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
@@ -28,7 +28,7 @@
                       <div class="adding-post__input-wrapper form__input-wrapper">
                         <label class="adding-post__label form__label" for="photo-tags">Теги</label>
                         <div class="form__input-section <?=(isset($form_errors["photo-tags"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="photo-tags" type="text" name="photo-tags" placeholder="Введите теги" value="<?= ($filter_form_data["photo-tags"] && $form_errors) ? $filter_form_data["photo-tags"] : '' ?>">
+                          <input class="adding-post__input form__input" id="photo-tags" type="text" name="photo-tags" placeholder="Введите теги" value="<?= ($form_errors && $filter_form_data["photo-tags"]) ? $filter_form_data["photo-tags"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
