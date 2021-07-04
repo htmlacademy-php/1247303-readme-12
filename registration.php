@@ -15,7 +15,9 @@ if($_POST){
 
     if(!$form_errors) {
         
-        register($connection, $filter_form_data);
+        if(register($connection, $filter_form_data)){
+            header("Location: index.php");
+        };
     };
 };
 
