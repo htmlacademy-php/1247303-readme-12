@@ -137,7 +137,7 @@ $layout_content = include_template('layout.php',
      'is_auth' => 1,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
-     'neader_user_nav' => CLOSE_BTN
+     'header_user_nav' => CLOSE_BTN
     ]
 );
 
