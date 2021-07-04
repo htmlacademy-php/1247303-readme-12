@@ -24,7 +24,7 @@ $layout_content = include_template('layout.php',
      'is_auth' => 1,
      'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть',
-     'neader_user_nav' => ADD_POST
+     'header_user_nav' => ADD_POST
     ]
 );
 

@@ -28,7 +28,7 @@ function check_password(string $password, string $password_repeat):array
  * @param string $email строка, содержащая e-mail пользователя
  * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
  */
-function check_email(mysqli $connection, string $email):array
+function check_email(mysqli $connection, string $email):?array
 {
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['email' => 'Введите корректный адрес электронной почты'];
@@ -192,7 +192,7 @@ function check_symbols(string $value):?string
  * @param array $text_inputs массив с данным из формы добавления поста
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
  */
-function check_filled_value(array $text_inputs, string $type_form):array
+function check_filled_value(array $text_inputs, string $type_form):?array
 {
     $errors = [];
 
@@ -235,6 +235,7 @@ function validate_registration_form(array $filter_form_data, array $files, mysql
 
     $form_errors = check_filled_value($filter_form_data, 'registration');
     
+
     $form_errors += check_email($connection, $filter_form_data['email']);
 
     $form_errors += check_password($filter_form_data['password'], $filter_form_data['password-repeat']);
@@ -243,7 +244,6 @@ function validate_registration_form(array $filter_form_data, array $files, mysql
 
         $form_errors += check_type_file($files["file-photo"]["type"]);
 
-        //(!$form_errors) ? $filter_form_data += upload_files($files) : $filter_form_data;
     };
 
     return $form_errors;

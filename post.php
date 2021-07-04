@@ -44,7 +44,7 @@ $layout_content = include_template('layout.php',
      'is_auth' => $is_auth,
      'content' => $post,
      'title' => $title,
-     'neader_user_nav' => ADD_POST
+     'header_user_nav' => ADD_POST
     ]
 );
 

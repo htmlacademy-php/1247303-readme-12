@@ -12,8 +12,9 @@ if($_POST){
 
     $form_errors = validate_registration_form($filter_form_data, $_FILES, $connection);
 
-    if(!$form_errors) {
 
+    if(!$form_errors) {
+        
         register($connection, $filter_form_data);
     };
 };
@@ -31,7 +32,7 @@ $layout_content = include_template('layout.php',
      'is_auth' => 0,
      'content' => $registration_form,
      'title' => 'Регистрация',
-     'neader_user_nav' => HEADER_AUTH_REG
+     'header_user_nav' => HEADER_AUTH_REG
     ]
 );
 

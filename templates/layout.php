@@ -105,7 +105,7 @@
                         </div>
                     </li>
                     <?php endif; ?>
-                    <?= $neader_user_nav; ?>
+                    <?= $header_user_nav; ?>
                 </ul>
             </nav>
         </div>
