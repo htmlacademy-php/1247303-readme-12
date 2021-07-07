@@ -41,7 +41,7 @@ $post = include_template('post-details.php',
 $layout_content = include_template('layout.php', 
     [
      'user_name' => $user_name,
-     'is_auth' => $is_auth,
+     'is_auth' => 1,
      'content' => $post,
      'title' => $title,
      'header_user_nav' => ADD_POST

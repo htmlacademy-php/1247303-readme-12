@@ -102,7 +102,7 @@ if($_POST) {
         };
 
         $post_id = mysqli_insert_id($connection);
-
+        
         if($tags_arr) {
             add_new_tags_db($connection, $tags_arr);
             add_relation_arr_db($connection, $post_id, $tags_arr);  

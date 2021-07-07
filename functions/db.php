@@ -71,7 +71,7 @@ function get_array_db(mysqli $connect, string $request): array
 * @param  string $request Строка запроса к базе данных.
 * TODO - Узнать у наставника, какой тип данных установить если функции может возвращать как данные, так и NULL
 */
-function get_first_value(mysqli $connect, string $request)
+function get_first_value(mysqli $connect, string $request):int
 {
   $query =  mysqli_query($connect, $request);
 
@@ -82,8 +82,11 @@ function get_first_value(mysqli $connect, string $request)
   else {
     $array = mysqli_fetch_array($query);
 
-    return $array[0];
-  }
+    $result = isset($array) ? $array[0] : 0;
+
+  };
+ 
+  return $result;
 }
 
 /**
@@ -294,6 +297,7 @@ function get_tags_id(mysqli $connection, string $tag):int
 function get_user_by_mail(mysqli $connection, string $email):bool
 {
   $sql = "SELECT id FROM `users` WHERE email = '{$email}'";
+  
 
   return (bool) get_first_value($connection, $sql);
 }
