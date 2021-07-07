@@ -22,6 +22,7 @@
                 micro blogging
             </p>
         </div>
+        <?php if($is_auth === 1): ?>
         <form class="header__search-form form" action="#" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
@@ -34,6 +35,7 @@
                 </button>
             </div>
         </form>
+        <?php endif; ?>
         <div class="header__nav-wrapper">
             <?php if($is_auth === 1): ?>
             <nav class="header__nav">
@@ -54,8 +56,10 @@
                         </a>
                     </li>
                 </ul>
+                <?php endif; ?>
                 <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
                 <ul class="header__user-nav">
+                    <?php if($is_auth === 1): ?>
                     <li class="header__profile">
                         <a class="header__profile-link" href="#">
                             <div class="header__avatar-wrapper">
@@ -100,16 +104,10 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <?= (!$button_close) ?
-                        "<a class='header__post-button button button--transparent' href='add.php?categories-id=3'>Пост</a>":
-                       
-                        "<a class='header__post-button button header__post-button--active button--transparent' href='/1247303-readme-12'>{$button_close}</a>"
-                        ?>
-                    </li>
+                    <?php endif; ?>
+                    <?= $header_user_nav; ?>
                 </ul>
             </nav>
-            <?php endif; ?>
         </div>
     </div>
 </header>

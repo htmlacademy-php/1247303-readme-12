@@ -11,6 +11,8 @@ $get_type_name = get_type_from_id($types_content, $get_id);
 
 $filter_form_data = null;
 
+$form_errors = null;
+
 if($_POST) {
 
     $filter_form_data = array_map('filtered_form_data', $_POST);
@@ -100,7 +102,7 @@ if($_POST) {
         };
 
         $post_id = mysqli_insert_id($connection);
-
+        
         if($tags_arr) {
             add_new_tags_db($connection, $tags_arr);
             add_relation_arr_db($connection, $post_id, $tags_arr);  
@@ -132,10 +134,10 @@ $add_post = include_template('adding-post.php',
 $layout_content = include_template('layout.php',
     [
      'user_name' => $user_name,
-     'is_auth' => $is_auth,
+     'is_auth' => 1,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
-     'button_close' => 'закрыть'
+     'header_user_nav' => CLOSE_BTN
     ]
 );
 

@@ -2,7 +2,43 @@
 
 require_once('bootstrap.php');
 
-$form_errors= [];
+$form_errors = [];
+
+/**
+ * Проверяет идентичны ли пароль и повтор пароля, если данные не совпадают -
+ * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
+ * @param string $password пароль (строка)
+ * @param string $password_repeat повтор пароля (строка)
+ * @return array массив с текстом ошибки или пустой массив, если $password и $password_repeat идентичны
+ */
+function check_password(string $password, string $password_repeat):array
+{
+    if($password != $password_repeat) {
+        return ['password' => 'Пароли и повтор пароля должны совпадать'];
+    };
+    return [];
+}
+
+
+
+/**
+ * Проверяет e-mail пользователя (строку) если данные не корректны -
+ * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email строка, содержащая e-mail пользователя
+ * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
+ */
+function check_email(mysqli $connection, string $email):?array
+{
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['email' => 'Введите корректный адрес электронной почты'];
+    };
+
+    if(get_user_by_mail($connection, $email)){
+        return ['email' => "Пользователь с адресом {$email} уже зарегистрирован"];
+    };
+    return [];
+}
 
 /**
  * Проверяет длину строки, возвращает текст ошибки, если символов в строке больше запрашиваемых
@@ -91,6 +127,7 @@ function check_video_form(array $text_inputs):array
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param array $text_inputs массив с данным из формы добавления поста "ФОТО"
  * @param array $files_arr массив $_FILES 
+ * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
  */
 function check_photo_form(array $files_arr, array $text_inputs):array
 {
@@ -155,7 +192,7 @@ function check_symbols(string $value):?string
  * @param array $text_inputs массив с данным из формы добавления поста
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
  */
-function check_filled_value(array $text_inputs, string $type_form):array
+function check_filled_value(array $text_inputs, string $type_form):?array
 {
     $errors = [];
 
@@ -182,3 +219,33 @@ function filtered_form_data(?string $value):string
 
     return $filtered;
 }
+
+
+/**
+ * Осуществляет валидацию формы обратной связи - регистрации нового пользователя. 
+ * Если при валидации возникли ошибки, возвращает их в виде массива с установленной в проекте структурой. 
+ * Если ошибок нет - возвращает пустой массив.
+ * @param array $filter_form_data массив с данным из формы добавления регистрации пользователя
+ * @param array глобальный массив $_FILES
+ * @param mysqli $connection объект соединения с БД
+ * @return array массив с ошибками, или пустой массив, если ошибок нет
+ */
+function validate_registration_form(array $filter_form_data, array $files, mysqli $connection):array
+{
+
+    $form_errors = check_filled_value($filter_form_data, 'registration');
+    
+
+    $form_errors += check_email($connection, $filter_form_data['email']);
+
+    $form_errors += check_password($filter_form_data['password'], $filter_form_data['password-repeat']);
+
+    if(!$files["file-photo"]["error"]){
+
+        $form_errors += check_type_file($files["file-photo"]["type"]);
+
+    };
+
+    return $form_errors;
+}
+

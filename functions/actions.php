@@ -1,6 +1,29 @@
 <?php 
 
 /**
+ * Возвращает массив, содержащий хеш пароля обернутый в принятую в проекте структуру данных. 
+ * В случае ошибки формирования хеша пароля выводит на экран ошибку.
+ * @param string $password Строка, содержащая пользовательский пароль
+ * @return array
+ * 
+ */
+function set_password_hash(string $password):string
+{
+   $hash = password_hash($password, PASSWORD_DEFAULT);
+    //var_dump($hash);
+   if($hash) {
+        return $hash;
+   }
+   else{
+    print("Ошибка формирования пароля");
+    exit();
+   }; 
+}
+
+
+
+
+/**
  * Возвращает подстроку идущую после заданного символа. 
  * @param string $str Строка, из которую нужно извлечь подстроку
  * @param string $separ разделитель
@@ -82,5 +105,32 @@ function get_tags_form(array $form_data, string $type_form):?array
     };
 
     return null; 
+}
+
+/**
+ * Запускает процесс регистрации нового пользователя.
+ * В случае успешной регистрации возвращает true
+ * @param array $filter_form_data массив данных из формы регистрации пользователя и ссылка на файл аватара, 
+ * если он был добавлен в форму
+ * @param mysqli $connection объект соединения с БД
+ * @return bool
+ */
+function register(mysqli $connection, array $filter_form_data):bool
+{
+    if(!$_FILES["file-photo"]["error"]){
+
+        $filter_form_data += upload_files($_FILES);
+    }
+    else{
+        $filter_form_data += ['file-link' => ''];
+    };
+          
+    $filter_form_data['password'] = set_password_hash($filter_form_data['password']);
+
+    $filter_form_data['password-repeat'] = null;
+
+    add_user_db($connection, $filter_form_data);
+
+    return true;
 }
 
