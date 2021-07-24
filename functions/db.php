@@ -71,7 +71,7 @@ function get_array_db(mysqli $connect, string $request): array
 * @param  string $request Строка запроса к базе данных.
 * TODO - Узнать у наставника, какой тип данных установить если функции может возвращать как данные, так и NULL
 */
-function get_first_value(mysqli $connect, string $request):int
+function get_first_value(mysqli $connect, string $request)
 {
   $query =  mysqli_query($connect, $request);
 
@@ -294,13 +294,41 @@ function get_tags_id(mysqli $connection, string $tag):int
  * @param string $email строка запроса (e-mail, наличие которого нужно проверить в БД)
  * @return bool true, если пользователь с таким email есть, false если e-mail нет
  */
-function get_user_by_mail(mysqli $connection, string $email):bool
+function get_user_by_mail(mysqli $connection, string $email):int
 {
   $sql = "SELECT id FROM `users` WHERE email = '{$email}'";
   
 
-  return (bool) get_first_value($connection, $sql);
+  return get_first_value($connection, $sql);
 }
+
+
+/**
+ * Возвращает из БД (табл. `users`) HASH пароля пользователя по текстовому запросу (email).
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email строка запроса (e-mail, наличие которого нужно проверить в БД)
+ * @return string
+ */
+function get_hash_by_mail(mysqli $connection, string $email):string
+{
+  $sql = "SELECT password FROM `users` WHERE email = '{$email}'";
+
+  return get_first_value($connection, $sql);
+}
+
+/**
+ * Возвращает из БД (табл. `users`) массив с именем и фамилией пользователя по ID).
+ * @param mysqli $connection объект соединения с БД
+ * @param string $id строка запроса (id, наличие которого нужно проверить в БД)
+ * @return string
+ */
+function get_user(mysqli $connection, int $id):array
+{
+  $sql = "SELECT avatar_path, first_name, last_name FROM `users` WHERE id = '{$id}'";
+
+  return get_array_db($connection, $sql);
+}
+
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом text(Текст).
@@ -309,7 +337,7 @@ function get_user_by_mail(mysqli $connection, string $email):bool
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_text_db(mysqli $connect, ?array $form_data)
+function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id)
 {
 
     $today = new DateTime('now');
@@ -326,12 +354,12 @@ function add_post_text_db(mysqli $connect, ?array $form_data)
         )
         VALUES
         (
-         2,
+          {$user_id},
           {$form_data['submit']},
          '{$today->format('Y-m-d H:i:s')}',
          '{$form_data["text-heading"]}',
          '{$form_data["post-text"]}',
-         15
+         1
         )";
 
     return set_request_db($connect, $request);
@@ -345,7 +373,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_quote_db(mysqli $connect, ?array $form_data)
+function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id)
 {
 
     $today = new DateTime('now');
@@ -363,13 +391,13 @@ function add_post_quote_db(mysqli $connect, ?array $form_data)
         )
         VALUES
         (
-         2,
+          {$user_id},
           {$form_data['submit']},
          '{$today->format('Y-m-d H:i:s')}',
          '{$form_data["quote-heading"]}',
          '{$form_data["post-quote"]}',
          '{$form_data["quote-author"]}',
-         15
+         1
         )";
 
     return set_request_db($connect, $request);
@@ -382,7 +410,7 @@ function add_post_quote_db(mysqli $connect, ?array $form_data)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_photo_db(mysqli $connect, ?array $form_data)
+function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id)
 {
 
     $today = new DateTime('now');
@@ -399,12 +427,12 @@ function add_post_photo_db(mysqli $connect, ?array $form_data)
         )
         VALUES
         (
-         2,
+          {$user_id},
           {$form_data['submit']},
          '{$today->format('Y-m-d H:i:s')}',
          '{$form_data["photo-heading"]}',
          '{$form_data["file-link"]}',
-         15
+         1
         )";
 
     return set_request_db($connect, $request);
@@ -417,7 +445,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_video_db(mysqli $connect, ?array $form_data)
+function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id)
 {
 
     $today = new DateTime('now');
@@ -434,12 +462,12 @@ function add_post_video_db(mysqli $connect, ?array $form_data)
         )
         VALUES
         (
-         2,
+          {$user_id},
           {$form_data['submit']},
          '{$today->format('Y-m-d H:i:s')}',
          '{$form_data["video-heading"]}',
          '{$form_data["video-url"]}',
-         15
+         1
         )";
 
     return set_request_db($connect, $request);
@@ -452,7 +480,7 @@ function add_post_video_db(mysqli $connect, ?array $form_data)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_link_db(mysqli $connect, ?array $form_data)
+function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id)
 {
 
     $today = new DateTime('now');
@@ -469,12 +497,12 @@ function add_post_link_db(mysqli $connect, ?array $form_data)
         )
         VALUES
         (
-         2,
+          {$user_id},
           {$form_data['submit']},
          '{$today->format('Y-m-d H:i:s')}',
          '{$form_data["link-heading"]}',
          '{$form_data["post-link"]}',
-         15
+         1
         )";
 
     return set_request_db($connect, $request);

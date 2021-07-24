@@ -16,7 +16,7 @@ if($_POST){
     if(!$form_errors) {
         
         if(register($connection, $filter_form_data)){
-            header("Location: index.php");
+            header("Location: popular.php");
         };
     };
 };

@@ -1,7 +1,12 @@
 <?php
+session_start();
 
 require_once('bootstrap.php');
 
+if(!isset($_SESSION['user_id'])) {
+    
+    redirect_to_main();
+};
 
 $types_content = get_content_types($connection);
 
@@ -12,6 +17,12 @@ $get_type_name = get_type_from_id($types_content, $get_id);
 $filter_form_data = null;
 
 $form_errors = null;
+
+$user_id = $_SESSION['user_id'];
+
+$user = get_user($connection, $user_id);
+
+$avatar_path = $user[0]['avatar_path'];
 
 if($_POST) {
 
@@ -81,23 +92,23 @@ if($_POST) {
         switch($get_type_name) {
 
             case "text" :
-                add_post_text_db($connection, $filter_form_data);
+                add_post_text_db($connection, $filter_form_data, $user_id);
             break;
 
             case "photo" :
-                add_post_photo_db($connection, $filter_form_data);
+                add_post_photo_db($connection, $filter_form_data, $user_id);
             break;
     
             case "video" :
-                add_post_video_db($connection, $filter_form_data);
+                add_post_video_db($connection, $filter_form_data, $user_id);
             break;
     
             case "link" :
-                add_post_link_db($connection, $filter_form_data);
+                add_post_link_db($connection, $filter_form_data, $user_id);
             break;
     
             case "quote" :
-                add_post_quote_db($connection, $filter_form_data);
+                add_post_quote_db($connection, $filter_form_data, $user_id);
             break;
         };
 
@@ -133,8 +144,8 @@ $add_post = include_template('adding-post.php',
 
 $layout_content = include_template('layout.php',
     [
-     'user_name' => $user_name,
-     'is_auth' => 1,
+     'user_name' => $user[0]['first_name'] . " " . $user[0]['last_name'],
+     'avatar_path' => $avatar_path,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
      'header_user_nav' => CLOSE_BTN

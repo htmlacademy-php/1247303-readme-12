@@ -1,30 +1,43 @@
-<?php 
+<?php
+session_start();
+
 require_once('bootstrap.php');
 
-$types_content = get_content_types($connection);
+$form_errors = null;
 
 
-$get_id = get_data_from_params('categories-id');
+if(isset($_SESSION['user_id'])) {
 
-$posts = get_posts($connection, $get_id, NULL);
+    header("Location: feed.php");
+};
 
 
-$page_content = include_template('main.php', 
+if($_POST) {
+    $filter_form_data = array_map('filtered_form_data', $_POST);
+    
+    $form_errors = validate_authentication_form($filter_form_data, $connection);
+
+    if(!$form_errors) {
+
+        $form_errors = validate_form_password($connection, $filter_form_data['email'], $filter_form_data['password']);
+    };
+
+    if(!$form_errors){
+
+        authorization_user($connection, $filter_form_data['email']);
+
+        header("Location: feed.php");
+
+        exit();
+        
+    };
+}
+
+
+$layout_content = include_template('main.php', 
     [
-     'posts' => $posts, 
-     'types_content' => $types_content, 
-     'get_id' => $get_id,
-     'connection' => $connection
-    ]
-);
-
-$layout_content = include_template('layout.php', 
-    [
-     'user_name' => $user_name,
      'is_auth' => 1,
-     'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть',
-     'header_user_nav' => ADD_POST
     ]
 );
 
