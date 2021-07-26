@@ -5,6 +5,8 @@ require_once('bootstrap.php');
 
 $form_errors = null;
 
+$filter_form_data = null;
+
 
 if(isset($_SESSION['user_id'])) {
 
@@ -23,6 +25,7 @@ if($_POST) {
     };
 
     if(!$form_errors){
+        session_start();
 
         authorization_user($connection, $filter_form_data['email']);
 
@@ -36,8 +39,9 @@ if($_POST) {
 
 $layout_content = include_template('main.php', 
     [
-     'is_auth' => 1,
      'title' => 'readme: блог, каким он должен быть',
+     'filter_form_data' => $filter_form_data,
+     'form_errors' => $form_errors
     ]
 );
 

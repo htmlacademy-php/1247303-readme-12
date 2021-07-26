@@ -25,10 +25,10 @@ const ADD_POST =  "<li><a class='header__post-button button button--transparent'
 const CLOSE_BTN = "<li><a class='header__post-button button header__post-button--active button--transparent' href='/1247303-readme-12'>Закрыть</a><li>";
 
 const HEADER_AUTH_REG = "<li class='header__authorization'>
-                        <a class='header__user-button header__authorization-button button' href='login.html'>Вход</a>
+                        <a class='header__user-button header__authorization-button button' href='login.php'>Вход</a>
                      </li>
                      <li>
-                        <a class='header__user-button header__user-button--active header__register-button button'>Регистрация</a>
+                        <a class='header__user-button header__user-button--active header__register-button button' href='registration.php' >Регистрация</a>
                      </li>";
 
 

@@ -154,7 +154,7 @@ function check_user_db_hash(mysqli $connection, string $email, string $password_
  */
 function authorization_user(mysqli $connection, string $email)
 {
-
+    
     $_SESSION['user_id'] = get_user_by_mail($connection, $email);
 }
 /**

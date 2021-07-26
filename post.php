@@ -34,6 +34,8 @@ $user = get_user($connection, $_SESSION['user_id']);
 
 $avatar_path = $user[0]['avatar_path'];
 
+$is_auth = (bool) ($_SESSION['user_id']);
+
 $post = include_template('post-details.php', 
     [
      'post_content' => $post_content, 
@@ -51,10 +53,12 @@ $post = include_template('post-details.php',
 $layout_content = include_template('layout.php', 
     [
      'user_name' => $user[0]['first_name'] . " " . $user[0]['last_name'],
+     'is_auth' => $is_auth,
      'avatar_path' => $avatar_path,
      'content' => $post,
      'title' => $title,
-     'header_user_nav' => ADD_POST
+     'header_user_nav' => ADD_POST,
+     'main_class' => 'publication'
     ]
 );
 

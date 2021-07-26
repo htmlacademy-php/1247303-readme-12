@@ -24,6 +24,8 @@ $user = get_user($connection, $user_id);
 
 $avatar_path = $user[0]['avatar_path'];
 
+$is_auth = (bool) ($_SESSION['user_id']);
+
 if($_POST) {
 
     $filter_form_data = array_map('filtered_form_data', $_POST);
@@ -145,10 +147,12 @@ $add_post = include_template('adding-post.php',
 $layout_content = include_template('layout.php',
     [
      'user_name' => $user[0]['first_name'] . " " . $user[0]['last_name'],
+     'is_auth' => $is_auth,
      'avatar_path' => $avatar_path,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
-     'header_user_nav' => CLOSE_BTN
+     'header_user_nav' => CLOSE_BTN,
+     'main_class' => 'adding-post'
     ]
 );
 

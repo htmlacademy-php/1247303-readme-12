@@ -19,6 +19,8 @@ $user = get_user($connection, $_SESSION['user_id']);
 
 $avatar_path = $user[0]['avatar_path'];
 
+$is_auth = (bool) $_SESSION['user_id'];
+
 $page_content = include_template('popular.php', 
     [
      'posts' => $posts, 
@@ -31,6 +33,7 @@ $page_content = include_template('popular.php',
 $layout_content = include_template('layout.php', 
     [
      'user_name' => $user[0]['first_name'] . " " . $user[0]['last_name'],
+     'is_auth' => $is_auth,
      'avatar_path' => $avatar_path,
      'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть',
