@@ -25,13 +25,10 @@ if($_POST) {
     };
 
     if(!$form_errors){
-        session_start();
 
         authorization_user($connection, $filter_form_data['email']);
 
         header("Location: feed.php");
-
-        exit();
         
     };
 }

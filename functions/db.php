@@ -326,7 +326,9 @@ function get_user(mysqli $connection, int $id):array
 {
   $sql = "SELECT avatar_path, first_name, last_name FROM `users` WHERE id = '{$id}'";
 
-  return get_array_db($connection, $sql);
+  $user = get_array_db($connection, $sql);
+
+  return $user[0];
 }
 
 
