@@ -21,7 +21,7 @@
                 micro blogging
             </p>
         </div>
-        <?php if($is_auth): ?>
+        <?php if(isset($user)): ?>
         <form class="header__search-form form" action="#" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
@@ -36,7 +36,7 @@
         </form>
         <?php endif; ?>
         <div class="header__nav-wrapper">
-            <?php if($is_auth): ?>
+            <?php if(isset($user)): ?>
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
@@ -58,15 +58,15 @@
                 </ul>
                 <?php endif; ?>
                 <ul class="header__user-nav">
-                <?php if($is_auth): ?>
+                <?php if(isset($user)): ?>
                     <li class="header__profile">
                         <a class="header__profile-link" href="#">
                             <div class="header__avatar-wrapper">
-                                <img class="header__profile-avatar" src="img/<?= $avatar_path ?>" alt="Аватар профиля">
+                                <img class="header__profile-avatar" src="img/<?= $user['avatar_path'] ?>" alt="Аватар профиля">
                             </div>
                             <div class="header__profile-name">
                                 <span>
-                                    <?=$user_name?>
+                                    <?=$user['first_name'] . " " . $user['last_name']?>
                                 </span>
                                 <svg class="header__link-arrow" width="10" height="6">
                                     <use xlink:href="#icon-arrow-right-ad"></use>

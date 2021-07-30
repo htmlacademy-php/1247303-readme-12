@@ -31,8 +31,6 @@ $registration_form = include_template('registration-new-user.php',
 
 $layout_content = include_template('layout.php',
     [
-     'user_name' => $user_name,
-     'is_auth' => false,
      'content' => $registration_form,
      'title' => 'Регистрация',
      'header_user_nav' => HEADER_AUTH_REG

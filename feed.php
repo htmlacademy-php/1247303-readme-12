@@ -18,8 +18,6 @@ $posts = get_posts($connection, $get_id, NULL);
 
 $user = get_user($connection, $_SESSION['user_id']);
 
-$avatar_path = $user['avatar_path'];
-
 
 $page_content = include_template('feed.php', 
     [
@@ -32,9 +30,7 @@ $page_content = include_template('feed.php',
 
 $layout_content = include_template('layout.php', 
     [
-     'user_name' => $user['first_name'] . " " . $user['last_name'],
-     'is_auth' => (bool) $_SESSION['user_id'],
-     'avatar_path' => $avatar_path,
+     'user' => $user,  
      'content' => $page_content, 
      'title' => 'readme: блог, каким он должен быть',
      'header_user_nav' => ADD_POST,

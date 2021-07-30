@@ -45,8 +45,6 @@ $login_form = include_template('login.php',
 
 $layout_content = include_template('layout.php',
     [
-     'user_name' => $user_name,
-     'is_auth' => false,
      'content' => $login_form ,
      'title' => 'Регистрация',
      'header_user_nav' => HEADER_AUTH_REG,
