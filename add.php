@@ -24,7 +24,6 @@ $user = get_user($connection, $user_id);
 
 $avatar_path = $user['avatar_path'];
 
-$is_auth = (bool) ($_SESSION['user_id']);
 
 if($_POST) {
 
@@ -147,7 +146,7 @@ $add_post = include_template('adding-post.php',
 $layout_content = include_template('layout.php',
     [
      'user_name' => $user['first_name'] . " " . $user['last_name'],
-     'is_auth' => $is_auth,
+     'is_auth' => (bool) $_SESSION['user_id'],
      'avatar_path' => $avatar_path,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
