@@ -62,19 +62,19 @@ if($_POST) {
 
                 $filter_form_data += download_out_files($filter_form_data["photo-url"]);
             };
-        break;
+            break;
 
         case "video" :
 
             $error_link_video = check_video_form($filter_form_data);
             $form_errors += $error_link_video;
-        break;
+            break;
 
         case "link" :
 
             $error_link = check_link($filter_form_data['post-link'], 'post-link');
             $form_errors += $error_link;
-        break;
+            break;
 
         case "quote" :
 
@@ -84,7 +84,7 @@ if($_POST) {
 
                 $form_errors +=  ["post-quote" => "Цитата. {$error_quote_text}"];
             };
-        break;
+            break;
     };
 
 
@@ -94,23 +94,23 @@ if($_POST) {
 
             case "text" :
                 add_post_text_db($connection, $filter_form_data, $user_id);
-            break;
+                break;
 
             case "photo" :
                 add_post_photo_db($connection, $filter_form_data, $user_id);
-            break;
+                break;
     
             case "video" :
                 add_post_video_db($connection, $filter_form_data, $user_id);
-            break;
+                break;
     
             case "link" :
                 add_post_link_db($connection, $filter_form_data, $user_id);
-            break;
+                break;
     
             case "quote" :
                 add_post_quote_db($connection, $filter_form_data, $user_id);
-            break;
+                break;
         };
 
         $post_id = mysqli_insert_id($connection);
@@ -145,9 +145,7 @@ $add_post = include_template('adding-post.php',
 
 $layout_content = include_template('layout.php',
     [
-     'user_name' => $user['first_name'] . " " . $user['last_name'],
-     'is_auth' => (bool) $_SESSION['user_id'],
-     'avatar_path' => $avatar_path,
+     'user' => $user,  
      'content' => $add_post,
      'title' => 'Добавить публикацию',
      'header_user_nav' => CLOSE_BTN,
