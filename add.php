@@ -1,7 +1,12 @@
 <?php
+session_start();
 
 require_once('bootstrap.php');
 
+if(!isset($_SESSION['user_id'])) {
+    
+    redirect_to_main();
+};
 
 $types_content = get_content_types($connection);
 
@@ -12,6 +17,13 @@ $get_type_name = get_type_from_id($types_content, $get_id);
 $filter_form_data = null;
 
 $form_errors = null;
+
+$user_id = $_SESSION['user_id'];
+
+$user = get_user($connection, $user_id);
+
+$avatar_path = $user['avatar_path'];
+
 
 if($_POST) {
 
@@ -50,19 +62,19 @@ if($_POST) {
 
                 $filter_form_data += download_out_files($filter_form_data["photo-url"]);
             };
-        break;
+            break;
 
         case "video" :
 
             $error_link_video = check_video_form($filter_form_data);
             $form_errors += $error_link_video;
-        break;
+            break;
 
         case "link" :
 
             $error_link = check_link($filter_form_data['post-link'], 'post-link');
             $form_errors += $error_link;
-        break;
+            break;
 
         case "quote" :
 
@@ -72,7 +84,7 @@ if($_POST) {
 
                 $form_errors +=  ["post-quote" => "Цитата. {$error_quote_text}"];
             };
-        break;
+            break;
     };
 
 
@@ -81,24 +93,24 @@ if($_POST) {
         switch($get_type_name) {
 
             case "text" :
-                add_post_text_db($connection, $filter_form_data);
-            break;
+                add_post_text_db($connection, $filter_form_data, $user_id);
+                break;
 
             case "photo" :
-                add_post_photo_db($connection, $filter_form_data);
-            break;
+                add_post_photo_db($connection, $filter_form_data, $user_id);
+                break;
     
             case "video" :
-                add_post_video_db($connection, $filter_form_data);
-            break;
+                add_post_video_db($connection, $filter_form_data, $user_id);
+                break;
     
             case "link" :
-                add_post_link_db($connection, $filter_form_data);
-            break;
+                add_post_link_db($connection, $filter_form_data, $user_id);
+                break;
     
             case "quote" :
-                add_post_quote_db($connection, $filter_form_data);
-            break;
+                add_post_quote_db($connection, $filter_form_data, $user_id);
+                break;
         };
 
         $post_id = mysqli_insert_id($connection);
@@ -133,11 +145,11 @@ $add_post = include_template('adding-post.php',
 
 $layout_content = include_template('layout.php',
     [
-     'user_name' => $user_name,
-     'is_auth' => 1,
+     'user' => $user,  
      'content' => $add_post,
      'title' => 'Добавить публикацию',
-     'header_user_nav' => CLOSE_BTN
+     'header_user_nav' => CLOSE_BTN,
+     'main_class' => 'adding-post'
     ]
 );
 

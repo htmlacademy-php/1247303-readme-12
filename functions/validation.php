@@ -22,7 +22,7 @@ function check_password(string $password, string $password_repeat):array
 
 
 /**
- * Проверяет e-mail пользователя (строку) если данные не корректны -
+ * Проверяет e-mail пользователя (строку) если e-mail не корректен или он есть в БД -
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param mysqli $connection объект соединения с БД
  * @param string $email строка, содержащая e-mail пользователя
@@ -39,6 +39,26 @@ function check_email(mysqli $connection, string $email):?array
     };
     return [];
 }
+/**
+ * Проверяет e-mail пользователя (строку) если e-mail не корректен или его в БД -
+ * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email строка, содержащая e-mail пользователя
+ * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
+ */
+function check_email_autn(mysqli $connection, string $email):?array
+{
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['email' => 'Введите корректный адрес электронной почты'];
+    };
+
+    if(!get_user_by_mail($connection, $email)){
+        return ['email' => "Пользователь с адресом {$email} не зарегистрирован. Необходима регистрация"];
+    };
+    return [];
+}
+
+
 
 /**
  * Проверяет длину строки, возвращает текст ошибки, если символов в строке больше запрашиваемых
@@ -249,3 +269,39 @@ function validate_registration_form(array $filter_form_data, array $files, mysql
     return $form_errors;
 }
 
+/**
+ * Осуществляет валидацию формы обратной связи - входа пользователя на сайт. 
+ * Если при валидации возникли ошибки, возвращает их в виде массива с установленной в проекте структурой. 
+ * Если ошибок нет - возвращает пустой массив.
+ * @param array $filter_form_data массив с данным из формы добавления регистрации пользователя
+ * @param mysqli $connection объект соединения с БД
+ * @return array массив с ошибками, или пустой массив, если ошибок нет
+ */
+function validate_authentication_form(array $filter_form_data, mysqli $connection):array 
+{
+    $form_errors = check_filled_value($filter_form_data, 'authentication');
+
+    $form_errors += check_email_autn($connection, $filter_form_data['email']);
+
+    return $form_errors;
+}
+
+/**
+ * Осуществляет валидацию пароля пользователя. 
+ * Если при валидации возникли ошибки, возвращает их в виде массива с установленной в проекте структурой. 
+ * Если ошибок нет - возвращает пустой массив.
+ * @param array $filter_form_data массив с данным из формы добавления регистрации пользователя
+ * @param string $email email пользователя
+ * @param string $password_form пароль, который необходит проверить на соответствии
+ * @return array массив с ошибками, или пустой массив, если ошибок нет
+ */
+function validate_form_password($connection, $email, $password_form)
+{
+    $status_form_password = check_user_db_hash($connection, $email, $password_form);
+
+    if($status_form_password) {
+        return [];
+    }
+    return ["password" => "Введен неверный пароль"];
+
+}

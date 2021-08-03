@@ -10,7 +10,7 @@
 function set_password_hash(string $password):string
 {
    $hash = password_hash($password, PASSWORD_DEFAULT);
-    //var_dump($hash);
+
    if($hash) {
         return $hash;
    }
@@ -132,5 +132,35 @@ function register(mysqli $connection, array $filter_form_data):bool
     add_user_db($connection, $filter_form_data);
 
     return true;
+}
+/**
+ * Проверяет, совпадение переданного пароля, с имеющимся хешем пароля пользователя в БД (`users`) по переданному e-mail.
+ * Если хэши совпадают возвращает true, если пароли не совпадают - false
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email е-мейл пользователя, по которому нужно проверить совпадения паролей
+ * @param string $password_form пароль, который необходимо проверить
+ */
+function check_user_db_hash(mysqli $connection, string $email, string $password_form):bool
+{
+    $hash_db = get_hash_by_mail($connection, $email);
+
+    return password_verify($password_form, $hash_db);
+
+}
+/**
+ * Записывает в $_SESSION id пользователя по переданному e-mail.
+ * @param mysqli $connection объект соединения с БД
+ * @param string $email е-мейл пользователя
+ */
+function authorization_user(mysqli $connection, string $email)
+{
+    
+    $_SESSION['user_id'] = get_user_by_mail($connection, $email);
+}
+/**
+ * Выполняет редирект на главную страницу (index.php)
+ */
+function redirect_to_main() {
+    header("Location: index.php");
 }
 

@@ -1,11 +1,10 @@
 <?php
-session_start();
 
 require_once('bootstrap.php');
 
-$form_errors = null;
-
 $filter_form_data = null;
+
+$form_errors = null;
 
 
 if(isset($_SESSION['user_id'])) {
@@ -25,20 +24,31 @@ if($_POST) {
     };
 
     if(!$form_errors){
+        session_start();
 
         authorization_user($connection, $filter_form_data['email']);
 
         header("Location: feed.php");
+
+        exit();
         
     };
 }
 
 
-$layout_content = include_template('main.php', 
+$login_form = include_template('login.php',
     [
-     'title' => 'readme: блог, каким он должен быть',
-     'filter_form_data' => $filter_form_data,
-     'form_errors' => $form_errors
+        'filter_form_data' => $filter_form_data,
+        'form_errors' => $form_errors
+     ]
+);
+
+$layout_content = include_template('layout.php',
+    [
+     'content' => $login_form ,
+     'title' => 'Регистрация',
+     'header_user_nav' => HEADER_AUTH_REG,
+     'main_class' => 'login'
     ]
 );
 

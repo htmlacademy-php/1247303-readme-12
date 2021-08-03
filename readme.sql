@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 30 2021 г., 19:49
+-- Время создания: Авг 02 2021 г., 19:17
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.3.17
 
@@ -107,12 +107,11 @@ INSERT INTO `posts` (`id`, `user_id`, `type_id`, `publictation_date`, `title`, `
 (1, 1, 2, '2021-01-06 21:05:02', 'Цитата', 'Мы в жизни любим только раз, а после ищем лишь похожих.Мы в жизни любим только раз, а после ищем лишь похожих.', 'Неизвестный Автор', NULL, NULL, NULL, 10),
 (2, 2, 1, '2021-03-01 12:04:02', 'Игра престолов', 'Не могу дождаться начала финального сезона своего любимого сериала!', NULL, NULL, NULL, NULL, 12),
 (3, 3, 3, '2021-03-03 20:24:02', 'Наконец, обработал фотки!', NULL, NULL, 'img/rock-default.jpg', NULL, NULL, 8),
-(6, 2, 3, '2021-03-01 12:04:02', 'Карелия', '', '', 'uploads/1692851310.jpg', '', '', 15),
-(7, 1, 2, '2021-03-01 12:04:02', 'Мальчик молодой', 'Все хотят потанцевать с тобой ', 'Ирина Аллегрова', '', '', '', 15),
-(8, 2, 3, '2021-04-17 12:28:16', 'Все решим', '', '', 'uploads/1876689215.png', '', '', 15),
-(10, 2, 4, '2021-04-17 12:32:35', 'Node JS', '', '', '', 'https://www.youtube.com/watch?v=pSdDK2_zu-U', '', 15),
-(11, 2, 3, '2021-04-29 23:56:37', 'Плато Путорана', '', '', 'uploads/2125507604.jpg', '', '', 15),
-(12, 2, 3, '2021-04-30 00:27:35', 'Море-море', '', '', 'uploads/40097206.jpg', '', '', 15);
+(53, 2, 3, '2021-05-26 22:01:54', 'Fixto', NULL, NULL, 'uploads/469745751.png', NULL, NULL, 15),
+(54, 16, 1, '2021-07-24 17:08:53', 'Привет!', 'Андрей', NULL, NULL, NULL, NULL, 1),
+(55, 16, 3, '2021-07-24 17:32:24', 'Такие дела', NULL, NULL, 'uploads/135891660.jpg', NULL, NULL, 1),
+(56, 16, 4, '2021-07-26 21:13:07', 'Прикольные треки', NULL, NULL, NULL, 'https://www.youtube.com/watch?v=THQ0qaCEzlU', NULL, 1),
+(57, 16, 2, '2021-07-30 08:52:21', 'Жизненно', 'Брат за брата, так за основу взято', 'Джейсон Стетхем', NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -134,18 +133,23 @@ INSERT INTO `relations_posts_tags` (`id`, `post_id`, `tags_id`) VALUES
 (1, 3, 1),
 (2, 3, 2),
 (3, 1, 3),
-(5, 4, 4),
-(7, 4, 5),
-(9, 5, 2),
-(11, 6, 1),
-(13, 6, 6),
-(15, 6, 7),
-(17, 6, 8),
-(19, 7, 9),
-(21, 8, 10),
-(23, 9, 11),
-(25, 11, 17),
-(27, 12, 18);
+(42, 21, 21),
+(44, 24, 10),
+(45, 47, 22),
+(46, 48, 22),
+(47, 49, 22),
+(48, 53, 10),
+(49, 54, 14),
+(50, 55, 14),
+(51, 56, 14),
+(52, 57, 14),
+(53, 58, 14),
+(54, 59, 14),
+(55, 60, 14),
+(56, 64, 14),
+(57, 65, 23),
+(58, 54, 14),
+(59, 56, 24);
 
 -- --------------------------------------------------------
 
@@ -187,21 +191,25 @@ CREATE TABLE `tags` (
 --
 
 INSERT INTO `tags` (`id`, `title`) VALUES
+(23, 'q35rh'),
 (5, 'аллегрова'),
 (16, 'бугага'),
 (19, 'вспоминаялето'),
+(21, 'дичь'),
 (18, 'зож'),
 (4, 'ирина'),
 (1, 'красота'),
 (2, 'круто'),
 (17, 'мечтаюпобывать'),
 (9, 'младшийлейтенант'),
+(24, 'музыка'),
 (6, 'невероятная'),
 (11, 'обучение'),
 (8, 'природа'),
 (10, 'проекты'),
 (7, 'россия'),
 (15, 'смешно'),
+(22, 'тестовыйтег'),
 (3, 'умно'),
 (14, 'хорошо');
 
@@ -237,12 +245,12 @@ INSERT INTO `types` (`id`, `type`, `class_name`) VALUES
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `dt_add` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `avatar_path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `first_name` varchar(128) NOT NULL,
-  `last_name` varchar(128) NOT NULL
+  `email` varchar(535) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` varchar(535) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar_path` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `first_name` varchar(256) NOT NULL,
+  `last_name` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -251,9 +259,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `dt_add`, `email`, `login`, `password`, `avatar_path`, `first_name`, `last_name`) VALUES
 (1, '2021-03-10 15:11:12', 'tanya@test.com', 'tanya', '123456', 'userpic-tanya.jpg', 'Татьяна', 'Петрова'),
-(2, '2021-02-10 20:16:14', 'vlad@test.com', 'vlad', '654321', 'userpic.jpg', 'Влад', 'Кусков'),
+(2, '2021-02-10 20:16:14', 'vlad@test.com', 'vlad', '$2y$10$T163HT/hPP3XEwRBFZ8OJO3kenUdma7ORQpcXPywdSdvsILwRQ3xa', 'userpic.jpg', 'Влад', 'Кусков'),
 (3, '2020-05-07 10:35:07', 'vitya@test.com', 'victor', '0', 'userpic-mark.jpg', 'Виктор', 'Сухомлинов'),
-(4, '2019-07-11 21:48:17', 'michael@mail.com', 'misha', 'qwerty', 'userpic-misha.jpg', 'Михаил', 'Иванов');
+(4, '2019-07-11 21:48:17', 'michael@mail.com', 'misha', 'qwerty', 'userpic-misha.jpg', 'Михаил', 'Иванов'),
+(16, '2021-07-17 14:40:12', 'p.kondrashin@gmail.com', 'p.kondrashin@gmail.com', '$2y$10$T163HT/hPP3XEwRBFZ8OJO3kenUdma7ORQpcXPywdSdvsILwRQ3xa', 'userpic-petro.jpg', 'Петр', 'Кондрашин');
 
 --
 -- Индексы сохранённых таблиц
@@ -339,12 +348,12 @@ ALTER TABLE `types`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `login` (`login`),
   ADD KEY `password` (`password`),
   ADD KEY `avatar_path` (`avatar_path`),
   ADD KEY `dt_add` (`dt_add`),
   ADD KEY `first_name` (`first_name`),
-  ADD KEY `last_name` (`last_name`);
+  ADD KEY `last_name` (`last_name`),
+  ADD KEY `login` (`login`) USING BTREE;
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -372,13 +381,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT для таблицы `relations_posts_tags`
 --
 ALTER TABLE `relations_posts_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT для таблицы `subscriptions`
@@ -390,7 +399,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT для таблицы `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT для таблицы `types`
@@ -402,7 +411,7 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
