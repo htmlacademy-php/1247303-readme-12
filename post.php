@@ -32,6 +32,15 @@ $title = $posts[0]["title"];
 
 $user = get_user($connection, $_SESSION['user_id']);
 
+$post_id_likes = get_data_from_params('post-id-likes');
+
+
+if(isset($post_id_likes))
+{
+    toggle_likes_db($connection, $user['id'], $post_id_likes);
+
+};
+
 
 $post = include_template('post-details.php', 
     [
