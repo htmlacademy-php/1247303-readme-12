@@ -101,7 +101,7 @@ function get_content_types(mysqli $connection): array
 }
 
 
-//TODO переписать несколько аргументов на один(массив)
+
 /**
  * Функция получает список постов из БД, и фильтрует список по запросу
  * @param mysqli $connection объект соединения с БД
@@ -121,6 +121,7 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
               posts.author_quote,
               posts.img_path,
               posts.video_path,
+              type_id,
               site_path,
               users.dt_add,
               users.first_name,
@@ -138,13 +139,14 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
             LEFT JOIN
               `types`
             ON
-              posts.type_id = types.id ";
+              posts.type_id = types.id "; 
+
 
       if($type_id) {
-        $sql .= "WHERE types.id = {$type_id}";
+        $sql .= "WHERE types.id = {$type_id} ";
       }
       if($post_id) {
-        $sql .= "WHERE posts.id = {$post_id}";
+        $sql .= "WHERE posts.id = {$post_id} ";
       }
 
     return get_array_db($connection, $sql);
@@ -324,7 +326,7 @@ function get_hash_by_mail(mysqli $connection, string $email):string
  */
 function get_user(mysqli $connection, int $id):array
 {
-  $sql = "SELECT avatar_path, first_name, last_name FROM `users` WHERE id = '{$id}'";
+  $sql = "SELECT id, avatar_path, first_name, last_name FROM `users` WHERE id = '{$id}'";
 
   $user = get_array_db($connection, $sql);
 
@@ -515,7 +517,6 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id)
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $tag_title наименование тега
-* @param  int $tag_last_id id последней записи в таблице `tags` БД.
 * В случае успешной отправки возвращает true
 */
 function add_tag_db(mysqli $connect, string $tag_title)
@@ -635,6 +636,204 @@ function add_user_db(mysqli $connect, ?array $form_data)
 
     return set_request_db($connect, $request);
 }
+/**
+ * Функция возвращает список постов из БД, по поисковому текстовому запросу,
+ * в случае отсутствия постов возвращает NULL
+ * @param mysqli $connection объект соединения с БД
+ * @param string $query запрос, по которому нужно осуществить поиск
+ * @return array массив с списком постов
+ */
+function search_posts_db(mysqli $connection, string $query):?array 
+{
+
+    $sql = "SELECT
+    posts.id,
+    posts.content,
+    posts.title,
+    posts.publictation_date,
+    posts.user_id,
+    posts.author_quote,
+    posts.img_path,
+    posts.video_path,
+    posts.count_view,
+    site_path,
+    users.first_name,
+    users.last_name,
+    users.avatar_path,
+    types.class_name
+
+  FROM `posts`
+
+  LEFT JOIN
+    `users`
+  ON
+    posts.user_id = users.id
+
+  LEFT JOIN
+    `types`
+  ON
+    posts.type_id = types.id 
+
+  WHERE MATCH(title,content) AGAINST('{$query}')";
+
+
+  $search_results = get_array_db($connection, $sql);
+
+  
+  if(count($search_results)) {
+
+    return $search_results;
+  }
+  return null;
+}
+/**
+ * Функция возвращает массив с ID постов из БД, по ID тега
+ * в случае отсутствия постов возвращает NULL
+ * @param mysqli $connection объект соединения с БД
+ * @param int $tag_id - ID тега, по которому нужно получить ID постов
+ * @return array массив с списком постов
+ */
+function get_posts_id_for_tags_id(mysqli $connection, int $tag_id):?array
+{
+  $sql = "SELECT post_id FROM `relations_posts_tags` WHERE tags_id = {$tag_id}";
+
+  $post_id = get_array_db($connection, $sql);
+
+  if(count($post_id)) {
+
+    return $post_id;
+  }
+  return null;
+}
+
+/**
+ * Функция возвращает массив постом из БД, по массиву ID нужных постов
+ * @param mysqli $connection объект соединения с БД
+ * @param array $posts_id - ID тега, по которому нужно получить ID постов
+ * @return array массив с списком постов
+ */
+function get_posts_for_id(mysqli $connection, array $posts_id):?array
+{
+    $results = [];
+
+    foreach($posts_id as $post_id) {
+
+        $result = get_posts($connection, NULL, $post_id["post_id"]);
+      
+        array_push($results, $result[0]);
+
+    };
+
+    if(count($results)) {
+
+      return $results;
+    }
+    return null;
+}
+/**
+ * Функция возвращает массив записей и таблицы `likes`, отфильтрованый по user_id
+ * в случае отсутствия постов возвращает NULL
+ * @param mysqli $connection объект соединения с БД
+ * @param int $user_id - ID пользователя, по которому нужно получить ID постов
+ * @return array массив с списком постов
+ */
+function get_posts_id_for_user_likes(mysqli $connection, int $user_id):?array
+{
+  $sql = "SELECT `id`, `post_id` FROM `likes` WHERE user_id = {$user_id}";
+
+  $post_id = get_array_db($connection, $sql);
+
+  if(count($post_id)) {
+
+    return $post_id;
+  }
+  return null;
+}
+/**
+ * Функция возвращает ID записи из таблицы `likes`, данные фильтровуются по user_id и post_id
+ * в случае отсутствия постов возвращает 0;
+ * @param mysqli $connection объект соединения с БД
+ * @param int $user_id - ID пользователя, по которому нужно получить ID постов
+ * @param int $post_id - ID пользователя, по которому нужно получить ID постов
+ * @return int - число, ID записи в из таблицы `likes`
+ */
+
+function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $post_id):int
+{
+  
+  $posts_likes = get_posts_id_for_user_likes($connection, $user_id);
+
+  if(isset($posts_likes)){
+    
+    foreach ($posts_likes as $post) {
+
+      if((int) $post['post_id'] === $post_id){
+
+          return $post['id'];
+      }
+    }
+  }
+
+  return 0;
+}
+
+/**
+* Создает или удаляет (тоглит) в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  int $user_id, ID пользователя, необходимо связать с постом
+* @param  int $post_id id поста, которого необходимо связать с пользователем в части лайка
+* В случае успешной отправки возвращает true
+*/
+function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
+{
+
+  $like = get_likes_for_user_id_post_id($connection, $user_id, $post_id);
+
+
+    if(!$like){
+      
+        $request = "
+        INSERT INTO
+            `likes` 
+            (
+              `user_id`, 
+              `post_id`
+            )
+
+        VALUES
+        (
+        {$user_id},
+        {$post_id}
+        )"; 
+
+        set_request_db($connection, $request);
+
+        redirect_to_back();
+
+        return;
+    }
+      delete_likes_db($connection, $like);
+
+      redirect_to_back();
+  
+      return;
+}
+
+/**
+* Удаляет в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  int $id записи, которую нужно удалить
+*/
+function delete_likes_db(mysqli $connection, $id)
+{
+      $request = "DELETE FROM `likes` WHERE `id` = {$id}";
+
+      return set_request_db($connection, $request);
+    
+}
+
 
 
 

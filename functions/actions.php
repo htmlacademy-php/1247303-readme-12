@@ -160,7 +160,40 @@ function authorization_user(mysqli $connection, string $email)
 /**
  * Выполняет редирект на главную страницу (index.php)
  */
-function redirect_to_main() {
+function redirect_to_main() 
+{
     header("Location: index.php");
 }
+
+/**
+ * Выполняет редирект на предыдущую страницу
+ */
+function redirect_to_back()
+{
+    header("Location: {$_SERVER['HTTP_REFERER']}");
+}
+
+/**
+ * Функция возвращает отфильтрованный массив (список постов) по id типа контента.
+ * @param array $posts е-мейл пользователя, по которому нужно проверить совпадения паролей
+ * @param int $type_id id типа контента
+ * @return array
+ */
+
+function filtered_arr_posts_by_types(array $posts, int $type_id):array
+{
+
+    $filtered_posts = [];
+
+    foreach($posts as $post) {
+
+        if((int) $post['type_id'] === $type_id){
+
+            array_push($filtered_posts, $post);
+        }
+    }
+    return $filtered_posts;
+}
+
+
 

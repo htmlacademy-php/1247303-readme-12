@@ -8,6 +8,9 @@ if(!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
+$posts = [];
+
+
 $types_content = get_content_types($connection);
 
 
@@ -16,6 +19,19 @@ $get_id = get_data_from_params('categories-id');
 $posts = get_posts($connection, $get_id, NULL);
 
 $user = get_user($connection, $_SESSION['user_id']);
+
+$post_id_likes = get_data_from_params('post-id-likes');
+
+$likes_posts = get_posts_id_for_user_likes($connection, $user['id']);
+
+
+if(isset($post_id_likes))
+{
+    toggle_likes_db($connection, $user['id'], $post_id_likes);
+    
+};
+
+
 
 
 $page_content = include_template('popular.php', 

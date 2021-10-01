@@ -40,9 +40,9 @@
                             <span>Все</span>
                         </a>
                     </li>
-                    <?php foreach ($types_content as $key => $type):?>
+                    <?php foreach ($types_content as $type):?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?=$type['class_name'];?> button <?= ((int) $type['id'] === $get_id) ? 'filters__button--active' : '' ?>" href="/1247303-readme-12/popular.php?categories-id=<?=$type['id'];?>">
+                        <a class="filters__button filters__button--<?=$type['class_name']?> button <?= ((int) $type['id'] === $get_id) ? 'filters__button--active' : '' ?>" href="popular.php?categories-id=<?=$type['id'];?>">
                             <span class="visually-hidden"><?=$type['type']; ?></span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-<?=$type['class_name']; ?>"></use>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="popular__posts">
-            <?php foreach ($posts as $key => $post):?>
+            <?php foreach ($posts as $post):?>
                 
             <article class="popular__post post post-<?=htmlspecialchars($post['class_name']); ?>">
                 <header class="post__header">
@@ -90,8 +90,7 @@
                         <span><?=$post['content'];?></span>
                     </a>
                 </div>
-                <?php 
-                    elseif($post['class_name'] === 'video'):?>
+                <?php elseif($post['class_name'] === 'video'):?>
                     <div class="post-video__block">
                         <div class="post-video__preview">
                         <?= embed_youtube_video($post['video_path']); ?>
@@ -122,7 +121,7 @@
                     </div>
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                            <a class="post__indicator post__indicator--likes button" href="popular.php?post-id-likes=<?=($post['id']); ?>" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>

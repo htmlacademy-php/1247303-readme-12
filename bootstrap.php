@@ -14,9 +14,6 @@ require_once('functions/template.php');
 require_once('functions/validation.php');
 require_once('functions/actions.php');
 
-$is_auth = rand(0, 1);
-
-$user_name = 'Иван Тестов'; // укажите здесь ваше имя
 
 $connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
 

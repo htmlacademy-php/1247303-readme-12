@@ -9,7 +9,7 @@
            <?= $post_content ?>
           <div class="post__indicators">
             <div class="post__buttons">
-              <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+              <a class="post__indicator post__indicator--likes button" href="post.php?post-id=2&post-id-likes=<?=($post[0]['id'])?>" title="Лайк">
                 <svg class="post__indicator-icon" width="20" height="17">
                   <use xlink:href="#icon-heart"></use>
                 </svg>
@@ -38,7 +38,7 @@
           </div>
           <ul class="post__tags">
             <?php foreach($tags as $tag): ?>
-            <li><a href="#"><?="#" . $tag['title']?></a></li>
+            <li><a href="search.php?tag=<?=$tag['title']?>&id=<?=$tag['id']?>"><?="#" . $tag['title']?></a></li>
             <?php endforeach ?>
           </ul>
           <div class="comments">
