@@ -60,7 +60,7 @@
                 <ul class="header__user-nav">
                 <?php if(isset($user)): ?>
                     <li class="header__profile">
-                        <a class="header__profile-link" href="#">
+                        <a class="header__profile-link" href="profile.php?id=<?=$user['id']?>">
                             <div class="header__avatar-wrapper">
                                 <img class="header__profile-avatar" src="img/<?= $user['avatar_path'] ?>" alt="Аватар профиля">
                             </div>
@@ -171,6 +171,6 @@
 </footer>
 <!-- <script src="libs/dropzone.js"></script>
 <script src="js/dropzone-settings.js"></script> -->
-<script src="js/main.js"></script>
+<!-- <script src="js/main.js"></script> -->
 </body>
 </html>

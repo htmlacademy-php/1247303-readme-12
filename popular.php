@@ -22,7 +22,11 @@ $user = get_user($connection, $_SESSION['user_id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
-$likes_posts = get_posts_id_for_user_likes($connection, $user['id']);
+$page_up =  get_data_from_params('page-up');
+
+$page_count = 1;
+
+
 
 
 if(isset($post_id_likes))
@@ -39,6 +43,7 @@ $page_content = include_template('popular.php',
      'posts' => $posts, 
      'types_content' => $types_content, 
      'get_id' => $get_id,
+     'page_count' => $page_count,
      'connection' => $connection
     ]
 );

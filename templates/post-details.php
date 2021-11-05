@@ -1,5 +1,3 @@
-
-<main class="page__main page__main--publication">
   <div class="container">
     <h1 class="page__title page__title--publication"><?=$post[0]["title"] ?></h1>
     <section class="post-details">
@@ -71,7 +69,7 @@
                             <a class="comments__user-name" href="#">
                                 <span><?=$comment['first_name']." ".$comment['last_name'] ?></span>
                             </a>
-                            <time class="comments__time" datetime="<?=$comment['publictation_date'] ?>"><?=relativeDate($comment['publictation_date']);?></time>
+                            <time class="comments__time" datetime="<?=$comment['publictation_date'] ?>"><?=relativeDate($comment['publictation_date']) . " назад";?></time>
                         </div>
                         <p class="comments__text">
                           <?=$comment['content'] ?>
@@ -99,7 +97,7 @@
                 <span><?=$post[0]["first_name"]." ".$post[0]["last_name"] ?></span>
               </a>
               <?php $registration_date = $post[0]['dt_add']?>
-              <time class="post-details__time user__time" datetime="<?=$registration_date?>"><?=relativeDate($registration_date);?></time>
+              <time class="post-details__time user__time" datetime="<?=$registration_date?>"><?=relativeDate($registration_date) . " на сайте"?></time>
             </div>
           </div>
           <div class="post-details__rating user__rating">
@@ -120,4 +118,3 @@
       </div>
     </section>
   </div>
-</main>

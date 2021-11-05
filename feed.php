@@ -21,6 +21,7 @@ $posts_likes = get_posts_id_for_user_likes($connection, $user['id']);
 $post_id_likes = get_data_from_params('post-id-likes');
 
 
+
 if(isset($post_id_likes))
 {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
@@ -59,7 +60,7 @@ $layout_content = include_template('layout.php',
     [
      'user' => $user,  
      'content' => $page_content, 
-     'title' => 'readme: блог, каким он должен быть',
+     'title' => 'readme. Лента публикаций',
      'header_user_nav' => ADD_POST,
      'main_class' => 'feed'
     ]

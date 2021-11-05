@@ -109,19 +109,19 @@
                 <?php $publicationsDate = $post['publictation_date']?>
                 <footer class="post__footer">
                     <div class="post__author">
-                        <a class="post__author-link" href="#" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">
+                        <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">
                             <div class="post__avatar-wrapper">
                                 <img class="post__author-avatar" src="img/<?=htmlspecialchars($post['avatar_path']); ?>" alt="Аватар пользователя">
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"><?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?></b>
-                                <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) ?></time>
+                                <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) . " назад" ?></time>
                             </div>
                         </a>
                     </div>
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button" href="popular.php?post-id-likes=<?=($post['id']); ?>" title="Лайк">
+                            <a class="post__indicator post__indicator--likes button" href="popular.php?post-id-likes=<?=($post['id'])?>" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>
@@ -143,5 +143,9 @@
                 </footer>
             </article>
             <?php endforeach; ?>
+        </div>
+        <div class="popular__page-links">
+            <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page-down=<?=$page_count?>">Предыдущая страница</a>
+            <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page-up=<?=$page_count?>">Следующая страница</a>
         </div>
     </div>

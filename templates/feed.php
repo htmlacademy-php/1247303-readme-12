@@ -9,13 +9,13 @@
             <?php foreach ($posts as $post):?>
               <article class="feed__post post post-<?=$post['class_name']?>">
                 <header class="post__header post__author">
-                  <a class="post__author-link" href="#" title="Автор">
+                  <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="Автор">
                     <div class="post__avatar-wrapper">
                       <img class="post__author-avatar" src="img/<?=$post['avatar_path']?>" alt="Аватар пользователя" width="60" height="60">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name"><?=$post['first_name'] ." ".  $post['last_name'] ?></b>
-                      <span class="post__time"><?=relativeDate($post['publictation_date']) ?></span>
+                      <span class="post__time"><?=relativeDate($post['publictation_date']) . " назад" ?></span>
                     </div>
                   </a>
                 </header>
@@ -75,7 +75,7 @@
                         </a>
                       </div>
                     <?php endif ?>
-                  </div>
+                </div>
 
                 <footer class="post__footer post__indicators">
                   <div class="post__buttons">

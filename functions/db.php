@@ -109,7 +109,7 @@ function get_content_types(mysqli $connection): array
  * @param ?int $post_id id поста
  * @return array массив с списком постов
  */
-function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL): array
+function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL): array
 {
 
     $sql = "SELECT
@@ -147,6 +147,9 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
       }
       if($post_id) {
         $sql .= "WHERE posts.id = {$post_id} ";
+      }
+      if($user_id) {
+        $sql .= "WHERE users.id = {$user_id} ";
       }
 
     return get_array_db($connection, $sql);
@@ -326,7 +329,7 @@ function get_hash_by_mail(mysqli $connection, string $email):string
  */
 function get_user(mysqli $connection, int $id):array
 {
-  $sql = "SELECT id, avatar_path, first_name, last_name FROM `users` WHERE id = '{$id}'";
+  $sql = "SELECT id, avatar_path, first_name, last_name, dt_add FROM `users` WHERE id = '{$id}'";
 
   $user = get_array_db($connection, $sql);
 
@@ -707,9 +710,9 @@ function get_posts_id_for_tags_id(mysqli $connection, int $tag_id):?array
 }
 
 /**
- * Функция возвращает массив постом из БД, по массиву ID нужных постов
+ * Функция возвращает массив постов из БД, по массиву ID нужных постов
  * @param mysqli $connection объект соединения с БД
- * @param array $posts_id - ID тега, по которому нужно получить ID постов
+ * @param array $posts_id - массив ID постов, по которому нужно получить массив с данными постов
  * @return array массив с списком постов
  */
 function get_posts_for_id(mysqli $connection, array $posts_id):?array
@@ -730,6 +733,8 @@ function get_posts_for_id(mysqli $connection, array $posts_id):?array
     }
     return null;
 }
+
+
 /**
  * Функция возвращает массив записей и таблицы `likes`, отфильтрованый по user_id
  * в случае отсутствия постов возвращает NULL
@@ -739,13 +744,13 @@ function get_posts_for_id(mysqli $connection, array $posts_id):?array
  */
 function get_posts_id_for_user_likes(mysqli $connection, int $user_id):?array
 {
-  $sql = "SELECT `id`, `post_id` FROM `likes` WHERE user_id = {$user_id}";
+  $sql = "SELECT `id`, `post_id` FROM `likes` WHERE like_user_id = {$user_id}";
 
-  $post_id = get_array_db($connection, $sql);
+  $likes = get_array_db($connection, $sql);
 
-  if(count($post_id)) {
+  if(count($likes)) {
 
-    return $post_id;
+    return $likes;
   }
   return null;
 }
@@ -762,7 +767,7 @@ function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $po
 {
   
   $posts_likes = get_posts_id_for_user_likes($connection, $user_id);
-
+  
   if(isset($posts_likes)){
     
     foreach ($posts_likes as $post) {
@@ -790,14 +795,13 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
 
   $like = get_likes_for_user_id_post_id($connection, $user_id, $post_id);
 
-
     if(!$like){
       
         $request = "
         INSERT INTO
             `likes` 
             (
-              `user_id`, 
+              `like_user_id`, 
               `post_id`
             )
 
@@ -813,6 +817,7 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
 
         return;
     }
+      
       delete_likes_db($connection, $like);
 
       redirect_to_back();
@@ -834,7 +839,185 @@ function delete_likes_db(mysqli $connection, $id)
     
 }
 
+/**
+ * Функция получает информацию по постам пользователя у которых есть лайки
+ * @param mysqli $connection объект соединения с БД
+ * @param ?int $$user_id id пользователя, список постов 
+ * @return array массив с списком постов
+ */
+function get_liked_posts(mysqli $connection, ?int $user_id = NULL): ?array
+{
+
+    $sql = "SELECT
+              like_user_id,
+              post_id,
+              likes.dt_add,
+              posts.user_id,
+              posts.img_path,
+              posts.video_path,
+              users.first_name,
+              users.last_name,
+              users.avatar_path,
+              posts.img_path,
+              posts.type_id,
+              types.class_name
+
+
+            FROM `likes`
+                          
+            LEFT JOIN
+              `posts`
+            ON
+              post_id = posts.id 
+
+            LEFT JOIN
+            `users`
+            ON
+              like_user_id = users.id
+
+            LEFT JOIN
+            `types`
+            ON
+              posts.type_id = types.id 
+            
+              
+            WHERE posts.user_id = {$user_id}"; 
+
+
+    return get_array_db($connection, $sql);
+}
+
+/**
+ * Функция получает список подписчиков пользователя
+ * @param mysqli $connection объект соединения с БД
+ * @param ?int $$user_id id пользователя 
+ * @return array массив с списком постов
+ */
+function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
+{
+
+    $sql = "SELECT
+              user_id,
+              followerr_user_id,
+              users.first_name,
+              users.last_name,
+              users.avatar_path,
+              users.dt_add
+
+
+            FROM `subscriptions`
+                          
+            LEFT JOIN
+            `users`
+            ON
+             followerr_user_id = users.id
+            
+              
+            WHERE user_id = {$user_id}"; 
+
+
+    return get_array_db($connection, $sql);
+}
+
+function get_followers_id_from_user_id(mysqli $connection, int $user_id):?array
+{
+  $sql = "SELECT `id`, `user_id`, `followerr_user_id` FROM `subscriptions` WHERE followerr_user_id = {$user_id}";
+
+  $followers = get_array_db($connection, $sql);
+
+  return $followers;
+
+}
 
 
 
+
+
+function get_follower_id_from_user_id(mysqli $connection, int $user_id, int $follower_id)
+{
+  
+  $followers = get_followers_id_from_user_id($connection, $user_id);
+
+  foreach($followers as $follower) {
+  
+    if((int) $follower['user_id'] === $follower_id){
+      
+      return $follower['user_id'];
+    }
+  };
+  return 0;
+
+}
+
+function get_id_subcriptions_from_user_id(mysqli $connection, int $user_id, int $follower_id)
+{
+  
+  $followers = get_followers_id_from_user_id($connection, $follower_id);
+
+  foreach($followers as $follower) {
+  
+    if((int) $follower['user_id'] === $user_id){
+      
+      return $follower['id'];
+    }
+  };
+  return 0;
+
+}
+
+/**
+* Удаляет в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  int $id записи, которую нужно удалить
+*/
+function delete_subscripions_db(mysqli $connection, $id)
+{
+      $request = "DELETE FROM `subscriptions` WHERE `id` = {$id}";
+
+      return set_request_db($connection, $request);
+    
+}
+
+/**
+* Создает или удаляет (тоглит) в таблице БД `subscriptions` запись - связь ID пользователя и ID пользователя-подписчика.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  int $user_id, ID пользователя, на которого нужно подписаться
+* @param  int $follower_id  id пользователя-подписчика
+*/
+function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_id)
+{
+
+  $subscription = get_id_subcriptions_from_user_id($connection, $user_id, $follower_id);
+
+
+    if(!$subscription){
+      
+        $request = "
+        INSERT INTO
+            `subscriptions` 
+            (
+              `user_id`, 
+              `followerr_user_id`
+            )
+
+        VALUES
+        (
+        {$user_id},
+        {$follower_id}
+        )"; 
+
+        set_request_db($connection, $request);
+
+        redirect_to_back();
+
+        return;
+    }
+      delete_subscripions_db($connection, $subscription);
+
+      redirect_to_back();
+  
+      return;
+}
 
