@@ -16,17 +16,18 @@ $types_content = get_content_types($connection);
 
 $get_id = get_data_from_params('categories-id');
 
-$posts = get_posts($connection, $get_id, NULL);
+$page =  get_data_from_params('page');
 
 $user = get_user($connection, $_SESSION['user_id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
-$page_up =  get_data_from_params('page-up');
+$offset = 0;
 
-$page_count = 1;
-
-
+if($page) {
+    
+    $offset = $page * 6;
+};
 
 
 if(isset($post_id_likes))
@@ -36,6 +37,7 @@ if(isset($post_id_likes))
 };
 
 
+$posts = get_posts($connection, $get_id, null, null, $offset);
 
 
 $page_content = include_template('popular.php', 
@@ -43,7 +45,7 @@ $page_content = include_template('popular.php',
      'posts' => $posts, 
      'types_content' => $types_content, 
      'get_id' => $get_id,
-     'page_count' => $page_count,
+     'page' => $page,
      'connection' => $connection
     ]
 );

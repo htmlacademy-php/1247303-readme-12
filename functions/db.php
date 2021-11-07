@@ -109,7 +109,7 @@ function get_content_types(mysqli $connection): array
  * @param ?int $post_id id поста
  * @return array массив с списком постов
  */
-function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL): array
+function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL, int $offset = NULL): array
 {
 
     $sql = "SELECT
@@ -139,7 +139,8 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
             LEFT JOIN
               `types`
             ON
-              posts.type_id = types.id "; 
+              posts.type_id = types.id 
+             "; 
 
 
       if($type_id) {
@@ -152,7 +153,14 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
         $sql .= "WHERE users.id = {$user_id} ";
       }
 
+      if($offset || $offset === 0) {
+        $sql .= "LIMIT 5 OFFSET {$offset}";
+      }
+      
+
     return get_array_db($connection, $sql);
+
+    
 }
 
 /**
@@ -221,7 +229,7 @@ function get_count_views(mysqli $connection, int $post_id):int
  * @param ?int $post_id id публикации (поста), по которой нужно получить список комментариев
  * @return array массив с списком комментариев
  */
-function get_comments(mysqli $connection, ?int $post_id = NULL): array
+function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2): array
 {
 
     $sql = "SELECT
@@ -229,6 +237,7 @@ function get_comments(mysqli $connection, ?int $post_id = NULL): array
               comments.publictation_date,
               comments.content,
               comments.publictation_date,
+              comments.user_id,
               users.first_name,
               users.last_name,
               users.avatar_path
@@ -245,7 +254,11 @@ function get_comments(mysqli $connection, ?int $post_id = NULL): array
             ON
               posts.id = comments.post_id
 
-            WHERE posts.id = {$post_id}";
+            WHERE posts.id = {$post_id} ORDER BY `publictation_date` DESC";
+
+    if ($limit) {
+      $sql .= " LIMIT {$limit} OFFSET 0";
+    };
 
     return get_array_db($connection, $sql);
 }
@@ -919,6 +932,12 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
     return get_array_db($connection, $sql);
 }
 
+/**
+ * Функция получает список подписок пользователя
+ * @param mysqli $connection объект соединения с БД
+ * @param ?int $$user_id id пользователя 
+ * @return array массив с списком постов
+ */
 function get_followers_id_from_user_id(mysqli $connection, int $user_id):?array
 {
   $sql = "SELECT `id`, `user_id`, `followerr_user_id` FROM `subscriptions` WHERE followerr_user_id = {$user_id}";
@@ -926,13 +945,16 @@ function get_followers_id_from_user_id(mysqli $connection, int $user_id):?array
   $followers = get_array_db($connection, $sql);
 
   return $followers;
-
 }
 
 
-
-
-
+/**
+ * Функция получает ID подписчика пользователя
+ * @param mysqli $connection объект соединения с БД
+ * @param int $$user_id id пользователя 
+ * @param int $follower_id подписчика
+ * @return array массив с списком постов
+ */
 function get_follower_id_from_user_id(mysqli $connection, int $user_id, int $follower_id)
 {
   
@@ -948,7 +970,13 @@ function get_follower_id_from_user_id(mysqli $connection, int $user_id, int $fol
   return 0;
 
 }
-
+/**
+ * Функция получает ID пользователя по ID подписчика
+ * @param mysqli $connection объект соединения с БД
+ * @param int $$user_id id пользователя 
+ * @param int $follower_id подписчика
+ * @return array массив с списком постов
+ */
 function get_id_subcriptions_from_user_id(mysqli $connection, int $user_id, int $follower_id)
 {
   
@@ -1014,10 +1042,53 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
 
         return;
     }
-      delete_subscripions_db($connection, $subscription);
 
-      redirect_to_back();
+    delete_subscripions_db($connection, $subscription);
+
+    redirect_to_back();
   
-      return;
+    return;
+}
+
+
+
+/**
+* Сохраняет в таблицу БД `comments` запись - комментарий к посту.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  string $comment_text текст комментария.
+* @param  int $user_id ID автора комментария.
+* @param  int $$post_id ID комментируемого поста.
+* В случае успешной отправки возвращает true
+*/
+function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id, int $post_id)
+{
+    $commented_post_is_valid = (int) get_posts($connect, null, $post_id, null, null)[0]['id']; 
+    
+    if($commented_post_is_valid === $post_id) {
+
+      $today = new DateTime('now');
+
+      $request = "
+          INSERT INTO
+          `comments`
+          ( 
+            `publictation_date`, 
+            `content`, 
+            `user_id`, 
+            `post_id`
+          )
+          VALUES
+          (
+           '{$today->format('Y-m-d H:i:s')}',
+           '{$comment_text}',
+            {$user_id},
+            {$post_id}
+          )";
+  
+      return set_request_db($connect, $request);
+    }
+    print("Системная ошибка. Пост не найден");
+    exit();
 }
 

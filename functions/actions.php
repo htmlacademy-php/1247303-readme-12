@@ -122,7 +122,7 @@ function register(mysqli $connection, array $filter_form_data):bool
         $filter_form_data += upload_files($_FILES);
     }
     else{
-        $filter_form_data += ['file-link' => ''];
+        $filter_form_data += ['file-link' => 'img/no-avatar.jpg'];
     };
           
     $filter_form_data['password'] = set_password_hash($filter_form_data['password']);

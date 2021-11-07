@@ -34,6 +34,11 @@ $user = get_user($connection, $_SESSION['user_id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
+$view_all_comments = get_data_from_params('view-all-comments');
+
+$filter_form_data = null;
+
+$form_errors = null;
 
 if(isset($post_id_likes))
 {
@@ -41,18 +46,50 @@ if(isset($post_id_likes))
 
 };
 
+if($view_all_comments) {
+    $comments = get_comments($connection, $post_id, null);
+}
+
+if ($_POST) {
+
+    $filter_form_data = array_map('filtered_form_data', $_POST);
+
+    $form_errors = check_filled_value($filter_form_data, 'comment');
+
+    $error_length_heading = check_length_str($filter_form_data["comment-text"], null, 4);
+
+    
+    if(isset($error_length_heading)) {
+
+        $form_errors += ["comment-text" => "Текст комментария. {$error_length_heading}"];
+    };
+
+    if(!$form_errors){
+
+        add_comment_post_db($connection,$filter_form_data["comment-text"], $user['id'], $posts[0]["id"]);
+
+        redirect_to_back();
+    }
+};
+
 
 $post = include_template('post-details.php', 
     [
      'post_content' => $post_content, 
      'post' => $posts, 
+     'user' => $user,
      'quantity_likes' => $quantity_likes, 
      'quantity_comments' => $quantity_comments, 
      'comments' => $comments,
      'quantity_post_author' => $quantity_post_author,
      'followers_author' => $followers_author,
      'count_views' => $count_views,
-     'tags' => $tags
+     'tags' => $tags,
+     'view_all_comments' => $view_all_comments,
+     'filter_form_data' => $filter_form_data,
+     'form_errors' => $form_errors,
+     'connection' => $connection
+
     ]
 );
 

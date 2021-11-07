@@ -12,10 +12,6 @@ $id_user_profile = get_string_from_params('id');
 
 $tabs_active = get_string_from_params('tabs');
 
-if(!isset($tabs_active)){
-    $tabs_active = 'posts';
-}
-
 $tabs_active_content = [];
 
 $user = get_user($connection, $_SESSION['user_id']);
@@ -30,7 +26,7 @@ $quantity_followers = get_quantity_followers($connection, (int) $user_profile["i
 
 $posts = get_posts($connection, NULL, NULL, $user_profile['id']);
 
-$post_id_comments = get_string_from_params('comments-post');
+$post_id_comments = get_data_from_params('comments-post');
 
 $posts_likes = get_liked_posts($connection, $user_profile['id']);
 
@@ -39,6 +35,19 @@ $post_id_likes = get_data_from_params('post-id-likes');
 $user_profile_subscriptions = get_subscritions($connection, $user_profile['id']);
 
 $subcrtions_user =  get_data_from_params('subscriptions');
+
+$view_comment = get_data_from_params('view');
+
+$view_all_comment = get_data_from_params('all');
+
+$filter_form_data = null;
+
+$form_errors = null;
+
+
+if(!isset($tabs_active)){
+    $tabs_active = 'posts';
+}
 
 if(isset($subcrtions_user)) 
 {
@@ -52,14 +61,39 @@ if(isset($post_id_likes))
     
 };
 
+if ($_POST) {
 
+    $filter_form_data = array_map('filtered_form_data', $_POST);
+
+    $form_errors = check_filled_value($filter_form_data, 'comment');
+
+    $error_length_heading = check_length_str($filter_form_data["comment-text"], null, 4);
+
+    
+
+    if(isset($error_length_heading)) {
+
+        $form_errors += ["comment-text" => "Текст комментария. {$error_length_heading}"];
+    };
+
+    if(!$form_errors){
+
+        add_comment_post_db($connection,$filter_form_data["comment-text"], $user['id'], $post_id_comments);
+    }
+};
 
 switch($tabs_active) {
     case "posts" :
         $tabs_active_content =  [
             'connection' => $connection,
             'user_profile' => $user_profile,
-            'posts' => $posts 
+            'user' => $user,
+            'posts' => $posts,
+            'post_id_likes' => $post_id_likes,
+            'view_comment' => $view_comment,
+            'view_all_comment' => $view_all_comment,
+            'filter_form_data' => $filter_form_data,
+            'form_errors' => $form_errors
         ];
     break;
     case "likes" :

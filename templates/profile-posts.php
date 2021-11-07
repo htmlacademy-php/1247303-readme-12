@@ -20,25 +20,8 @@
                       <a class="post-text__more-link" href="#">Читать далее</a>
                     <?php elseif($post['class_name'] === 'video'):?>
                       <div class="post-video__preview">
-                          <img src="img/coast.jpg" alt="Превью к видео" width="760" height="396">
-                        </div>
-                        <div class="post-video__control">
-                          <button class="post-video__play post-video__play--paused button button--video" type="button"><span class="visually-hidden">Запустить видео</span></button>
-                          <div class="post-video__scale-wrapper">
-                            <div class="post-video__scale">
-                              <div class="post-video__bar">
-                                <div class="post-video__toggle"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <button class="post-video__fullscreen post-video__fullscreen--inactive button button--video" type="button"><span class="visually-hidden">Полноэкранный режим</span></button>
-                        </div>
-                        <button class="post-video__play-big button" type="button">
-                          <svg class="post-video__play-big-icon" width="27" height="28">
-                            <use xlink:href="#icon-video-play-big"></use>
-                          </svg>
-                          <span class="visually-hidden">Запустить проигрыватель</span>
-                        </button>
+                        <?= embed_youtube_video($post['video_path']) ?>
+                      </div>
                       <?php elseif($post['class_name'] === 'quote'):?>
                         <blockquote>
                           <p>
@@ -61,7 +44,7 @@
                             </svg>
                           </a>
                         </div>
-                      <?php endif ?>
+                      <?php endif; ?>
                 </div>
 
                   <footer class="post__footer">
@@ -85,7 +68,7 @@
                           <span class="visually-hidden">количество репостов</span>
                         </a>
                       </div>
-                      <time class="post__time" datetime="<?=relativeDate($post['publictation_date'])?>"><?=relativeDate($post['publictation_date']) . " назад" ?></time>
+                      <time class="post__time" datetime="<?=$post['publictation_date']?>"><?=relativeDate($post['publictation_date']) . " назад" ?></time>
                     </div>
                     <ul class="post__tags">
                       <?php $tags = get_tags_post($connection, $post['id']); foreach($tags as $tag): ?>
@@ -93,11 +76,58 @@
                       <?php endforeach ?>
                     </ul>
                   </footer>
+                  <?php $comments = get_comments($connection, $post['id']); if(count($comments) && !$view_comment): ?>
+                    <div class="comments">
+                      <a class="comments__button button" href="profile.php?id=<?=$user_profile["id"]?>&tabs=posts&view=1&comments-post=<?=$post['id']?>">Показать комментарии</a>
+                    </div>
+                  <?php elseif($view_comment): ?>
                   <div class="comments">
-                    <a class="comments__button button" href="profile.php?comments-post=<?=$post['id']?>">Показать комментарии</a>
-                    <?php if(isset($post_id_comments)): ?>
-                      <?="Список комментариев для постав {$post_id_comments}"?>
-                    <?php endif ?>
+                      <div class="comments__list-wrapper">
+                        <ul class="comments__list">
+                          <?php if($view_all_comment) {$comments = get_comments($connection, $post['id'], null);}; foreach($comments as $comment): ?>
+                          <li class="comments__item user">
+                            <div class="comments__avatar">
+                              <a class="user__avatar-link" href="profile.php?id=<?=$comment['id']?>">
+                                <img class="comments__picture" src="<?=$comment['avatar_path'] ?>" alt="Аватар пользователя">
+                              </a>
+                            </div>
+                            <div class="comments__info">
+                              <div class="comments__name-wrapper">
+                                <a class="comments__user-name" href="profile.php?id=<?=$comment['id']?>">
+                                  <span><?=$comment['first_name']." ".$comment['last_name']?></span>
+                                </a>
+                                <time class="comments__time" datetime="<?=$comment['publictation_date']?>"><?=relativeDate($comment['publictation_date']) . " назад"?> </time>
+                              </div>
+                              <p class="comments__text">
+                                <?=$comment['content']?>
+                              </p>
+                            </div>
+                          </li>
+                        <?php endforeach; ?>
+                        </ul>
+                        <?php if(get_count_comments($connection, $post['id']) > 2 && !$view_all_comment): ?>
+                        <a class="comments__more-link" href="profile.php?id=<?=$user_profile["id"]?>&tabs=posts&view=1&comments-post=<?=$post['id']?>&all=1">
+                          <span>Показать все комментарии</span>
+                          <sup class="comments__amount"><?=get_count_comments($connection, $post['id'])?></sup>
+                        </a>
+                        <?php endif; ?>
+                      </div>
                   </div>
+                  <form class="comments__form form" action="profile.php?id=<?=$user_profile["id"]?>&tabs=posts&view=1&comments-post=<?=$post['id']?>" method="post">
+                    <div class="comments__my-avatar">
+                      <img class="comments__picture" src="<?=$user['avatar_path']?>" alt="Аватар пользователя">
+                    </div>
+                    <div class="form__input-section <?=(isset($form_errors["comment-text"])) ? "form__input-section--error":""?>">
+                      <textarea class="comments__textarea form__textarea form__input" id="comment-text" name="comment-text" placeholder="Ваш комментарий"><?= ($form_errors && $filter_form_data['comment-text']) ? $filter_form_data['comment-text'] : '' ?></textarea>
+                      <label class="visually-hidden">Ваш комментарий</label>
+                      <button class="form__error-button button" type="button">!</button>
+                      <div div class="form__error-text">
+                        <h3 class="form__error-title">Ошибка валидации</h3>
+                        <p class="form__error-desc"><?=$form_errors["comment-text"]?></p>
+                      </div>
+                    </div>
+                    <button class="comments__submit button button--green" type="submit">Отправить</button>
+                  </form>
+                  <?php endif; ?>
                   </article> 
                 <?php endforeach; ?> 

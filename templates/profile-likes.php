@@ -4,12 +4,12 @@
                   <li class="post-mini post-mini--<?=$post_like['class_name']?> post user">
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
-                        <a class="user__avatar-link" href="#">
-                          <img class="post-mini__picture user__picture" src="img/<?=$post_like['avatar_path']?>" alt="Аватар пользователя">
+                        <a class="user__avatar-link" href="profile.php?id=<?=$post_like['like_user_id']?>">
+                          <img class="post-mini__picture user__picture" src="<?=$post_like['avatar_path']?>" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
-                        <a class="post-mini__name user__name" href="#">
+                        <a class="post-mini__name user__name" href="profile.php?id=<?=$post_like['like_user_id']?>">
                           <span><?=$post_like['first_name'] ." ". $post_like['last_name']?></span>
                         </a>
                         <div class="post-mini__action">

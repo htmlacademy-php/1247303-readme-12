@@ -5,7 +5,7 @@
                     <div class="post-mini__user-info user__info">
                       <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="profile.php?id=<?=$follower['followerr_user_id']?>&tabs=posts">
-                          <img class="post-mini__picture user__picture" src="img/<?=$follower['avatar_path']?>" alt="Аватар пользователя">
+                          <img class="post-mini__picture user__picture" src="<?=$follower['avatar_path']?>" alt="Аватар пользователя">
                         </a>
                       </div>
                       <div class="post-mini__name-wrapper user__name-wrapper">
@@ -26,7 +26,7 @@
                       </p>
                     </div>
                     <div class="post-mini__user-buttons user__buttons">
-                      <button class="post-mini__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $follower['followerr_user_id']) === $follower['followerr_user_id']) ? "button--quartz":"button--main" ?>" type="button"><?= (get_follower_id_from_user_id($connection, $user['id'], $follower['followerr_user_id']) === $follower['followerr_user_id']) ? "Отписаться":"Подписаться" ?></button>
+                      <a href="profile.php?id=<?=$follower['followerr_user_id']?>&subscriptions=1" class="post-mini__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $follower['followerr_user_id']) === $follower['followerr_user_id']) ? "button--quartz":"button--main" ?>" type="button"><?= (get_follower_id_from_user_id($connection, $user['id'], $follower['followerr_user_id']) === $follower['followerr_user_id']) ? "Отписаться":"Подписаться" ?></a>
                     </div>
                   </li>
                 <?php endforeach; ?>

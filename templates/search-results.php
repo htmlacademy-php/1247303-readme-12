@@ -15,7 +15,7 @@
                 <header class="post__header post__author">
                   <a class="post__author-link" href="#" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/<?=$post['avatar_path']?>" alt="Аватар пользователя" width="60" height="60">
+                      <img class="post__author-avatar" src="<?=$post['avatar_path']?>" alt="Аватар пользователя" width="60" height="60">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name"><?=$post['first_name'] ." ".  $post['last_name'] ?></b>

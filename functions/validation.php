@@ -65,11 +65,14 @@ function check_email_autn(mysqli $connection, string $email):?array
  * @param string $str строка, которую необходимо проверить
  * @param int $length_str максимальное количество символов в строке
  */
-function check_length_str(string $str, int $length_str):?string
+function check_length_str(string $str, ?int $max_length_str = null, ?int $min_length_str = null):?string
 {
-    if(mb_strlen($str) > $length_str) {
-        return "Количество символов не должен превышать {$length_str} знаков.";
+    if($max_length_str && mb_strlen($str) > $max_length_str) {
+        return "Количество символов не должно превышать {$max_length_str} знаков.";
     }
+    elseif($min_length_str && mb_strlen($str) < $min_length_str){
+        return "Количество символов не должно быть меньше {$min_length_str} знаков.";
+    };
     return null;
 }
 
@@ -205,12 +208,12 @@ function check_symbols(string $value):?string
 }
 
 /**
- * Проверяет заполнены ли все обязательные поля в форме добавления постов. 
+ * Проверяет заполнены ли все обязательные поля в форме. 
  * Если поля не заполнены - возвращает текст ошибки в виде массива. 
  * Если ошибок нет - возвращает пустой массив.
  * массив обязательных поле в константе массиве REQUIRED_FIELDS
  * @param array $text_inputs массив с данным из формы добавления поста
- * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
+ * @param string $type_form тип формы ('text','quote', 'photo', 'video', 'link', полный список типов форм в REQUIRED_FIELDS/bootstrap.php)
  */
 function check_filled_value(array $text_inputs, string $type_form):?array
 {
