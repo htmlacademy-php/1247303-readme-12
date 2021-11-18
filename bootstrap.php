@@ -19,7 +19,7 @@ $connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["
 
 const ADD_POST =  "<li><a class='header__post-button button button--transparent' href='add.php?categories-id=3'>Пост</a></li>"; 
 
-const CLOSE_BTN = "<li><a class='header__post-button button header__post-button--active button--transparent' href='/1247303-readme-12'>Закрыть</a><li>";
+const CLOSE_BTN = "<li><a class='header__post-button button header__post-button--active button--transparent' href='index.php'>Закрыть</a><li>";
 
 const HEADER_AUTH_REG = "<li class='header__authorization'>
                         <a class='header__user-button header__authorization-button button' href='login.php'>Вход</a>
@@ -33,24 +33,24 @@ const UNALLOWABLE_SYMBOLS = [",", "/", ".", "#", "!", "?","_"];
 
 const REQUIRED_FIELDS = [
     'text' => [
-        'text-heading' => 'Заголовок. Это поле должно быть заполнено.',
-        'post-text' => 'Текст поста. Это поле должно быть заполнено.'
+        'title' => 'Заголовок. Это поле должно быть заполнено.',
+        'content' => 'Текст поста. Это поле должно быть заполнено.'
     ],
     'quote'=> [
-        'quote-heading' => 'Заголовок. Это поле должно быть заполнено.',
-        'post-quote' => 'Цитата. Это поле должно быть заполнено.',
-        'quote-author' => 'Автор цитаты. Это поле должно быть заполнено.'
+        'title' => 'Заголовок. Это поле должно быть заполнено.',
+        'content' => 'Цитата. Это поле должно быть заполнено.',
+        'author_quote' => 'Автор цитаты. Это поле должно быть заполнено.'
     ],
     'photo' => [
-        'photo-heading' => 'Заголовок. Это поле должно быть заполнено.'
+        'title' => 'Заголовок. Это поле должно быть заполнено.'
     ],
     'video' => [
-        'video-heading' => 'Заголовок. Это поле должно быть заполнено.',
-        'video-url' => 'Ссылка Youtube. Это поле должно быть заполнено.'
+        'title' => 'Заголовок. Это поле должно быть заполнено.',
+        'video_path' => 'Ссылка Youtube. Это поле должно быть заполнено.'
     ],
     'link' => [
-        'link-heading' => 'Заголовок. Это поле должно быть заполнено.',
-        'post-link' => 'Ссылка. Это поле должно быть заполнено.'
+        'title' => 'Заголовок. Это поле должно быть заполнено.',
+        'site_path' => 'Ссылка. Это поле должно быть заполнено.'
     ],
     'registration' => [
         'email' => 'Электронная почта. Это поле должно быть заполнено.',

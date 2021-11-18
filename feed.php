@@ -20,6 +20,7 @@ $posts_likes = get_posts_id_for_user_likes($connection, $user['id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
+$repost = get_data_from_params('repost');
 
 
 if(isset($post_id_likes))
@@ -34,6 +35,7 @@ if(isset($posts_likes))
 
     $posts = get_posts_for_id($connection, $posts_likes);
 
+
     if(isset($get_id)){
 
         $filtered_posts = filtered_arr_posts_by_types($posts, $get_id);
@@ -46,6 +48,13 @@ else {
     $posts = [];
 
 }   
+
+if($repost) {
+
+    $key_post = get_data_from_params('key');
+
+    add_repost($connection, $posts[$key_post], $user['id']);
+};
 
 $page_content = include_template('feed.php', 
 [

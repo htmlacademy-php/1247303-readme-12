@@ -4,35 +4,35 @@
                   <div class="form__text-inputs-wrapper">
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
-                        <label class="adding-post__label form__label" for="quote-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["quote-heading"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="quote-heading" type="text" name="quote-heading" placeholder="Введите заголовок" value="<?= ($filter_form_data['quote-heading'] && $form_errors) ? $filter_form_data['quote-heading'] : '' ?>">
+                        <label class="adding-post__label form__label" for="title">Заголовок <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["title"])) ? "form__input-section--error":""?>">
+                          <input class="adding-post__input form__input" id="title" type="text" name="title" placeholder="Введите заголовок" value="<?= ($filter_form_data['title'] && $form_errors) ? $filter_form_data['title'] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["quote-heading"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["title"]?></p>
                           </div>
                         </div>
                       </div>
                       <div class="adding-post__input-wrapper form__textarea-wrapper">
-                        <label class="adding-post__label form__label" for="post-quote">Текст цитаты <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["post-quote"]) || isset($form_errors["quote-length-err"])) ? "form__input-section--error":""?>">
-                          <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="post-quote" name="post-quote" placeholder="Текст цитаты"><?= ($form_errors && $filter_form_data['post-quote']) ? $filter_form_data['post-quote'] : '' ?></textarea>
+                        <label class="adding-post__label form__label" for="content">Текст цитаты <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["content"]) || isset($form_errors["quote-length-err"])) ? "form__input-section--error":""?>">
+                          <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="content" name="content" placeholder="Текст цитаты"><?= ($form_errors && $filter_form_data['content']) ? $filter_form_data['content'] : '' ?></textarea>
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["post-quote"] ?></p>
+                            <p class="form__error-desc"><?=$form_errors["content"] ?></p>
                           </div>
                         </div>
                       </div>
                       <div class="adding-post__textarea-wrapper form__input-wrapper">
-                        <label class="adding-post__label form__label" for="quote-author">Автор <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["quote-author"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="quote-author" type="text" name="quote-author" placeholder="Автор цитаты" value="<?= ($form_errors && $filter_form_data['quote-author']) ? $filter_form_data['quote-author'] : '' ?>">
+                        <label class="adding-post__label form__label" for="author_quote">Автор <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["author_quote"])) ? "form__input-section--error":""?>">
+                          <input class="adding-post__input form__input" id="author_quote" type="text" name="author_quote" placeholder="Автор цитаты" value="<?= ($form_errors && $filter_form_data['author_quote']) ? $filter_form_data['author_quote'] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["quote-author"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["author_quote"]?></p>
                           </div>
                         </div>
                       </div>
@@ -60,8 +60,8 @@
                     <?php endif ?>
                   </div>
                   <div class="adding-post__buttons">
-                    <button class="adding-post__submit button button--main" type="submit" name="submit" value="<?=$get_id?>">Опубликовать</button>
-                    <a class="adding-post__close" href="#">Закрыть</a>
+                    <button class="adding-post__submit button button--main" type="submit" name="type_id" value="<?=$get_id?>">Опубликовать</button>
+                    <a class="adding-post__close" href="index.php">Закрыть</a>
                   </div>
                 </form>
               </section>

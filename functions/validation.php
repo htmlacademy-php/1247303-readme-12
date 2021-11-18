@@ -138,11 +138,11 @@ function check_type_file(string $type_file):array
 function check_video_form(array $text_inputs):array
 {
 
-    if(filter_var($text_inputs["video-url"], FILTER_VALIDATE_URL)) {
-        return check_youtube_url($text_inputs["video-url"]);
+    if(filter_var($text_inputs["video_path"], FILTER_VALIDATE_URL)) {
+        return check_youtube_url($text_inputs["video_path"]);
     }
 
-    return ['video-url' => 'Введенные данные не являются валидной ссылкой'];
+    return ['video_path' => 'Введенные данные не являются валидной ссылкой'];
 }
 
 /**

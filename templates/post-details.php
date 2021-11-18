@@ -24,11 +24,11 @@
                 <span><?=$quantity_comments ?></span>
                 <span class="visually-hidden">количество комментариев</span>
               </a>
-              <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+              <a class="post__indicator post__indicator--repost button" href="post.php?post-id=<?=$post[0]['id']?>&repost=1" title="Репост">
                 <svg class="post__indicator-icon" width="19" height="17">
                   <use xlink:href="#icon-repost"></use>
                 </svg>
-                <span>5</span>
+                <span><?=(get_count_repost($connection,$post[0]['id']))? get_count_repost($connection,$post[0]['id']):"0"?></span>
                 <span class="visually-hidden">количество репостов</span>
               </a>
             </div>

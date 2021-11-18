@@ -6,7 +6,7 @@
           <h2 class="visually-hidden">Лента</h2>
           <div class="feed__main-wrapper">
             <div class="feed__wrapper">
-            <?php foreach ($posts as $post):?>
+            <?php foreach ($posts as $key => $post):?>
               <article class="feed__post post post-<?=$post['class_name']?>">
                 <header class="post__header post__author">
                   <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="Автор">
@@ -79,11 +79,11 @@
                       <span><?=get_count_comments($connection, $post['id']); ?></span>
                       <span class="visually-hidden">количество комментариев</span>
                     </a>
-                    <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                    <a class="post__indicator post__indicator--repost button" href="feed.php?repost=<?=($post['id'])?>&key=<?=$key?>" title="Репост">
                       <svg class="post__indicator-icon" width="19" height="17">
                         <use xlink:href="#icon-repost"></use>
                       </svg>
-                      <span>5</span>
+                      <span><?=(get_count_repost($connection,$post['id']))? get_count_repost($connection,$post['id']):"0"?></span>
                       <span class="visually-hidden">количество репостов</span>
                     </a>
                   </div>

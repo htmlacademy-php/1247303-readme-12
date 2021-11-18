@@ -109,7 +109,7 @@ function get_content_types(mysqli $connection): array
  * @param ?int $post_id id поста
  * @return array массив с списком постов
  */
-function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL, int $offset = NULL): array
+function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL, int $offset = NULL, ?array $sorting = NULL): array
 {
 
     $sql = "SELECT
@@ -127,21 +127,21 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
               users.first_name,
               users.last_name,
               users.avatar_path,
-              types.class_name
+              types.class_name,
+              (SELECT COUNT(id) FROM `likes` WHERE post_id = posts.id) AS likes_count
 
             FROM `posts`
 
-            LEFT JOIN
+            INNER JOIN
               `users`
             ON
               posts.user_id = users.id
 
-            LEFT JOIN
+            INNER JOIN
               `types`
             ON
               posts.type_id = types.id 
              "; 
-
 
       if($type_id) {
         $sql .= "WHERE types.id = {$type_id} ";
@@ -152,11 +152,26 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
       if($user_id) {
         $sql .= "WHERE users.id = {$user_id} ";
       }
+      
+      if($sorting && $sorting['type'] && $sorting['type'] != "likes") {
+        $sql .= "ORDER BY `posts`.`{$sorting["type"]}` {$sorting["by"]} ";
+    
+      }
+
+      if($sorting && $sorting['type'] === "likes"){
+        $sql .= "ORDER BY likes_count {$sorting["by"]} ";
+      }
+
+
+      if(!$type_id && !$sorting) {
+        $sql .= "ORDER BY `posts`.`count_view` DESC ";
+      }
+
 
       if($offset || $offset === 0) {
-        $sql .= "LIMIT 5 OFFSET {$offset}";
+        $sql .= "LIMIT 6 OFFSET {$offset} ";
       }
-      
+    
 
     return get_array_db($connection, $sql);
 
@@ -212,13 +227,20 @@ function get_quantity_followers(mysqli $connection, int $user_id):int
 }
 
 /**
- * Функция получает из БД количество просмотров публикации (поста)
+ * Функция получает из БД количество репостов публикации (поста)
  * @param mysqli $connection объект соединения с БД
  * @param ?int $post_idчисло, id публикации(поста), по которому нужно получить количество просмотров
  */
-function get_count_views(mysqli $connection, int $post_id):int
+function get_count_views(mysqli $connection, int $post_id):?int
 {
   $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = {$post_id}";
+
+  return get_first_value($connection,$sql);
+}
+
+function get_count_repost(mysqli $connection, int $post_id):?int
+{
+  $sql = "SELECT SUM(count_repost) FROM `posts` WHERE id = {$post_id}";
 
   return get_first_value($connection,$sql);
 }
@@ -357,10 +379,38 @@ function get_user(mysqli $connection, int $id):array
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id)
+function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
 
+
     $today = new DateTime('now');
+
+    if($repost) {
+      $request = "
+      INSERT INTO
+      `posts`(
+        `user_id`,
+        `type_id`,
+        `publictation_date`,
+        `title`,
+        `content`,
+        `count_view`,
+        `orig_user_id`
+      )
+      VALUES
+      (
+        {$user_id},
+        {$form_data['type_id']},
+       '{$today->format('Y-m-d H:i:s')}',
+       '{$form_data["title"]}',
+       '{$form_data["content"]}',
+       1,
+       {$form_data["orig_user_id"]}
+      )";
+
+      return set_request_db($connect, $request);
+
+    }
 
     $request = "
         INSERT INTO
@@ -370,19 +420,19 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id)
           `publictation_date`,
           `title`,
           `content`,
-          `count_view`
+          `count_view`   
         )
         VALUES
         (
           {$user_id},
-          {$form_data['submit']},
+          {$form_data['type_id']},
          '{$today->format('Y-m-d H:i:s')}',
-         '{$form_data["text-heading"]}',
-         '{$form_data["post-text"]}',
-         1
+         '{$form_data["title"]}',
+         '{$form_data["content"]}',
+         1 
         )";
 
-    return set_request_db($connect, $request);
+        return set_request_db($connect, $request);  
 }
 
 
@@ -393,10 +443,38 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id)
+function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
 
     $today = new DateTime('now');
+
+    if($repost) {
+      $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `content`,
+          `author_quote`,
+          `count_view`,
+          `orig_user_id`
+        )
+        VALUES
+        (
+          {$user_id},
+          {$form_data['type_id']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["title"]}',
+         '{$form_data["content"]}',
+         '{$form_data["author_quote"]}',
+         1,
+         {$form_data["orig_user_id"]}
+        )";
+
+    return set_request_db($connect, $request);
+    }
 
     $request = "
         INSERT INTO
@@ -412,11 +490,11 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id)
         VALUES
         (
           {$user_id},
-          {$form_data['submit']},
+          {$form_data['type_id']},
          '{$today->format('Y-m-d H:i:s')}',
-         '{$form_data["quote-heading"]}',
-         '{$form_data["post-quote"]}',
-         '{$form_data["quote-author"]}',
+         '{$form_data["title"]}',
+         '{$form_data["content"]}',
+         '{$form_data["author_quote"]}',
          1
         )";
 
@@ -430,12 +508,13 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id)
+function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
 
     $today = new DateTime('now');
 
-    $request = "
+    if($repost) {
+      $request = "
         INSERT INTO
         `posts`(
           `user_id`,
@@ -443,19 +522,45 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id)
           `publictation_date`,
           `title`,
           `img_path`,
-          `count_view`
+          `count_view`,
+          `orig_user_id`
         )
         VALUES
         (
           {$user_id},
-          {$form_data['submit']},
+          {$form_data['type_id']},
          '{$today->format('Y-m-d H:i:s')}',
-         '{$form_data["photo-heading"]}',
-         '{$form_data["file-link"]}',
-         1
+         '{$form_data["title"]}',
+         '{$form_data["img_path"]}',
+         1,
+         '{$form_data["orig_user_id"]}'
         )";
 
-    return set_request_db($connect, $request);
+      return set_request_db($connect, $request);
+    }
+
+    $request = "
+    INSERT INTO
+    `posts`(
+      `user_id`,
+      `type_id`,
+      `publictation_date`,
+      `title`,
+      `img_path`,
+      `count_view`
+    )
+    VALUES
+    (
+      {$user_id},
+      {$form_data['type_id']},
+     '{$today->format('Y-m-d H:i:s')}',
+     '{$form_data["title"]}',
+     '{$form_data["img_path"]}',
+     1
+    )";
+
+  return set_request_db($connect, $request);
+    
 }
 
 /**
@@ -465,10 +570,38 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id)
+function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
 
     $today = new DateTime('now');
+
+    if($repost){
+
+      $request = "
+      INSERT INTO
+      `posts`(
+        `user_id`,
+        `type_id`,
+        `publictation_date`,
+        `title`,
+        `video_path`,
+        `count_view`,
+        `orig_user_id`
+      )
+      VALUES
+      (
+        {$user_id},
+        {$form_data['type_id']},
+       '{$today->format('Y-m-d H:i:s')}',
+       '{$form_data["title"]}',
+       '{$form_data["video_path"]}',
+       1,
+       '{$form_data["orig_user_id"]}'
+      )";
+
+        return set_request_db($connect, $request);
+
+    }
 
     $request = "
         INSERT INTO
@@ -483,10 +616,10 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id)
         VALUES
         (
           {$user_id},
-          {$form_data['submit']},
+          {$form_data['type_id']},
          '{$today->format('Y-m-d H:i:s')}',
-         '{$form_data["video-heading"]}',
-         '{$form_data["video-url"]}',
+         '{$form_data["title"]}',
+         '{$form_data["video_path"]}',
          1
         )";
 
@@ -500,10 +633,36 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id)
 * @param  array $form_data массив данных из формы добавления поста.
 * В случае успешной отправки возвращает true
 */
-function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id)
+function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
+  $today = new DateTime('now');
 
-    $today = new DateTime('now');
+  if($repost){
+    $request = "
+        INSERT INTO
+        `posts`(
+          `user_id`,
+          `type_id`,
+          `publictation_date`,
+          `title`,
+          `site_path`,
+          `count_view`,
+          `orig_user_id`
+        )
+        VALUES
+        (
+          {$user_id},
+          {$form_data['type_id']},
+         '{$today->format('Y-m-d H:i:s')}',
+         '{$form_data["title"]}',
+         '{$form_data["site_path"]}',
+         1,
+          '{$form_data["orig_user_id"]}'
+        )";
+
+    return set_request_db($connect, $request);
+  };
+     
 
     $request = "
         INSERT INTO
@@ -518,14 +677,107 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id)
         VALUES
         (
           {$user_id},
-          {$form_data['submit']},
+          {$form_data['type_id']},
          '{$today->format('Y-m-d H:i:s')}',
-         '{$form_data["link-heading"]}',
-         '{$form_data["post-link"]}',
+         '{$form_data["title"]}',
+         '{$form_data["site_path"]}',
          1
         )";
 
     return set_request_db($connect, $request);
+}
+/**
+* Обновляет в таблице БД `posts` счетчик количества репостов.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  int $post_id id поста, количество репостов которого нужно увеличить.
+* @param  int $count_repost текущее количество репостов.
+* В случае успешной отправки возвращает true
+*/
+function update_count_repost(mysqli $connection, int $post_id, int $count_repost) 
+{
+  $request = "UPDATE posts SET count_repost = $count_repost WHERE id = $post_id";
+
+  return set_request_db($connection, $request);
+
+}
+/**
+* Сохраняет в таблицу БД `posts` запись - репост уже имеющегося поста.
+* Принимает следующие параметры:
+* @param  mysqli $connect обьект подключения к базе данных,
+* @param  array $post массив данных поста, который репостится.
+* @param  int $user_id id пользователя, который выполняет репост.
+* В случае успешной отправки возвращает true
+*/
+function add_repost(mysqli $connection, array $post, int $user_id)
+{
+  $count_repost = get_count_repost($connection,$post['id']) + 1;
+  
+  $post['orig_user_id'] = $post['user_id'];
+
+  switch ($post['class_name'])
+  {
+    case "text" :
+
+      add_post_text_db($connection, $post, $user_id, 1);
+
+      update_count_repost($connection, $post['id'], $count_repost);
+
+      $post_id = mysqli_insert_id($connection);
+
+      header("Location: post.php?post-id={$post_id}");
+
+      break;
+
+  case "photo" :
+
+      add_post_photo_db($connection, $post, $user_id, 1);
+
+      $post_id = mysqli_insert_id($connection);
+
+      update_count_repost($connection, $post['id'], $count_repost);
+
+      header("Location: post.php?post-id={$post_id}");
+
+      break;
+
+  case "video" :
+
+      add_post_video_db($connection, $post, $user_id, 1);
+
+      $post_id = mysqli_insert_id($connection);
+
+      update_count_repost($connection, $post['id'], $count_repost);
+      
+      header("Location: post.php?post-id={$post_id}");
+
+      break;
+
+  case "link" :
+
+      add_post_link_db($connection, $post, $user_id, 1);
+
+      $post_id = mysqli_insert_id($connection);
+
+      update_count_repost($connection, $post['id'], $count_repost);
+
+      header("Location: post.php?post-id={$post_id}");
+
+      break;
+
+  case "quote" :
+
+      add_post_quote_db($connection, $post, $user_id, 1);
+
+      $post_id = mysqli_insert_id($connection);
+
+      update_count_repost($connection, $post['id'], $count_repost);
+    
+      header("Location: post.php?post-id={$post_id}");
+
+      break;
+};
+
 }
 
 /**
@@ -645,7 +897,7 @@ function add_user_db(mysqli $connect, ?array $form_data)
           '{$form_data["email"]}',
           '{$form_data["login"]}',
           '{$form_data["password"]}',
-          '{$form_data["file-link"]}',
+          '{$form_data["img_path"]}',
           '{$form_data["first_name"]}',
           '{$form_data["last_name"]}'
         )";
@@ -734,14 +986,12 @@ function get_posts_for_id(mysqli $connection, array $posts_id):?array
 
     foreach($posts_id as $post_id) {
 
-        $result = get_posts($connection, NULL, $post_id["post_id"]);
-      
+        $result = get_posts($connection, NULL, $post_id["post_id"], null, null, null);
         array_push($results, $result[0]);
 
     };
 
     if(count($results)) {
-
       return $results;
     }
     return null;
@@ -1091,4 +1341,6 @@ function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id
     print("Системная ошибка. Пост не найден");
     exit();
 }
+
+
 

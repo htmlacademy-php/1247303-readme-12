@@ -57,7 +57,7 @@ function download_out_files($link)
     $result = file_put_contents($file_url, $current);
 
     if($result) {
-        return ["file-link" => "{$file_url}"];
+        return ["img_path" => "{$file_url}"];
     }
     return false;
 }
@@ -81,7 +81,7 @@ function upload_files($files_arr)
     $result = move_uploaded_file($files_arr['file-photo']['tmp_name'], $file_url);
  
     if($result) {
-        return ["file-link" => "{$file_url}"];
+        return ["img_path" => "{$file_url}"];
     }
     return false;
 }
@@ -122,7 +122,7 @@ function register(mysqli $connection, array $filter_form_data):bool
         $filter_form_data += upload_files($_FILES);
     }
     else{
-        $filter_form_data += ['file-link' => 'img/no-avatar.jpg'];
+        $filter_form_data += ['img_path' => 'img/no-avatar.jpg'];
     };
           
     $filter_form_data['password'] = set_password_hash($filter_form_data['password']);
@@ -194,6 +194,8 @@ function filtered_arr_posts_by_types(array $posts, int $type_id):array
     }
     return $filtered_posts;
 }
+
+
 
 
 

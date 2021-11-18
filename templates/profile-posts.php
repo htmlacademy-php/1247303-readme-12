@@ -1,6 +1,6 @@
 
                 <h2 class="visually-hidden">Публикации</h2>
-                <?php foreach ($posts as $post):?>
+                <?php foreach ($posts as $key => $post):?>
                 <article class="profile__post post post-<?=$post['class_name']?>"> 
                   <header class="post__header">
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
@@ -60,11 +60,11 @@
                           <span><?=get_count_likes($connection, $post['id']); ?></span>
                           <span class="visually-hidden">количество лайков</span>
                         </a>
-                        <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                        <a class="post__indicator post__indicator--repost button" href="profile.php?id=<?=$user_profile['id']?>&tabs=posts&repost=<?=($post['id'])?>&key=<?=$key?>" title="Репост">
                           <svg class="post__indicator-icon" width="19" height="17">
                             <use xlink:href="#icon-repost"></use>
                           </svg>
-                          <span>5</span>
+                          <span><?=(get_count_repost($connection,$post['id']))? get_count_repost($connection,$post['id']):"0"?></span>
                           <span class="visually-hidden">количество репостов</span>
                         </a>
                       </div>

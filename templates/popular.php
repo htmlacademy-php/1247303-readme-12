@@ -7,7 +7,7 @@
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
                     <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--active" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "count_view")?"active":""?>" href="popular.php?sort=true&type=count_view&by=<?=$sorting?>">
                             <span>Популярность</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "likes")?"active":""?>" href="popular.php?sort=true&type=likes&by=<?=$sorting?>">
                             <span>Лайки</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -23,7 +23,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "publictation_date")?"active":""?>" href="popular.php?sort=true&type=publictation_date&by=<?=$sorting?>">
                             <span>Дата</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -36,7 +36,7 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all <?= (!$get_id) ? 'filters__button--active' : '' ?>" href="/1247303-readme-12/popular.php">
+                        <a class="filters__button filters__button--ellipse filters__button--all <?= (!$get_id) ? 'filters__button--active' : '' ?>" href="popular.php">
                             <span>Все</span>
                         </a>
                     </li>
@@ -140,7 +140,7 @@
             <?php if($page):?>
             <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page=<?=$page-1?>">Предыдущая страница</a>
             <?php endif;?>
-            <?php if(count($posts) >= 5):?>
+            <?php if(count($posts) >= 6):?>
             <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page=<?=$page+1?>">Следующая страница</a>
             <?php endif;?>
         </div>

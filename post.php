@@ -40,6 +40,9 @@ $filter_form_data = null;
 
 $form_errors = null;
 
+$repost = get_data_from_params('repost');
+
+
 if(isset($post_id_likes))
 {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
@@ -71,6 +74,12 @@ if ($_POST) {
         redirect_to_back();
     }
 };
+
+if($repost) {
+
+    add_repost($connection, $posts[0], $user['id']);
+
+}
 
 
 $post = include_template('post-details.php', 

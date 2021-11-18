@@ -40,6 +40,8 @@ $view_comment = get_data_from_params('view');
 
 $view_all_comment = get_data_from_params('all');
 
+$repost = get_data_from_params('repost');
+
 $filter_form_data = null;
 
 $form_errors = null;
@@ -115,6 +117,13 @@ switch($tabs_active) {
     
 
 }
+
+if($repost) {
+
+    $key_post = get_data_from_params('key');
+
+    add_repost($connection, $posts[$key_post], $user['id']);
+};
 
 $tab_content = include_template("profile-{$tabs_active}.php", $tabs_active_content);
 

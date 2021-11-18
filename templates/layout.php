@@ -14,7 +14,7 @@
 <header class="header">
     <div class="header__wrapper container">
         <div class="header__logo-wrapper">
-            <a class="header__logo-link" href="/1247303-readme-12/">
+            <a class="header__logo-link" href="index.php">
                 <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
             </a>
             <p class="header__topic">
@@ -22,7 +22,7 @@
             </p>
         </div>
         <?php if(isset($user)): ?>
-        <form class="header__search-form form" action="/1247303-readme-12/search.php" method="get">
+        <form class="header__search-form form" action="search.php" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
                 <input class="header__search-input form__input" name="query" type="search">
@@ -93,7 +93,7 @@
                                     </li>
 
                                     <li class="header__profile-nav-item">
-                                        <a class="header__profile-nav-link" href="/1247303-readme-12/logout.php">
+                                        <a class="header__profile-nav-link" href="logout.php">
                           <span class="header__profile-nav-text">
                             Выход
                           </span>
