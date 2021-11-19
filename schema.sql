@@ -187,7 +187,7 @@ ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `type_id` (`type_id`),
-  ADD KEY `publictation_date` (`publication_date`),
+  ADD KEY `publication_date` (`publication_date`),
   ADD KEY `img_path` (`img_path`),
   ADD KEY `video_path` (`video_path`),
   ADD KEY `site_path` (`site_path`),
@@ -213,7 +213,7 @@ ALTER TABLE `relations_posts_tags`
 ALTER TABLE `subscriptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `followerr_user_id` (`follower_user_id`) USING BTREE;
+  ADD KEY `follower_user_id` (`follower_user_id`) USING BTREE;
 
 --
 -- Индексы таблицы `tags`
