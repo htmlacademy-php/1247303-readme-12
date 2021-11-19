@@ -15,7 +15,7 @@
                     </div>
                     <div class="post__info">
                       <b class="post__author-name"><?=$post['first_name'] ." ".  $post['last_name'] ?></b>
-                      <span class="post__time"><?=relativeDate($post['publictation_date']) . " назад" ?></span>
+                      <span class="post__time"><?=relativeDate($post['publication_date']) . " назад" ?></span>
                     </div>
                   </a>
                 </header>

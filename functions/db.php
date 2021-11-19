@@ -116,7 +116,7 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
               posts.id,
               posts.content,
               posts.title,
-              posts.publictation_date,
+              posts.publication_date,
               posts.user_id,
               posts.author_quote,
               posts.img_path,
@@ -256,9 +256,9 @@ function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2)
 
     $sql = "SELECT
               comments.id,
-              comments.publictation_date,
+              comments.publication_date,
               comments.content,
-              comments.publictation_date,
+              comments.publication_date,
               comments.user_id,
               users.first_name,
               users.last_name,
@@ -276,7 +276,7 @@ function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2)
             ON
               posts.id = comments.post_id
 
-            WHERE posts.id = {$post_id} ORDER BY `publictation_date` DESC";
+            WHERE posts.id = {$post_id} ORDER BY `publication_date` DESC";
 
     if ($limit) {
       $sql .= " LIMIT {$limit} OFFSET 0";
@@ -391,7 +391,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
       `posts`(
         `user_id`,
         `type_id`,
-        `publictation_date`,
+        `publication_date`,
         `title`,
         `content`,
         `count_view`,
@@ -417,7 +417,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `content`,
           `count_view`   
@@ -454,7 +454,7 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `content`,
           `author_quote`,
@@ -481,7 +481,7 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `content`,
           `author_quote`,
@@ -519,7 +519,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `img_path`,
           `count_view`,
@@ -544,7 +544,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
     `posts`(
       `user_id`,
       `type_id`,
-      `publictation_date`,
+      `publication_date`,
       `title`,
       `img_path`,
       `count_view`
@@ -582,7 +582,7 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
       `posts`(
         `user_id`,
         `type_id`,
-        `publictation_date`,
+        `publication_date`,
         `title`,
         `video_path`,
         `count_view`,
@@ -608,7 +608,7 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `video_path`,
           `count_view`
@@ -643,7 +643,7 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `site_path`,
           `count_view`,
@@ -669,7 +669,7 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
         `posts`(
           `user_id`,
           `type_id`,
-          `publictation_date`,
+          `publication_date`,
           `title`,
           `site_path`,
           `count_view`
@@ -918,7 +918,7 @@ function search_posts_db(mysqli $connection, string $query):?array
     posts.id,
     posts.content,
     posts.title,
-    posts.publictation_date,
+    posts.publication_date,
     posts.user_id,
     posts.author_quote,
     posts.img_path,
@@ -1323,7 +1323,7 @@ function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id
           INSERT INTO
           `comments`
           ( 
-            `publictation_date`, 
+            `publication_date`, 
             `content`, 
             `user_id`, 
             `post_id`

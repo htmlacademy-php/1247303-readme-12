@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 07 2021 г., 14:10
+-- Время создания: Ноя 19 2021 г., 13:46
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.3.17
 
@@ -72,7 +72,7 @@ CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `publictation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `publication_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `title` text NOT NULL,
   `content` text,
   `author_quote` text,
@@ -80,8 +80,8 @@ CREATE TABLE `posts` (
   `video_path` varchar(128) DEFAULT NULL,
   `site_path` varchar(128) DEFAULT NULL,
   `count_view` int(11) DEFAULT NULL,
-  `repost` tinyint(1) DEFAULT NULL,
-  `orig_user_id` int(11) NOT NULL
+  `count_repost` int(11) DEFAULT NULL,
+  `orig_user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -105,7 +105,7 @@ CREATE TABLE `relations_posts_tags` (
 CREATE TABLE `subscriptions` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `followerr_user_id` int(11) NOT NULL
+  `follower_user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -132,16 +132,7 @@ CREATE TABLE `types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
---
--- Дамп данных таблицы `types`
---
 
-INSERT INTO `types` (`id`, `type`, `class_name`) VALUES
-(1, 'Текст', 'text'),
-(2, 'Цитата', 'quote'),
-(3, 'Фото', 'photo'),
-(4, 'Видео', 'video'),
-(5, 'Ссылка', 'link');
 --
 -- Структура таблицы `users`
 --
@@ -196,12 +187,12 @@ ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `type_id` (`type_id`),
-  ADD KEY `publictation_date` (`publictation_date`),
+  ADD KEY `publictation_date` (`publication_date`),
   ADD KEY `img_path` (`img_path`),
   ADD KEY `video_path` (`video_path`),
   ADD KEY `site_path` (`site_path`),
   ADD KEY `count_view` (`count_view`),
-  ADD KEY `repost` (`repost`),
+  ADD KEY `repost` (`count_repost`),
   ADD KEY `orig_user_id` (`orig_user_id`);
 ALTER TABLE `posts` ADD FULLTEXT KEY `title` (`title`);
 ALTER TABLE `posts` ADD FULLTEXT KEY `author_quote` (`author_quote`);
@@ -222,7 +213,7 @@ ALTER TABLE `relations_posts_tags`
 ALTER TABLE `subscriptions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `followerr_user_id` (`followerr_user_id`) USING BTREE;
+  ADD KEY `followerr_user_id` (`follower_user_id`) USING BTREE;
 
 --
 -- Индексы таблицы `tags`
@@ -266,7 +257,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT для таблицы `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT для таблицы `messages`
@@ -278,7 +269,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT для таблицы `relations_posts_tags`
@@ -290,25 +281,25 @@ ALTER TABLE `relations_posts_tags`
 -- AUTO_INCREMENT для таблицы `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT для таблицы `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT для таблицы `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

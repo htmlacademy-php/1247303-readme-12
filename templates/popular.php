@@ -23,7 +23,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link sorting__link--<?=($sort_type === "publictation_date")?"active":""?>" href="popular.php?sort=true&type=publictation_date&by=<?=$sorting?>">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "publication_date")?"active":""?>" href="popular.php?sort=true&type=publication_date&by=<?=$sorting?>">
                             <span>Дата</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -98,7 +98,7 @@
                     </div>
                 <?php endif ?> 
                 </div>
-                <?php $publicationsDate = $post['publictation_date']?>
+                <?php $publicationsDate = $post['publication_date']?>
                 <footer class="post__footer">
                     <div class="post__author">
                         <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">

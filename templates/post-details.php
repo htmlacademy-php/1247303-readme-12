@@ -69,7 +69,7 @@
                             <a class="comments__user-name" href="profile.php?id=<?=$comment['user_id']?>">
                                 <span><?=$comment['first_name']." ".$comment['last_name'] ?></span>
                             </a>
-                            <time class="comments__time" datetime="<?=$comment['publictation_date'] ?>"><?=relativeDate($comment['publictation_date']) . " назад";?></time>
+                            <time class="comments__time" datetime="<?=$comment['publication_date'] ?>"><?=relativeDate($comment['publication_date']) . " назад";?></time>
                         </div>
                         <p class="comments__text">
                           <?=$comment['content'] ?>
