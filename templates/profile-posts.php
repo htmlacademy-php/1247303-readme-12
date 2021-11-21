@@ -7,17 +7,14 @@
                   </header>
 
                 <div class="post__main">
-                    <?php if($post['class_name'] === 'photo'):?>
-                      <!-- <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2> -->
+                    <?php if($post['class_name'] === 'photo'):?>     
                       <div class="post-photo__image-wrapper">
                         <img src="<?=$post['img_path']?>" alt="Фото от пользователя" width="760" height="396">
                       </div>
                     <?php elseif($post['class_name'] === 'text'):?>
-                      <!-- <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2> -->
                       <p>
-                        <?=$post['content']?>
+                        <?=cutStr($post['content'], 300, $post['id'])?>
                       </p>
-                      <a class="post-text__more-link" href="#">Читать далее</a>
                     <?php elseif($post['class_name'] === 'video'):?>
                       <div class="post-video__preview">
                         <?= embed_youtube_video($post['video_path']) ?>
@@ -60,12 +57,14 @@
                           <span><?=get_count_likes($connection, $post['id']); ?></span>
                           <span class="visually-hidden">количество лайков</span>
                         </a>
+                        <?php if((int) $post['user_id'] =! (int) $user['id']): ?>
                         <a class="post__indicator post__indicator--repost button" href="profile.php?id=<?=$user_profile['id']?>&tabs=posts&repost=<?=($post['id'])?>&key=<?=$key?>" title="Репост">
                           <svg class="post__indicator-icon" width="19" height="17">
                             <use xlink:href="#icon-repost"></use>
                           </svg>
                           <span><?=(get_count_repost($connection,$post['id']))? get_count_repost($connection,$post['id']):"0"?></span>
                           <span class="visually-hidden">количество репостов</span>
+                          <?php endif; ?>
                         </a>
                       </div>
                       <time class="post__time" datetime="<?=$post['publication_date']?>"><?=relativeDate($post['publication_date']) . " назад" ?></time>

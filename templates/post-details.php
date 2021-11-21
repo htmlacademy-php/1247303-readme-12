@@ -24,6 +24,7 @@
                 <span><?=$quantity_comments ?></span>
                 <span class="visually-hidden">количество комментариев</span>
               </a>
+              <?php if((int) $post[0]['user_id'] != (int) $user['id']): ?>
               <a class="post__indicator post__indicator--repost button" href="post.php?post-id=<?=$post[0]['id']?>&repost=1" title="Репост">
                 <svg class="post__indicator-icon" width="19" height="17">
                   <use xlink:href="#icon-repost"></use>
@@ -31,6 +32,7 @@
                 <span><?=(get_count_repost($connection,$post[0]['id']))? get_count_repost($connection,$post[0]['id']):"0"?></span>
                 <span class="visually-hidden">количество репостов</span>
               </a>
+              <?php endif; ?>
             </div>
             <span class="post__view"><?=$count_views." ".get_noun_plural_form($count_views, "просмотр", "просмотра", "просмотров")?></span>
           </div>
@@ -50,7 +52,7 @@
               <button class="form__error-button button" type="button">!</button>
                 <div div class="form__error-text">
                   <h3 class="form__error-title">Ошибка валидации</h3>
-                    <p class="form__error-desc"><?=$form_errors["comment-text"]?></p>
+                    <p class="form__error-desc"><?=isset($form_errors["comment-text"])?></p>
                 </div>
             </div>
             <button class="comments__submit button button--green" type="submit">Отправить</button>
@@ -113,10 +115,10 @@
             </p>
           </div>
           <div class="post-details__user-buttons user__buttons">
+          <?php if($user['id'] != $post[0]['user_id']):?>
           <a class="user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "button--quartz":"button--main" ?>" type="button" href="profile.php?id=<?=$post[0]['user_id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "Отписаться":"Подписаться" ?></a>
-<!-- <button class="user__button user__button--subscription button button--main" type="button">Подписаться</button> -->
-            <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
-          </div>
+          <?php endif; ?>
+        </div>
         </div>
       </div>
     </section>

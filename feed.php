@@ -10,6 +10,9 @@ if(!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
+$user = get_user($connection, $_SESSION['user_id']);
+
+
 $types_content = get_content_types($connection);
 
 $get_id = get_data_from_params('categories-id');
@@ -61,7 +64,8 @@ $page_content = include_template('feed.php',
  'posts' => $posts, 
  'types_content' => $types_content, 
  'get_id' => $get_id,
- 'connection' => $connection
+ 'connection' => $connection,
+ 'user' => $user
 ]
 );
 

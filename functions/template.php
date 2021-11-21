@@ -26,7 +26,7 @@ function include_template($name, array $data = [])
 
 * Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
 */
-function cutStr(string $str, int $length = 300) : string 
+function cutStr(string $str, int $length = 300, ?int $post_id) : string 
 {
 
     if(mb_strlen($str) > $length) {
@@ -50,7 +50,7 @@ function cutStr(string $str, int $length = 300) : string
         }
         $cuttingStr = implode(" ", $strOut) . "...";
 
-        return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='#'>Читать далее</a>";
+        return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='post.php?post-id={$post_id}'>Читать далее</a>";
     }
 
     return "<p>{$str}</p>";   

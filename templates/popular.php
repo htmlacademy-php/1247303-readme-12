@@ -71,7 +71,7 @@
                     <cite><?=htmlspecialchars($post['author_quote']);?></cite>
                 </blockquote>
                 <?php elseif($post['class_name'] === 'text'):?>
-                    <?=cutStr(htmlspecialchars($post['content']));?>
+                    <?=cutStr($post['content'], 300, $post['id']);?>
                 <?php elseif($post['class_name'] === 'photo'):?>
                     <div class="post-photo__image-wrapper"> 
                         <img src="<?=htmlspecialchars($post['img_path']);?>" alt="Фото от пользователя" width="360" height="240"> 

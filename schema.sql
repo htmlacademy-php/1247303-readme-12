@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 19 2021 г., 13:46
+-- Время создания: Ноя 21 2021 г., 20:12
 -- Версия сервера: 5.7.29
 -- Версия PHP: 7.3.17
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL,
-  `publictation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `publication_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL
@@ -131,6 +131,17 @@ CREATE TABLE `types` (
   `class_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Дамп данных таблицы `types`
+--
+
+INSERT INTO `types` (`id`, `type`, `class_name`) VALUES
+(1, 'Текст', 'text'),
+(2, 'Цитата', 'quote'),
+(3, 'Фото', 'photo'),
+(4, 'Видео', 'video'),
+(5, 'Ссылка', 'link');
+
 -- --------------------------------------------------------
 
 --
@@ -157,7 +168,7 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `publictation_date` (`publictation_date`),
+  ADD KEY `publication_date` (`publication_date`),
   ADD KEY `content` (`content`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `post_id` (`post_id`);
@@ -257,7 +268,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT для таблицы `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `messages`
@@ -269,7 +280,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT для таблицы `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `relations_posts_tags`
@@ -281,25 +292,25 @@ ALTER TABLE `relations_posts_tags`
 -- AUTO_INCREMENT для таблицы `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

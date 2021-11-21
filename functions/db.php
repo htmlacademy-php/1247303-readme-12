@@ -1161,7 +1161,7 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
 
     $sql = "SELECT
               user_id,
-              followerr_user_id,
+              follower_user_id,
               users.first_name,
               users.last_name,
               users.avatar_path,
@@ -1173,7 +1173,7 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
             LEFT JOIN
             `users`
             ON
-             followerr_user_id = users.id
+             follower_user_id = users.id
             
               
             WHERE user_id = {$user_id}"; 
@@ -1190,7 +1190,7 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
  */
 function get_followers_id_from_user_id(mysqli $connection, int $user_id):?array
 {
-  $sql = "SELECT `id`, `user_id`, `followerr_user_id` FROM `subscriptions` WHERE followerr_user_id = {$user_id}";
+  $sql = "SELECT `id`, `user_id`, `follower_user_id` FROM `subscriptions` WHERE follower_user_id = {$user_id}";
 
   $followers = get_array_db($connection, $sql);
 
@@ -1277,7 +1277,7 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
             `subscriptions` 
             (
               `user_id`, 
-              `followerr_user_id`
+              `follower_user_id`
             )
 
         VALUES

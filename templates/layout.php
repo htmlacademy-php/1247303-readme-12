@@ -49,12 +49,6 @@
                             <span class="visually-hidden">Моя лента</span>
                         </a>
                     </li>
-                    <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link" href="#
-                        " title="Личные сообщения">
-                            <span class="visually-hidden">Личные сообщения</span>
-                        </a>
-                    </li>
                 </ul>
                 <?php endif; ?>
                 <ul class="header__user-nav">
@@ -83,15 +77,6 @@
                           </span>
                                         </a>
                                     </li>
-                                    <li class="header__profile-nav-item">
-                                        <a class="header__profile-nav-link" href="#">
-                          <span class="header__profile-nav-text">
-                            Сообщения
-                            <i class="header__profile-indicator"></i>
-                          </span>
-                                        </a>
-                                    </li>
-
                                     <li class="header__profile-nav-item">
                                         <a class="header__profile-nav-link" href="logout.php">
                           <span class="header__profile-nav-text">
@@ -152,9 +137,6 @@
                     </li>
                     <li class="footer__my-page footer__my-page--popular">
                         <a class="footer__page-link" href="popular.php">Популярный контент</a>
-                    </li>
-                    <li class="footer__my-page footer__my-page--messages">
-                        <a class="footer__page-link" href="#">Личные сообщения</a>
                     </li>
                 </ul>
                 <div class="footer__copyright">
