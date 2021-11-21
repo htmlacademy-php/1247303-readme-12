@@ -6,16 +6,16 @@
           <h2 class="visually-hidden">Лента</h2>
           <div class="feed__main-wrapper">
             <div class="feed__wrapper">
-            <?php foreach ($posts as $post):?>
+            <?php foreach ($posts as $key => $post):?>
               <article class="feed__post post post-<?=$post['class_name']?>">
                 <header class="post__header post__author">
-                  <a class="post__author-link" href="#" title="Автор">
+                  <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="Автор">
                     <div class="post__avatar-wrapper">
-                      <img class="post__author-avatar" src="img/<?=$post['avatar_path']?>" alt="Аватар пользователя" width="60" height="60">
+                      <img class="post__author-avatar" src="<?=$post['avatar_path']?>" alt="Аватар пользователя" width="60" height="60">
                     </div>
                     <div class="post__info">
                       <b class="post__author-name"><?=$post['first_name'] ." ".  $post['last_name'] ?></b>
-                      <span class="post__time"><?=relativeDate($post['publictation_date']) ?></span>
+                      <span class="post__time"><?=relativeDate($post['publication_date']) . " назад" ?></span>
                     </div>
                   </a>
                 </header>
@@ -28,30 +28,12 @@
                   <?php elseif($post['class_name'] === 'text'):?>
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
                     <p>
-                      <?=$post['content']?>
+                      <?=cutStr($post['content'],300, $post['id'])?>
                     </p>
-                    <a class="post-text__more-link" href="#">Читать далее</a>
                   <?php elseif($post['class_name'] === 'video'):?>
                     <div class="post-video__preview">
-                        <img src="img/coast.jpg" alt="Превью к видео" width="760" height="396">
-                      </div>
-                      <div class="post-video__control">
-                        <button class="post-video__play post-video__play--paused button button--video" type="button"><span class="visually-hidden">Запустить видео</span></button>
-                        <div class="post-video__scale-wrapper">
-                          <div class="post-video__scale">
-                            <div class="post-video__bar">
-                              <div class="post-video__toggle"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <button class="post-video__fullscreen post-video__fullscreen--inactive button button--video" type="button"><span class="visually-hidden">Полноэкранный режим</span></button>
-                      </div>
-                      <button class="post-video__play-big button" type="button">
-                        <svg class="post-video__play-big-icon" width="27" height="28">
-                          <use xlink:href="#icon-video-play-big"></use>
-                        </svg>
-                        <span class="visually-hidden">Запустить проигрыватель</span>
-                      </button>
+                      <?= embed_youtube_video($post['video_path']) ?>
+                    </div>
                     <?php elseif($post['class_name'] === 'quote'):?>
                       <blockquote>
                         <p>
@@ -75,7 +57,7 @@
                         </a>
                       </div>
                     <?php endif ?>
-                  </div>
+                </div>
 
                 <footer class="post__footer post__indicators">
                   <div class="post__buttons">
@@ -89,20 +71,22 @@
                       <span><?=get_count_likes($connection, $post['id']); ?></span>
                       <span class="visually-hidden">количество лайков</span>
                     </a>
-                    <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
+                    <a class="post__indicator post__indicator--comments button" href="post.php?post-id=<?=($post['id'])?>" title="Комментарии">
                       <svg class="post__indicator-icon" width="19" height="17">
                         <use xlink:href="#icon-comment"></use>
                       </svg>
                       <span><?=get_count_comments($connection, $post['id']); ?></span>
                       <span class="visually-hidden">количество комментариев</span>
                     </a>
-                    <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                    <?php if((int) $post['user_id'] != (int) $user['id']): ?>
+                    <a class="post__indicator post__indicator--repost button" href="feed.php?repost=<?=($post['id'])?>&key=<?=$key?>" title="Репост">
                       <svg class="post__indicator-icon" width="19" height="17">
                         <use xlink:href="#icon-repost"></use>
                       </svg>
-                      <span>5</span>
+                      <span><?=(get_count_repost($connection,$post['id']))? get_count_repost($connection,$post['id']):"0"?></span>
                       <span class="visually-hidden">количество репостов</span>
                     </a>
+                    <?php endif; ?>
                   </div>
                 </footer>
               </article>

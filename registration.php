@@ -33,7 +33,8 @@ $layout_content = include_template('layout.php',
     [
      'content' => $registration_form,
      'title' => 'Регистрация',
-     'header_user_nav' => HEADER_AUTH_REG
+     'header_user_nav' => HEADER_AUTH_REG,
+     'main_class' => 'registration'
     ]
 );
 

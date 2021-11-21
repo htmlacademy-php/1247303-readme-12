@@ -11,6 +11,8 @@
     },
     "scripts": {
         "test": "vendor/bin/kahlan --config=bootstrap.php"
-	}
-    
+	},
+    "require": {
+        "friendsofphp/php-cs-fixer": "^3.2"
+    }
 }

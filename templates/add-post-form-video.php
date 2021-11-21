@@ -4,24 +4,24 @@
                   <div class="form__text-inputs-wrapper">
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
-                        <label class="adding-post__label form__label" for="video-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["video-heading"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="video-heading" type="text" name="video-heading" placeholder="Введите заголовок" value="<?= ($form_errors && $filter_form_data["video-heading"]) ? $filter_form_data["video-heading"] : '' ?>">
+                        <label class="adding-post__label form__label" for="title">Заголовок <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["title"])) ? "form__input-section--error":""?>">
+                          <input class="adding-post__input form__input" id="title" type="text" name="title" placeholder="Введите заголовок" value="<?= ($form_errors && $filter_form_data["title"]) ? $filter_form_data["title"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["video-heading"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["title"]?></p>
                           </div>
                         </div>
                       </div>
                       <div class="adding-post__input-wrapper form__input-wrapper">
-                        <label class="adding-post__label form__label" for="video-url">Ссылка youtube <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["video-url"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="video-url" type="text" name="video-url" placeholder="Введите ссылку" value="<?= ($form_errors && $filter_form_data["video-url"]) ? $filter_form_data["video-url"] : '' ?>">
+                        <label class="adding-post__label form__label" for="video_path">Ссылка youtube <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["video_path"])) ? "form__input-section--error":""?>">
+                          <input class="adding-post__input form__input" id="video_path" type="text" name="video_path" placeholder="Введите ссылку" value="<?= ($form_errors && $filter_form_data["video_path"]) ? $filter_form_data["video_path"] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["video-url"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["video_path"]?></p>
                           </div>
                         </div>
                       </div>
@@ -50,8 +50,8 @@
                   </div>
 
                   <div class="adding-post__buttons">
-                    <button class="adding-post__submit button button--main" type="submit" name="submit" value="<?=$get_id?>">Опубликовать</button>
-                    <a class="adding-post__close" href="#">Закрыть</a>
+                    <button class="adding-post__submit button button--main" type="submit" name="type_id" value="<?=$get_id?>">Опубликовать</button>
+                    <a class="adding-post__close" href="index.php">Закрыть</a>
                   </div>
                 </form>
               </section>

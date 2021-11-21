@@ -7,7 +7,7 @@
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
                     <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--active" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "count_view")?"active":""?>" href="popular.php?sort=true&type=count_view&by=<?=$sorting?>">
                             <span>Популярность</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "likes")?"active":""?>" href="popular.php?sort=true&type=likes&by=<?=$sorting?>">
                             <span>Лайки</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -23,7 +23,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link" href="#">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "publication_date")?"active":""?>" href="popular.php?sort=true&type=publication_date&by=<?=$sorting?>">
                             <span>Дата</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -36,7 +36,7 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all <?= (!$get_id) ? 'filters__button--active' : '' ?>" href="/1247303-readme-12/popular.php">
+                        <a class="filters__button filters__button--ellipse filters__button--all <?= (!$get_id) ? 'filters__button--active' : '' ?>" href="popular.php">
                             <span>Все</span>
                         </a>
                     </li>
@@ -71,7 +71,7 @@
                     <cite><?=htmlspecialchars($post['author_quote']);?></cite>
                 </blockquote>
                 <?php elseif($post['class_name'] === 'text'):?>
-                    <?=cutStr(htmlspecialchars($post['content']));?>
+                    <?=cutStr($post['content'], 300, $post['id']);?>
                 <?php elseif($post['class_name'] === 'photo'):?>
                     <div class="post-photo__image-wrapper"> 
                         <img src="<?=htmlspecialchars($post['img_path']);?>" alt="Фото от пользователя" width="360" height="240"> 
@@ -93,35 +93,27 @@
                 <?php elseif($post['class_name'] === 'video'):?>
                     <div class="post-video__block">
                         <div class="post-video__preview">
-                        <?= embed_youtube_video($post['video_path']); ?>
-                            <!-- embed_youtube_video($post['video_path']) -->
-                            <!-- <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188"> -->
+                        <?= embed_youtube_video($post['video_path']) ?>
                         </div>
-                        <!-- <a href="post-details.html" class="post-video__play-big button">
-                            <svg class="post-video__play-big-icon" width="14" height="14">
-                                <use xlink:href="#icon-video-play-big"></use>
-                            </svg>
-                            <span class="visually-hidden">Запустить проигрыватель</span>
-                        </a>  -->
                     </div>
                 <?php endif ?> 
                 </div>
-                <?php $publicationsDate = $post['publictation_date']?>
+                <?php $publicationsDate = $post['publication_date']?>
                 <footer class="post__footer">
                     <div class="post__author">
-                        <a class="post__author-link" href="#" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">
+                        <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">
                             <div class="post__avatar-wrapper">
-                                <img class="post__author-avatar" src="img/<?=htmlspecialchars($post['avatar_path']); ?>" alt="Аватар пользователя">
+                                <img class="post__author-avatar" src="<?=htmlspecialchars($post['avatar_path']); ?>" alt="Аватар пользователя">
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"><?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?></b>
-                                <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) ?></time>
+                                <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) . " назад" ?></time>
                             </div>
                         </a>
                     </div>
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button" href="popular.php?post-id-likes=<?=($post['id']); ?>" title="Лайк">
+                            <a class="post__indicator post__indicator--likes button" href="popular.php?post-id-likes=<?=($post['id'])?>" title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>
@@ -131,7 +123,7 @@
                                 <span><?=get_count_likes($connection, $post['id']); ?></span>
                                 <span class="visually-hidden">Количество лайков</span>
                             </a>
-                            <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
+                            <a class="post__indicator post__indicator--comments button" href="post.php?post-id=<?=($post['id'])?>" title="Комментарии">
                                 <svg class="post__indicator-icon" width="19" height="17">
                                     <use xlink:href="#icon-comment"></use>
                                 </svg>
@@ -143,5 +135,13 @@
                 </footer>
             </article>
             <?php endforeach; ?>
+        </div>
+        <div class="popular__page-links">
+            <?php if($page):?>
+            <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page=<?=$page-1?>">Предыдущая страница</a>
+            <?php endif;?>
+            <?php if(count($posts) >= 6):?>
+            <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page=<?=$page+1?>">Следующая страница</a>
+            <?php endif;?>
         </div>
     </div>

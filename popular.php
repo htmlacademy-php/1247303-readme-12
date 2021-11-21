@@ -16,13 +16,28 @@ $types_content = get_content_types($connection);
 
 $get_id = get_data_from_params('categories-id');
 
-$posts = get_posts($connection, $get_id, NULL);
+$page =  get_data_from_params('page');
 
 $user = get_user($connection, $_SESSION['user_id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
-$likes_posts = get_posts_id_for_user_likes($connection, $user['id']);
+$sort = get_string_from_params('sort');
+
+$sort_type = get_string_from_params('type');
+
+$sort_by = get_string_from_params('by');
+
+$sorting = "desc";
+
+$sorting_arr = [];
+
+$offset = 0;
+
+if($page) {
+    
+    $offset = $page * 6;
+};
 
 
 if(isset($post_id_likes))
@@ -31,6 +46,18 @@ if(isset($post_id_likes))
     
 };
 
+$posts = get_posts($connection, $get_id, null, null, $offset);
+
+if($sort_by && $sort_by === "desc"){
+    $sorting = "asc";
+};
+
+if($sort) {
+    $sorting_arr['type'] = $sort_type;
+    $sorting_arr['by'] = mb_strtoupper($sort_by);
+    $posts = get_posts($connection, $get_id, null, null, $offset, $sorting_arr);
+
+}
 
 
 
@@ -39,6 +66,9 @@ $page_content = include_template('popular.php',
      'posts' => $posts, 
      'types_content' => $types_content, 
      'get_id' => $get_id,
+     'page' => $page,
+     'sorting' => $sorting,
+     'sort_type' => $sort_type,
      'connection' => $connection
     ]
 );

@@ -33,11 +33,11 @@ if($_POST) {
 
     $tags_arr = get_tags_form($filter_form_data, $get_type_name);
 
-    $error_length_heading = check_length_str($filter_form_data["{$get_type_name}-heading"], 50);
+    $error_length_heading = check_length_str($filter_form_data["title"], 50);
 
     if(isset($error_length_heading)) {
 
-        $form_errors += ["{$get_type_name}-heading" => "Заголовок. {$error_length_heading}"];
+        $form_errors += ["title" => "Заголовок. {$error_length_heading}"];
     };
 
     $tags_field_error = check_symbols($filter_form_data["{$get_type_name}-tags"]);
@@ -72,17 +72,17 @@ if($_POST) {
 
         case "link" :
 
-            $error_link = check_link($filter_form_data['post-link'], 'post-link');
+            $error_link = check_link($filter_form_data['site_path'], 'site_path');
             $form_errors += $error_link;
             break;
 
         case "quote" :
 
-            $error_quote_text = check_length_str($filter_form_data["post-quote"], 70);
+            $error_quote_text = check_length_str($filter_form_data["content"], 70);
 
             if(isset($error_quote_text)){
 
-                $form_errors +=  ["post-quote" => "Цитата. {$error_quote_text}"];
+                $form_errors +=  ["content" => "Цитата. {$error_quote_text}"];
             };
             break;
     };

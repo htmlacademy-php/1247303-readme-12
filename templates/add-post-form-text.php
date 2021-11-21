@@ -4,24 +4,24 @@
                   <div class="form__text-inputs-wrapper">
                     <div class="form__text-inputs">
                       <div class="adding-post__input-wrapper form__input-wrapper">
-                        <label class="adding-post__label form__label" for="text-heading">Заголовок <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["text-heading"])) ? "form__input-section--error":""?>">
-                          <input class="adding-post__input form__input" id="text-heading" type="text" name="text-heading" placeholder="Введите заголовок" value="<?= ($form_errors && $filter_form_data['text-heading']) ? $filter_form_data['text-heading'] : '' ?>">
+                        <label class="adding-post__label form__label" for="title">Заголовок <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["title"])) ? "form__input-section--error":""?>">
+                          <input class="adding-post__input form__input" id="title" type="text" name="title" placeholder="Введите заголовок" value="<?= ($form_errors && $filter_form_data['title']) ? $filter_form_data['title'] : '' ?>">
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["text-heading"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["title"]?></p>
                           </div>
                         </div>
                       </div>
                       <div class="adding-post__textarea-wrapper form__textarea-wrapper">
-                        <label class="adding-post__label form__label" for="post-text">Текст поста <span class="form__input-required">*</span></label>
-                        <div class="form__input-section <?=(isset($form_errors["post-text"])) ? "form__input-section--error":""?>">
-                          <textarea class="adding-post__textarea form__textarea form__input" id="post-text" name="post-text" placeholder="Введите текст публикации" ><?= ($form_errors && $filter_form_data['post-text']) ? $filter_form_data['post-text'] : '' ?></textarea>
+                        <label class="adding-post__label form__label" for="content">Текст поста <span class="form__input-required">*</span></label>
+                        <div class="form__input-section <?=(isset($form_errors["content"])) ? "form__input-section--error":""?>">
+                          <textarea class="adding-post__textarea form__textarea form__input" id="content" name="content" placeholder="Введите текст публикации" ><?= ($form_errors && $filter_form_data['content']) ? $filter_form_data['content'] : '' ?></textarea>
                           <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
                           <div class="form__error-text">
                             <h3 class="form__error-title">Данные некорректны</h3>
-                            <p class="form__error-desc"><?=$form_errors["post-text"]?></p>
+                            <p class="form__error-desc"><?=$form_errors["content"]?></p>
                           </div>
                         </div>
                       </div>
@@ -49,8 +49,8 @@
                     <?php endif ?>
                   </div>
                   <div class="adding-post__buttons">
-                    <button class="adding-post__submit button button--main" type="submit" name="submit" value="<?=$get_id?>">Опубликовать</button>
-                    <a class="adding-post__close" href="#">Закрыть</a>
+                    <button class="adding-post__submit button button--main" type="submit" name="type_id" value="<?=$get_id?>">Опубликовать</button>
+                    <a class="adding-post__close" href="index.php">Закрыть</a>
                   </div>
                 </form>
               </section>
