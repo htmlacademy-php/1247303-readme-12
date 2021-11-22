@@ -140,7 +140,7 @@
             <?php if($page):?>
             <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page=<?=$page-1?>">Предыдущая страница</a>
             <?php endif;?>
-            <?php if(count($posts) >= 6):?>
+            <?php if(count($posts) >= 6 && count(get_posts($connection)) > 6):?>
             <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page=<?=$page+1?>">Следующая страница</a>
             <?php endif;?>
         </div>
