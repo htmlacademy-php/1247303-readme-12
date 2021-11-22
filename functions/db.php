@@ -13,10 +13,9 @@ function db_connect(string $host, string $user, string $password, string $db): m
     $con = mysqli_connect($host, $user, $password, $db);
 
     if ($con == false) {
-       print("Ошибка подключения: " . mysqli_connect_error());
-       exit();
-    }
-    else {
+        print("Ошибка подключения: " . mysqli_connect_error());
+        exit();
+    } else {
         return $con;
     }
 }
@@ -31,16 +30,14 @@ function db_connect(string $host, string $user, string $password, string $db): m
 */
 function set_request_db(mysqli $connect, string $request)
 {
-  $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connect, $request);
 
-  if($query == false) {
-    print("Ошибка запроса в БД: " .  mysqli_error($connect));
-    exit();
-  }
-  else {
-
-    return true;
-  }
+    if ($query == false) {
+        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        exit();
+    } else {
+        return true;
+    }
 }
 
 /**
@@ -51,17 +48,16 @@ function set_request_db(mysqli $connect, string $request)
 */
 function get_array_db(mysqli $connect, string $request): array
 {
-  $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connect, $request);
 
-  if($query == false) {
-    print("Ошибка запроса в БД: " .  mysqli_error($connect));
-    exit();
-  }
-  else {
-    $array = mysqli_fetch_all($query, MYSQLI_ASSOC);
+    if ($query == false) {
+        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        exit();
+    } else {
+        $array = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
-    return $array;
-  }
+        return $array;
+    }
 }
 
 /**
@@ -73,20 +69,18 @@ function get_array_db(mysqli $connect, string $request): array
 */
 function get_first_value(mysqli $connect, string $request)
 {
-  $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connect, $request);
 
-  if($query == false) {
-    print("Ошибка запроса в БД: " .  mysqli_error($connect));
-    exit();
-  }
-  else {
-    $array = mysqli_fetch_array($query);
+    if ($query == false) {
+        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        exit();
+    } else {
+        $array = mysqli_fetch_array($query);
 
-    $result = isset($array) ? $array[0] : 0;
+        $result = isset($array) ? $array[0] : 0;
+    };
 
-  };
- 
-  return $result;
+    return $result;
 }
 
 /**
@@ -109,9 +103,8 @@ function get_content_types(mysqli $connection): array
  * @param ?int $post_id id поста
  * @return array массив с списком постов
  */
-function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NULL, ?int $user_id = NULL, int $offset = NULL, ?array $sorting = NULL): array
+function get_posts(mysqli $connection, ?int $type_id = null, ?int $post_id = null, ?int $user_id = null, int $offset = null, ?array $sorting = null): array
 {
-
     $sql = "SELECT
               posts.id,
               posts.content,
@@ -141,41 +134,38 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
               `types`
             ON
               posts.type_id = types.id 
-             "; 
+             ";
 
-      if($type_id) {
+    if ($type_id) {
         $sql .= "WHERE types.id = {$type_id} ";
-      }
-      if($post_id) {
+    }
+    if ($post_id) {
         $sql .= "WHERE posts.id = {$post_id} ";
-      }
-      if($user_id) {
+    }
+    if ($user_id) {
         $sql .= "WHERE users.id = {$user_id} ";
-      }
-      
-      if($sorting && $sorting['type'] && $sorting['type'] != "likes") {
+    }
+
+    if ($sorting && $sorting['type'] && $sorting['type'] != "likes") {
         $sql .= "ORDER BY `posts`.`{$sorting["type"]}` {$sorting["by"]} ";
-    
-      }
+    }
 
-      if($sorting && $sorting['type'] === "likes"){
+    if ($sorting && $sorting['type'] === "likes") {
         $sql .= "ORDER BY likes_count {$sorting["by"]} ";
-      }
+    }
 
 
-      if(!$type_id && !$sorting) {
+    if (!$type_id && !$sorting) {
         $sql .= "ORDER BY `posts`.`count_view` DESC ";
-      }
+    }
 
 
-      if($offset || $offset === 0) {
+    if ($offset || $offset === 0) {
         $sql .= "LIMIT 6 OFFSET {$offset} ";
-      }
-    
+    }
+
 
     return get_array_db($connection, $sql);
-
-    
 }
 
 /**
@@ -183,11 +173,11 @@ function get_posts(mysqli $connection, ?int $type_id = NULL, ?int $post_id = NUL
  * @param mysqli $connection объект соединения с БД
  * @param ?int $post_id число, id поста, по которому нужно подсчитать количество лайков
  */
-function get_count_likes(mysqli $connection, int $post_id):int
+function get_count_likes(mysqli $connection, int $post_id): int
 {
-  $sql = "SELECT COUNT(id) AS total_count FROM `likes` WHERE post_id = {$post_id}";
+    $sql = "SELECT COUNT(id) AS total_count FROM `likes` WHERE post_id = {$post_id}";
 
-  return get_first_value($connection,$sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -195,11 +185,11 @@ function get_count_likes(mysqli $connection, int $post_id):int
  * @param mysqli $connection объект соединения с БД
  * @param ?int $post_id число, id поста, по которому нужно получить количество комментариев
  */
-function get_count_comments(mysqli $connection, int $post_id):int
+function get_count_comments(mysqli $connection, int $post_id): int
 {
-  $sql = "SELECT COUNT(id) AS total_count FROM `comments` WHERE post_id = {$post_id}";
+    $sql = "SELECT COUNT(id) AS total_count FROM `comments` WHERE post_id = {$post_id}";
 
-  return get_first_value($connection,$sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -207,11 +197,11 @@ function get_count_comments(mysqli $connection, int $post_id):int
  * @param mysqli $connection объект соединения с БД
  * @param ?int $user_id число, id пользователя, по которому нужно получить количество публикаций
  */
-function get_quantity_post(mysqli $connection, int $user_id):int
+function get_quantity_post(mysqli $connection, int $user_id): int
 {
-  $sql = "SELECT COUNT(id) AS total_count FROM `posts` WHERE user_id = {$user_id}";
+    $sql = "SELECT COUNT(id) AS total_count FROM `posts` WHERE user_id = {$user_id}";
 
-  return get_first_value($connection, $sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -219,11 +209,11 @@ function get_quantity_post(mysqli $connection, int $user_id):int
  * @param mysqli $connection объект соединения с БД
  * @param ?int $user_id число, id пользователя, по которому нужно получить количество подписчиков
  */
-function get_quantity_followers(mysqli $connection, int $user_id):int
+function get_quantity_followers(mysqli $connection, int $user_id): int
 {
-  $sql = "SELECT COUNT(id) AS total_count FROM `subscriptions` WHERE user_id = {$user_id}";
+    $sql = "SELECT COUNT(id) AS total_count FROM `subscriptions` WHERE user_id = {$user_id}";
 
-  return get_first_value($connection,$sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -231,18 +221,18 @@ function get_quantity_followers(mysqli $connection, int $user_id):int
  * @param mysqli $connection объект соединения с БД
  * @param ?int $post_idчисло, id публикации(поста), по которому нужно получить количество просмотров
  */
-function get_count_views(mysqli $connection, int $post_id):?int
+function get_count_views(mysqli $connection, int $post_id): ?int
 {
-  $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = {$post_id}";
+    $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = {$post_id}";
 
-  return get_first_value($connection,$sql);
+    return get_first_value($connection, $sql);
 }
 
-function get_count_repost(mysqli $connection, int $post_id):?int
+function get_count_repost(mysqli $connection, int $post_id): ?int
 {
-  $sql = "SELECT SUM(count_repost) FROM `posts` WHERE id = {$post_id}";
+    $sql = "SELECT SUM(count_repost) FROM `posts` WHERE id = {$post_id}";
 
-  return get_first_value($connection,$sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -251,9 +241,8 @@ function get_count_repost(mysqli $connection, int $post_id):?int
  * @param ?int $post_id id публикации (поста), по которой нужно получить список комментариев
  * @return array массив с списком комментариев
  */
-function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2): array
+function get_comments(mysqli $connection, ?int $post_id = null, ?int $limit = 2): array
 {
-
     $sql = "SELECT
               comments.id,
               comments.publication_date,
@@ -279,7 +268,7 @@ function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2)
             WHERE posts.id = {$post_id} ORDER BY `publication_date` DESC";
 
     if ($limit) {
-      $sql .= " LIMIT {$limit} OFFSET 0";
+        $sql .= " LIMIT {$limit} OFFSET 0";
     };
 
     return get_array_db($connection, $sql);
@@ -291,10 +280,9 @@ function get_comments(mysqli $connection, ?int $post_id = NULL, ?int $limit = 2)
  * @param ?int $post_id id публикации (поста), по которой нужно получить список тэгов
  * @return array массив с списком тэгов
  */
-function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
+function get_tags_post(mysqli $connection, ?int $post_id = null): array
 {
-
-  $sql = "SELECT
+    $sql = "SELECT
     tags.id,
     tags.title
 
@@ -312,7 +300,7 @@ function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
 
   WHERE posts.id = {$post_id}";
 
-  return get_array_db($connection, $sql);
+    return get_array_db($connection, $sql);
 }
 
 /**
@@ -321,11 +309,11 @@ function get_tags_post(mysqli $connection, ?int $post_id = NULL): array
  * @param string $tag строка запроса (тега, id которого, нужно получить)
  * @return int id тэга или 0, если совпадения не найдены
  */
-function get_tags_id(mysqli $connection, string $tag):int
+function get_tags_id(mysqli $connection, string $tag): int
 {
-  $sql = "SELECT id FROM `tags` WHERE title = '{$tag}'";
+    $sql = "SELECT id FROM `tags` WHERE title = '{$tag}'";
 
-  return (int) get_first_value($connection, $sql);
+    return (int) get_first_value($connection, $sql);
 }
 
 /**
@@ -334,12 +322,12 @@ function get_tags_id(mysqli $connection, string $tag):int
  * @param string $email строка запроса (e-mail, наличие которого нужно проверить в БД)
  * @return bool true, если пользователь с таким email есть, false если e-mail нет
  */
-function get_user_by_mail(mysqli $connection, string $email):int
+function get_user_by_mail(mysqli $connection, string $email): int
 {
-  $sql = "SELECT id FROM `users` WHERE email = '{$email}'";
-  
+    $sql = "SELECT id FROM `users` WHERE email = '{$email}'";
 
-  return get_first_value($connection, $sql);
+
+    return get_first_value($connection, $sql);
 }
 
 
@@ -349,11 +337,11 @@ function get_user_by_mail(mysqli $connection, string $email):int
  * @param string $email строка запроса (e-mail, наличие которого нужно проверить в БД)
  * @return string
  */
-function get_hash_by_mail(mysqli $connection, string $email):string
+function get_hash_by_mail(mysqli $connection, string $email): string
 {
-  $sql = "SELECT password FROM `users` WHERE email = '{$email}'";
+    $sql = "SELECT password FROM `users` WHERE email = '{$email}'";
 
-  return get_first_value($connection, $sql);
+    return get_first_value($connection, $sql);
 }
 
 /**
@@ -362,13 +350,13 @@ function get_hash_by_mail(mysqli $connection, string $email):string
  * @param string $id строка запроса (id, наличие которого нужно проверить в БД)
  * @return string
  */
-function get_user(mysqli $connection, int $id):array
+function get_user(mysqli $connection, int $id): array
 {
-  $sql = "SELECT id, avatar_path, first_name, last_name, dt_add FROM `users` WHERE id = '{$id}'";
+    $sql = "SELECT id, avatar_path, first_name, last_name, dt_add FROM `users` WHERE id = '{$id}'";
 
-  $user = get_array_db($connection, $sql);
+    $user = get_array_db($connection, $sql);
 
-  return $user[0];
+    return $user[0];
 }
 
 
@@ -381,12 +369,10 @@ function get_user(mysqli $connection, int $id):array
 */
 function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
-
-
     $today = new DateTime('now');
 
-    if($repost) {
-      $request = "
+    if ($repost) {
+        $request = "
       INSERT INTO
       `posts`(
         `user_id`,
@@ -408,8 +394,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
        {$form_data["orig_user_id"]}
       )";
 
-      return set_request_db($connect, $request);
-
+        return set_request_db($connect, $request);
     }
 
     $request = "
@@ -432,7 +417,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
          1 
         )";
 
-        return set_request_db($connect, $request);  
+    return set_request_db($connect, $request);
 }
 
 
@@ -445,11 +430,10 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
 */
 function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
-
     $today = new DateTime('now');
 
-    if($repost) {
-      $request = "
+    if ($repost) {
+        $request = "
         INSERT INTO
         `posts`(
           `user_id`,
@@ -473,7 +457,7 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
          {$form_data["orig_user_id"]}
         )";
 
-    return set_request_db($connect, $request);
+        return set_request_db($connect, $request);
     }
 
     $request = "
@@ -510,11 +494,10 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
 */
 function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
-
     $today = new DateTime('now');
 
-    if($repost) {
-      $request = "
+    if ($repost) {
+        $request = "
         INSERT INTO
         `posts`(
           `user_id`,
@@ -536,7 +519,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
          '{$form_data["orig_user_id"]}'
         )";
 
-      return set_request_db($connect, $request);
+        return set_request_db($connect, $request);
     }
 
     $request = "
@@ -559,8 +542,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
      1
     )";
 
-  return set_request_db($connect, $request);
-    
+    return set_request_db($connect, $request);
 }
 
 /**
@@ -572,12 +554,10 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
 */
 function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
-
     $today = new DateTime('now');
 
-    if($repost){
-
-      $request = "
+    if ($repost) {
+        $request = "
       INSERT INTO
       `posts`(
         `user_id`,
@@ -600,7 +580,6 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
       )";
 
         return set_request_db($connect, $request);
-
     }
 
     $request = "
@@ -635,10 +614,10 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
 */
 function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null)
 {
-  $today = new DateTime('now');
+    $today = new DateTime('now');
 
-  if($repost){
-    $request = "
+    if ($repost) {
+        $request = "
         INSERT INTO
         `posts`(
           `user_id`,
@@ -660,9 +639,9 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
           '{$form_data["orig_user_id"]}'
         )";
 
-    return set_request_db($connect, $request);
-  };
-     
+        return set_request_db($connect, $request);
+    };
+
 
     $request = "
         INSERT INTO
@@ -694,12 +673,11 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
 * @param  int $count_repost текущее количество репостов.
 * В случае успешной отправки возвращает true
 */
-function update_count_repost(mysqli $connection, int $post_id, int $count_repost) 
+function update_count_repost(mysqli $connection, int $post_id, int $count_repost)
 {
-  $request = "UPDATE posts SET count_repost = $count_repost WHERE id = $post_id";
+    $request = "UPDATE posts SET count_repost = $count_repost WHERE id = $post_id";
 
-  return set_request_db($connection, $request);
-
+    return set_request_db($connection, $request);
 }
 /**
 * Сохраняет в таблицу БД `posts` запись - репост уже имеющегося поста.
@@ -711,13 +689,12 @@ function update_count_repost(mysqli $connection, int $post_id, int $count_repost
 */
 function add_repost(mysqli $connection, array $post, int $user_id)
 {
-  $count_repost = get_count_repost($connection,$post['id']) + 1;
-  
-  $post['orig_user_id'] = $post['user_id'];
+    $count_repost = get_count_repost($connection, $post['id']) + 1;
 
-  switch ($post['class_name'])
-  {
-    case "text" :
+    $post['orig_user_id'] = $post['user_id'];
+
+    switch ($post['class_name']) {
+    case "text":
 
       add_post_text_db($connection, $post, $user_id, 1);
 
@@ -729,7 +706,7 @@ function add_repost(mysqli $connection, array $post, int $user_id)
 
       break;
 
-  case "photo" :
+  case "photo":
 
       add_post_photo_db($connection, $post, $user_id, 1);
 
@@ -741,19 +718,19 @@ function add_repost(mysqli $connection, array $post, int $user_id)
 
       break;
 
-  case "video" :
+  case "video":
 
       add_post_video_db($connection, $post, $user_id, 1);
 
       $post_id = mysqli_insert_id($connection);
 
       update_count_repost($connection, $post['id'], $count_repost);
-      
+
       header("Location: post.php?post-id={$post_id}");
 
       break;
 
-  case "link" :
+  case "link":
 
       add_post_link_db($connection, $post, $user_id, 1);
 
@@ -765,19 +742,18 @@ function add_repost(mysqli $connection, array $post, int $user_id)
 
       break;
 
-  case "quote" :
+  case "quote":
 
       add_post_quote_db($connection, $post, $user_id, 1);
 
       $post_id = mysqli_insert_id($connection);
 
       update_count_repost($connection, $post['id'], $count_repost);
-    
+
       header("Location: post.php?post-id={$post_id}");
 
       break;
 };
-
 }
 
 /**
@@ -798,8 +774,7 @@ function add_tag_db(mysqli $connect, string $tag_title)
          '{$tag_title}'
         )";
 
-        return set_request_db($connect, $request);
-
+    return set_request_db($connect, $request);
 }
 
 /**
@@ -812,7 +787,6 @@ function add_tag_db(mysqli $connect, string $tag_title)
 */
 function add_relations_db(mysqli $connect, int $tag_id, int $post_id)
 {
-
     $request = "
         INSERT INTO
             `relations_posts_tags` 
@@ -827,7 +801,7 @@ function add_relations_db(mysqli $connect, int $tag_id, int $post_id)
          {$tag_id}
         )";
 
-        return set_request_db($connect, $request);
+    return set_request_db($connect, $request);
 }
 
 /**
@@ -838,13 +812,10 @@ function add_relations_db(mysqli $connect, int $tag_id, int $post_id)
 */
 function add_new_tags_db(mysqli $connection, array $tags_arr)
 {
-
-    foreach($tags_arr as $tag){
-
-      if(get_tags_id($connection, $tag) === 0 && $tag){
-
-        add_tag_db($connection, $tag);
-      };
+    foreach ($tags_arr as $tag) {
+        if (get_tags_id($connection, $tag) === 0 && $tag) {
+            add_tag_db($connection, $tag);
+        };
     };
 }
 
@@ -857,8 +828,7 @@ function add_new_tags_db(mysqli $connection, array $tags_arr)
 */
 function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr)
 {
-    foreach($tags_arr as $tag) {
-
+    foreach ($tags_arr as $tag) {
         $tag_id = get_tags_id($connection, $tag);
 
         add_relations_db($connection, $tag_id, $post_id);
@@ -876,7 +846,6 @@ function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr)
 */
 function add_user_db(mysqli $connect, ?array $form_data)
 {
-
     $today = new DateTime('now');
 
     $request = "
@@ -911,9 +880,8 @@ function add_user_db(mysqli $connect, ?array $form_data)
  * @param string $query запрос, по которому нужно осуществить поиск
  * @return array массив с списком постов
  */
-function search_posts_db(mysqli $connection, string $query):?array 
+function search_posts_db(mysqli $connection, string $query): ?array
 {
-
     $sql = "SELECT
     posts.id,
     posts.content,
@@ -945,14 +913,13 @@ function search_posts_db(mysqli $connection, string $query):?array
   WHERE MATCH(title,content) AGAINST('{$query}')";
 
 
-  $search_results = get_array_db($connection, $sql);
+    $search_results = get_array_db($connection, $sql);
 
-  
-  if(count($search_results)) {
 
-    return $search_results;
-  }
-  return null;
+    if (count($search_results)) {
+        return $search_results;
+    }
+    return null;
 }
 /**
  * Функция возвращает массив с ID постов из БД, по ID тега
@@ -961,17 +928,16 @@ function search_posts_db(mysqli $connection, string $query):?array
  * @param int $tag_id - ID тега, по которому нужно получить ID постов
  * @return array массив с списком постов
  */
-function get_posts_id_for_tags_id(mysqli $connection, int $tag_id):?array
+function get_posts_id_for_tags_id(mysqli $connection, int $tag_id): ?array
 {
-  $sql = "SELECT post_id FROM `relations_posts_tags` WHERE tags_id = {$tag_id}";
+    $sql = "SELECT post_id FROM `relations_posts_tags` WHERE tags_id = {$tag_id}";
 
-  $post_id = get_array_db($connection, $sql);
+    $post_id = get_array_db($connection, $sql);
 
-  if(count($post_id)) {
-
-    return $post_id;
-  }
-  return null;
+    if (count($post_id)) {
+        return $post_id;
+    }
+    return null;
 }
 
 /**
@@ -980,19 +946,17 @@ function get_posts_id_for_tags_id(mysqli $connection, int $tag_id):?array
  * @param array $posts_id - массив ID постов, по которому нужно получить массив с данными постов
  * @return array массив с списком постов
  */
-function get_posts_for_id(mysqli $connection, array $posts_id):?array
+function get_posts_for_id(mysqli $connection, array $posts_id): ?array
 {
     $results = [];
 
-    foreach($posts_id as $post_id) {
-
-        $result = get_posts($connection, NULL, $post_id["post_id"], null, null, null);
+    foreach ($posts_id as $post_id) {
+        $result = get_posts($connection, null, $post_id["post_id"], null, null, null);
         array_push($results, $result[0]);
-
     };
 
-    if(count($results)) {
-      return $results;
+    if (count($results)) {
+        return $results;
     }
     return null;
 }
@@ -1005,17 +969,16 @@ function get_posts_for_id(mysqli $connection, array $posts_id):?array
  * @param int $user_id - ID пользователя, по которому нужно получить ID постов
  * @return array массив с списком постов
  */
-function get_posts_id_for_user_likes(mysqli $connection, int $user_id):?array
+function get_posts_id_for_user_likes(mysqli $connection, int $user_id): ?array
 {
-  $sql = "SELECT `id`, `post_id` FROM `likes` WHERE like_user_id = {$user_id}";
+    $sql = "SELECT `id`, `post_id` FROM `likes` WHERE like_user_id = {$user_id}";
 
-  $likes = get_array_db($connection, $sql);
+    $likes = get_array_db($connection, $sql);
 
-  if(count($likes)) {
-
-    return $likes;
-  }
-  return null;
+    if (count($likes)) {
+        return $likes;
+    }
+    return null;
 }
 /**
  * Функция возвращает ID записи из таблицы `likes`, данные фильтровуются по user_id и post_id
@@ -1026,23 +989,19 @@ function get_posts_id_for_user_likes(mysqli $connection, int $user_id):?array
  * @return int - число, ID записи в из таблицы `likes`
  */
 
-function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $post_id):int
+function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $post_id): int
 {
-  
-  $posts_likes = get_posts_id_for_user_likes($connection, $user_id);
-  
-  if(isset($posts_likes)){
-    
-    foreach ($posts_likes as $post) {
+    $posts_likes = get_posts_id_for_user_likes($connection, $user_id);
 
-      if((int) $post['post_id'] === $post_id){
-
-          return $post['id'];
-      }
+    if (isset($posts_likes)) {
+        foreach ($posts_likes as $post) {
+            if ((int) $post['post_id'] === $post_id) {
+                return $post['id'];
+            }
+        }
     }
-  }
 
-  return 0;
+    return 0;
 }
 
 /**
@@ -1055,11 +1014,9 @@ function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $po
 */
 function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
 {
+    $like = get_likes_for_user_id_post_id($connection, $user_id, $post_id);
 
-  $like = get_likes_for_user_id_post_id($connection, $user_id, $post_id);
-
-    if(!$like){
-      
+    if (!$like) {
         $request = "
         INSERT INTO
             `likes` 
@@ -1072,7 +1029,7 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
         (
         {$user_id},
         {$post_id}
-        )"; 
+        )";
 
         set_request_db($connection, $request);
 
@@ -1080,12 +1037,12 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
 
         return;
     }
-      
-      delete_likes_db($connection, $like);
 
-      redirect_to_back();
-  
-      return;
+    delete_likes_db($connection, $like);
+
+    redirect_to_back();
+
+    return;
 }
 
 /**
@@ -1096,21 +1053,19 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id)
 */
 function delete_likes_db(mysqli $connection, $id)
 {
-      $request = "DELETE FROM `likes` WHERE `id` = {$id}";
+    $request = "DELETE FROM `likes` WHERE `id` = {$id}";
 
-      return set_request_db($connection, $request);
-    
+    return set_request_db($connection, $request);
 }
 
 /**
  * Функция получает информацию по постам пользователя у которых есть лайки
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя, список постов 
+ * @param ?int $$user_id id пользователя, список постов
  * @return array массив с списком постов
  */
-function get_liked_posts(mysqli $connection, ?int $user_id = NULL): ?array
+function get_liked_posts(mysqli $connection, ?int $user_id = null): ?array
 {
-
     $sql = "SELECT
               like_user_id,
               post_id,
@@ -1144,7 +1099,7 @@ function get_liked_posts(mysqli $connection, ?int $user_id = NULL): ?array
               posts.type_id = types.id 
             
               
-            WHERE posts.user_id = {$user_id}"; 
+            WHERE posts.user_id = {$user_id}";
 
 
     return get_array_db($connection, $sql);
@@ -1153,12 +1108,11 @@ function get_liked_posts(mysqli $connection, ?int $user_id = NULL): ?array
 /**
  * Функция получает список подписчиков пользователя
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя 
+ * @param ?int $$user_id id пользователя
  * @return array массив с списком постов
  */
-function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
+function get_subscritions(mysqli $connection, ?int $user_id = null): ?array
 {
-
     $sql = "SELECT
               user_id,
               follower_user_id,
@@ -1176,7 +1130,7 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
              follower_user_id = users.id
             
               
-            WHERE user_id = {$user_id}"; 
+            WHERE user_id = {$user_id}";
 
 
     return get_array_db($connection, $sql);
@@ -1185,62 +1139,54 @@ function get_subscritions(mysqli $connection, ?int $user_id = NULL): ?array
 /**
  * Функция получает список подписок пользователя
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя 
+ * @param ?int $$user_id id пользователя
  * @return array массив с списком постов
  */
-function get_followers_id_from_user_id(mysqli $connection, int $user_id):?array
+function get_followers_id_from_user_id(mysqli $connection, int $user_id): ?array
 {
-  $sql = "SELECT `id`, `user_id`, `follower_user_id` FROM `subscriptions` WHERE follower_user_id = {$user_id}";
+    $sql = "SELECT `id`, `user_id`, `follower_user_id` FROM `subscriptions` WHERE follower_user_id = {$user_id}";
 
-  $followers = get_array_db($connection, $sql);
+    $followers = get_array_db($connection, $sql);
 
-  return $followers;
+    return $followers;
 }
 
 
 /**
  * Функция получает ID подписчика пользователя
  * @param mysqli $connection объект соединения с БД
- * @param int $$user_id id пользователя 
+ * @param int $$user_id id пользователя
  * @param int $follower_id подписчика
  * @return array массив с списком постов
  */
 function get_follower_id_from_user_id(mysqli $connection, int $user_id, int $follower_id)
 {
-  
-  $followers = get_followers_id_from_user_id($connection, $user_id);
+    $followers = get_followers_id_from_user_id($connection, $user_id);
 
-  foreach($followers as $follower) {
-  
-    if((int) $follower['user_id'] === $follower_id){
-      
-      return $follower['user_id'];
-    }
-  };
-  return 0;
-
+    foreach ($followers as $follower) {
+        if ((int) $follower['user_id'] === $follower_id) {
+            return $follower['user_id'];
+        }
+    };
+    return 0;
 }
 /**
  * Функция получает ID пользователя по ID подписчика
  * @param mysqli $connection объект соединения с БД
- * @param int $$user_id id пользователя 
+ * @param int $$user_id id пользователя
  * @param int $follower_id подписчика
  * @return array массив с списком постов
  */
 function get_id_subcriptions_from_user_id(mysqli $connection, int $user_id, int $follower_id)
 {
-  
-  $followers = get_followers_id_from_user_id($connection, $follower_id);
+    $followers = get_followers_id_from_user_id($connection, $follower_id);
 
-  foreach($followers as $follower) {
-  
-    if((int) $follower['user_id'] === $user_id){
-      
-      return $follower['id'];
-    }
-  };
-  return 0;
-
+    foreach ($followers as $follower) {
+        if ((int) $follower['user_id'] === $user_id) {
+            return $follower['id'];
+        }
+    };
+    return 0;
 }
 
 /**
@@ -1251,10 +1197,9 @@ function get_id_subcriptions_from_user_id(mysqli $connection, int $user_id, int 
 */
 function delete_subscripions_db(mysqli $connection, $id)
 {
-      $request = "DELETE FROM `subscriptions` WHERE `id` = {$id}";
+    $request = "DELETE FROM `subscriptions` WHERE `id` = {$id}";
 
-      return set_request_db($connection, $request);
-    
+    return set_request_db($connection, $request);
 }
 
 /**
@@ -1266,12 +1211,10 @@ function delete_subscripions_db(mysqli $connection, $id)
 */
 function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_id)
 {
+    $subscription = get_id_subcriptions_from_user_id($connection, $user_id, $follower_id);
 
-  $subscription = get_id_subcriptions_from_user_id($connection, $user_id, $follower_id);
 
-
-    if(!$subscription){
-      
+    if (!$subscription) {
         $request = "
         INSERT INTO
             `subscriptions` 
@@ -1284,7 +1227,7 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
         (
         {$user_id},
         {$follower_id}
-        )"; 
+        )";
 
         set_request_db($connection, $request);
 
@@ -1296,7 +1239,7 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
     delete_subscripions_db($connection, $subscription);
 
     redirect_to_back();
-  
+
     return;
 }
 
@@ -1313,13 +1256,12 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
 */
 function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id, int $post_id)
 {
-    $commented_post_is_valid = (int) get_posts($connect, null, $post_id, null, null)[0]['id']; 
-    
-    if($commented_post_is_valid === $post_id) {
+    $commented_post_is_valid = (int) get_posts($connect, null, $post_id, null, null)[0]['id'];
 
-      $today = new DateTime('now');
+    if ($commented_post_is_valid === $post_id) {
+        $today = new DateTime('now');
 
-      $request = "
+        $request = "
           INSERT INTO
           `comments`
           ( 
@@ -1335,12 +1277,9 @@ function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id
             {$user_id},
             {$post_id}
           )";
-  
-      return set_request_db($connect, $request);
+
+        return set_request_db($connect, $request);
     }
     print("Системная ошибка. Пост не найден");
     exit();
 }
-
-
-

@@ -1,10 +1,10 @@
 <?php
+
 session_start();
 
 require_once('bootstrap.php');
 
-if(!isset($_SESSION['user_id'])) {
-    
+if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
@@ -25,8 +25,7 @@ $user = get_user($connection, $user_id);
 $avatar_path = $user['avatar_path'];
 
 
-if($_POST) {
-
+if ($_POST) {
     $filter_form_data = array_map('filtered_form_data', $_POST);
 
     $form_errors = check_filled_value($filter_form_data, $get_type_name);
@@ -35,89 +34,82 @@ if($_POST) {
 
     $error_length_heading = check_length_str($filter_form_data["title"], 50);
 
-    if(isset($error_length_heading)) {
-
+    if (isset($error_length_heading)) {
         $form_errors += ["title" => "Заголовок. {$error_length_heading}"];
     };
 
     $tags_field_error = check_symbols($filter_form_data["{$get_type_name}-tags"]);
 
-    if(isset($tags_field_error)) {
-
+    if (isset($tags_field_error)) {
         $form_errors += ["{$get_type_name}-tags" => "Символы:  {$tags_field_error}  недопустимы для тегов"];
     };
 
-    switch($get_type_name) {
+    switch ($get_type_name) {
 
-        case "photo" :
+        case "photo":
 
             $error_file_or_link = check_photo_form($_FILES, $filter_form_data);
             $form_errors += $error_file_or_link;
 
-            if(!$_FILES["file-photo"]["error"] && !$form_errors) {
-
+            if (!$_FILES["file-photo"]["error"] && !$form_errors) {
                 $filter_form_data += upload_files($_FILES);
-            }
-            elseif(!$form_errors) {
-
+            } elseif (!$form_errors) {
                 $filter_form_data += download_out_files($filter_form_data["photo-url"]);
             };
             break;
 
-        case "video" :
+        case "video":
 
             $error_link_video = check_video_form($filter_form_data);
             $form_errors += $error_link_video;
             break;
 
-        case "link" :
+        case "link":
 
             $error_link = check_link($filter_form_data['site_path'], 'site_path');
             $form_errors += $error_link;
             break;
 
-        case "quote" :
+        case "quote":
 
             $error_quote_text = check_length_str($filter_form_data["content"], 70);
 
-            if(isset($error_quote_text)){
-
+            if (isset($error_quote_text)) {
                 $form_errors +=  ["content" => "Цитата. {$error_quote_text}"];
             };
             break;
     };
 
 
-    if(!$form_errors){
+    if (!$form_errors) {
+        switch ($get_type_name) {
 
-        switch($get_type_name) {
-
-            case "text" :
+            case "text":
                 add_post_text_db($connection, $filter_form_data, $user_id);
                 break;
 
-            case "photo" :
+            case "photo":
                 add_post_photo_db($connection, $filter_form_data, $user_id);
                 break;
-    
-            case "video" :
+
+            case "video":
                 add_post_video_db($connection, $filter_form_data, $user_id);
                 break;
-    
-            case "link" :
+
+            case "link":
                 add_post_link_db($connection, $filter_form_data, $user_id);
                 break;
-    
-            case "quote" :
+
+            case "quote":
                 add_post_quote_db($connection, $filter_form_data, $user_id);
                 break;
         };
 
         $post_id = mysqli_insert_id($connection);
-        
-        if($tags_arr) {
+
+        if ($tags_arr) {
             add_new_tags_db($connection, $tags_arr);
-            add_relation_arr_db($connection, $post_id, $tags_arr);  
+            add_relation_arr_db($connection, $post_id, $tags_arr);
         };
 
         header("Location: post.php?post-id={$post_id}");
@@ -126,7 +118,8 @@ if($_POST) {
     };
 };
 
-$add_post_form = include_template("add-post-form-{$get_type_name}.php",
+$add_post_form = include_template(
+    "add-post-form-{$get_type_name}.php",
     [
         'get_id' => $get_id,
         'filter_form_data' => $filter_form_data,
@@ -135,7 +128,8 @@ $add_post_form = include_template("add-post-form-{$get_type_name}.php",
 );
 
 
-$add_post = include_template('adding-post.php',
+$add_post = include_template(
+    'adding-post.php',
     [
      'types_content' => $types_content,
      'get_id' => $get_id,
@@ -143,9 +137,10 @@ $add_post = include_template('adding-post.php',
     ]
 );
 
-$layout_content = include_template('layout.php',
+$layout_content = include_template(
+    'layout.php',
     [
-     'user' => $user,  
+     'user' => $user,
      'content' => $add_post,
      'title' => 'Добавить публикацию',
      'header_user_nav' => CLOSE_BTN,
@@ -155,4 +150,3 @@ $layout_content = include_template('layout.php',
 
 
 print($layout_content);
-

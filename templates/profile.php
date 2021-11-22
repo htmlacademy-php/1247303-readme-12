@@ -22,8 +22,8 @@
               </p>
             </div>
             <div class="profile__user-buttons user__buttons">
-              <?php if($user_profile['id'] != $user['id']):?>
-              <a class="profile__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "button--quartz":"button--main" ?>" type="button" href="profile.php?id=<?=$user_profile['id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "Отписаться":"Подписаться" ?></a>
+              <?php if ($user_profile['id'] != $user['id']):?>
+              <a class="profile__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$user_profile['id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "Отписаться" : "Подписаться" ?></a>
               <?php endif; ?>
             </div>
           </div>
@@ -34,13 +34,13 @@
               <b class="profile__tabs-caption filters__caption">Показать:</b>
               <ul class="profile__tabs-list filters__list tabs__list">
                 <li class="profile__tabs-item filters__item">
-                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'posts')? "filters__button--active":"" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=posts">Посты</a>
+                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'posts') ? "filters__button--active" : "" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=posts">Посты</a>
                 </li>
                 <li class="profile__tabs-item filters__item">
-                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'likes')? "filters__button--active":"" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=likes">Лайки</a>
+                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'likes') ? "filters__button--active" : "" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=likes">Лайки</a>
                 </li>
                 <li class="profile__tabs-item filters__item">
-                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'subscriptions')? "filters__button--active":"" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=subscriptions">Подписки</a>
+                  <a class="profile__tabs-link filters__button <?= ($tabs_active === 'subscriptions') ? "filters__button--active" : "" ?> tabs__item button" href="profile.php?id=<?=$user_profile['id']?>&tabs=subscriptions">Подписки</a>
                 </li>
               </ul>
             </div>

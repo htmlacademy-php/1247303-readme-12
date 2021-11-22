@@ -26,34 +26,29 @@ function include_template($name, array $data = [])
 
 * Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
 */
-function cutStr(string $str, int $length = 300, ?int $post_id) : string 
+function cutStr(string $str, int $length = 300, ?int $post_id): string
 {
-
-    if(mb_strlen($str) > $length) {
-
+    if (mb_strlen($str) > $length) {
         $words = explode(" ", $str);
-   
+
         $currentTextLength = 0;
 
         $strOut = [];
 
-        foreach($words as $word) {
-
-            if($currentTextLength < $length) {
+        foreach ($words as $word) {
+            if ($currentTextLength < $length) {
                 $currentTextLength += mb_strlen($word) + 1;
                 $strOut[] = $word;
-            } 
-            else {
+            } else {
                 break;
-            }  
-
+            }
         }
         $cuttingStr = implode(" ", $strOut) . "...";
 
         return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='post.php?post-id={$post_id}'>Читать далее</a>";
     }
 
-    return "<p>{$str}</p>";   
+    return "<p>{$str}</p>";
 }
 
 /**
@@ -107,11 +102,12 @@ function extract_youtube_id(string $youtube_url)
  *
  * @return array Ошибку если валидация не прошла
  */
-function check_youtube_url(string $url):array
+function check_youtube_url(string $url): array
 {
     $id = extract_youtube_id($url);
 
-    set_error_handler(function () {}, E_WARNING);
+    set_error_handler(function () {
+    }, E_WARNING);
     $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
     restore_error_handler();
 
@@ -133,11 +129,11 @@ function check_youtube_url(string $url):array
  * @param array $types_content массив вида [id => 'тип контента']
  * @param int $id - id типа контента
  */
-function get_type_from_id(array $types_content, ?int $id):string
+function get_type_from_id(array $types_content, ?int $id): string
 {
-  foreach($types_content as $type) {
-      if((int) $type['id'] === $id) {
-          return $type['class_name'];
-      }
-  }
+    foreach ($types_content as $type) {
+        if ((int) $type['id'] === $id) {
+            return $type['class_name'];
+        }
+    }
 }

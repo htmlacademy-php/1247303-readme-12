@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 /**
  * Возвращает корректную форму множественного числа
@@ -58,12 +59,12 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * если от $date до текущего времени прошло больше 7 дней, но меньше 5 недель, то формат будет вида “% недель;
  * если от $date до текущего времени прошло больше 5 недель, то формат будет вида “% месяцев.
  */
-function relativeDate(string $date): string 
+function relativeDate(string $date): string
 {
     $today = new DateTime('now');
     $timePublication = new DateTime($date);
     $interval = $today->diff($timePublication);
-    
+
     $days = intval($interval->format("%a"));
     $hours = intval($interval->format("%H"));
     $minutes = intval($interval->format("%i"));
@@ -71,27 +72,26 @@ function relativeDate(string $date): string
     if ($timePublication->getTimestamp() >= $today->getTimestamp()) {
         return '0 минут';
     }
-    if($days >= 35) { 
+    if ($days >= 35) {
         $months = floor($days/30);
         $declensionmonths = get_noun_plural_form($months, "месяц", "месяца", "месяцев");
         return "{$months} {$declensionmonths}";
     }
-    if($days >= 7 && $days < 35) {
+    if ($days >= 7 && $days < 35) {
         $weeks = floor($days/7);
         $declensionWeeks = get_noun_plural_form($weeks, "неделя", "недели", "недель");
         return "{$weeks} {$declensionWeeks}";
     }
-    if($days < 7 && $days > 0) {
+    if ($days < 7 && $days > 0) {
         $declensionDays = get_noun_plural_form($days, "день", "дня", "дней");
         return "{$days} {$declensionDays}";
     }
 
-    if($hours < 24 && $hours > 0) {
+    if ($hours < 24 && $hours > 0) {
         $declensionHours = get_noun_plural_form($hours, "час", "часа", "часов");
-        return "{$hours} {$declensionHours}";  
+        return "{$hours} {$declensionHours}";
     }
-    
-    $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
-    return "{$minutes} {$declensionMinutes}";  
-}
 
+    $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
+    return "{$minutes} {$declensionMinutes}";
+}

@@ -24,12 +24,12 @@
                 <span><?=$quantity_comments ?></span>
                 <span class="visually-hidden">количество комментариев</span>
               </a>
-              <?php if((int) $post[0]['user_id'] != (int) $user['id']): ?>
+              <?php if ((int) $post[0]['user_id'] != (int) $user['id']): ?>
               <a class="post__indicator post__indicator--repost button" href="post.php?post-id=<?=$post[0]['id']?>&repost=1" title="Репост">
                 <svg class="post__indicator-icon" width="19" height="17">
                   <use xlink:href="#icon-repost"></use>
                 </svg>
-                <span><?=(get_count_repost($connection,$post[0]['id']))? get_count_repost($connection,$post[0]['id']):"0"?></span>
+                <span><?=(get_count_repost($connection, $post[0]['id'])) ? get_count_repost($connection, $post[0]['id']) : "0"?></span>
                 <span class="visually-hidden">количество репостов</span>
               </a>
               <?php endif; ?>
@@ -37,7 +37,7 @@
             <span class="post__view"><?=$count_views." ".get_noun_plural_form($count_views, "просмотр", "просмотра", "просмотров")?></span>
           </div>
           <ul class="post__tags">
-            <?php foreach($tags as $tag): ?>
+            <?php foreach ($tags as $tag): ?>
             <li><a href="search.php?tag=<?=$tag['title']?>&id=<?=$tag['id']?>"><?="#" . $tag['title']?></a></li>
             <?php endforeach ?>
           </ul>
@@ -46,7 +46,7 @@
             <div class="comments__my-avatar">
               <img class="comments__picture" src="<?=$user['avatar_path']?>" alt="Аватар пользователя">
             </div>
-            <div class="form__input-section <?=(isset($form_errors["comment-text"])) ? "form__input-section--error":""?>">
+            <div class="form__input-section <?=(isset($form_errors["comment-text"])) ? "form__input-section--error" : ""?>">
               <textarea class="comments__textarea form__textarea form__input" id="comment-text" name="comment-text" placeholder="Ваш комментарий"><?= ($form_errors && $filter_form_data['comment-text']) ? $filter_form_data['comment-text'] : '' ?></textarea>
               <label class="visually-hidden">Ваш комментарий</label>
               <button class="form__error-button button" type="button">!</button>
@@ -80,7 +80,7 @@
                 </li>
                 <?php endforeach ?>
               </ul>
-              <?php if($quantity_comments > 2 && !$view_all_comments): ?>
+              <?php if ($quantity_comments > 2 && !$view_all_comments): ?>
               <a class="comments__more-link" href="post.php?post-id=<?=$post[0]['id']?>&view-all-comments=1">
                 <span>Показать все комментарии</span>
                 <sup class="comments__amount"><?=$quantity_comments ?></sup>
@@ -115,8 +115,8 @@
             </p>
           </div>
           <div class="post-details__user-buttons user__buttons">
-          <?php if($user['id'] != $post[0]['user_id']):?>
-          <a class="user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "button--quartz":"button--main" ?>" type="button" href="profile.php?id=<?=$post[0]['user_id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "Отписаться":"Подписаться" ?></a>
+          <?php if ($user['id'] != $post[0]['user_id']):?>
+          <a class="user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$post[0]['user_id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "Отписаться" : "Подписаться" ?></a>
           <?php endif; ?>
         </div>
         </div>

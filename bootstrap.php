@@ -17,7 +17,7 @@ require_once('functions/actions.php');
 
 $connection = db_connect($config["db"]["host"], $config["db"]["user"], $config["db"]["password"], $config["db"]["name"]);
 
-const ADD_POST =  "<li><a class='header__post-button button button--transparent' href='add.php?categories-id=3'>Пост</a></li>"; 
+const ADD_POST =  "<li><a class='header__post-button button button--transparent' href='add.php?categories-id=3'>Пост</a></li>";
 
 const CLOSE_BTN = "<li><a class='header__post-button button header__post-button--active button--transparent' href='index.php'>Закрыть</a><li>";
 
@@ -68,6 +68,3 @@ const REQUIRED_FIELDS = [
         'comment-text' => 'Текст комментария. Это поле должно быть заполнено.'
     ]
 ];
-
-
-

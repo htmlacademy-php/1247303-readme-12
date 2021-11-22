@@ -1,10 +1,10 @@
-<?php 
+<?php
+
 session_start();
 
 require_once('bootstrap.php');
 
-if(!isset($_SESSION['user_id'])) {
-    
+if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
@@ -34,37 +34,34 @@ $sorting_arr = [];
 
 $offset = 0;
 
-if($page) {
-    
+if ($page) {
     $offset = $page * 6;
 };
 
 
-if(isset($post_id_likes))
-{
+if (isset($post_id_likes)) {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
-    
 };
 
 $posts = get_posts($connection, $get_id, null, null, $offset);
 
-if($sort_by && $sort_by === "desc"){
+if ($sort_by && $sort_by === "desc") {
     $sorting = "asc";
 };
 
-if($sort) {
+if ($sort) {
     $sorting_arr['type'] = $sort_type;
     $sorting_arr['by'] = mb_strtoupper($sort_by);
     $posts = get_posts($connection, $get_id, null, null, $offset, $sorting_arr);
-
 }
 
 
 
-$page_content = include_template('popular.php', 
+$page_content = include_template(
+    'popular.php',
     [
-     'posts' => $posts, 
-     'types_content' => $types_content, 
+     'posts' => $posts,
+     'types_content' => $types_content,
      'get_id' => $get_id,
      'page' => $page,
      'sorting' => $sorting,
@@ -73,10 +70,11 @@ $page_content = include_template('popular.php',
     ]
 );
 
-$layout_content = include_template('layout.php', 
+$layout_content = include_template(
+    'layout.php',
     [
-     'user' => $user,  
-     'content' => $page_content, 
+     'user' => $user,
+     'content' => $page_content,
      'title' => 'readme: блог, каким он должен быть',
      'header_user_nav' => ADD_POST,
      'main_class' => 'popular'

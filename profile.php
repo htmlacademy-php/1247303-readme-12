@@ -1,10 +1,10 @@
 <?php
+
 session_start();
 
 require_once('bootstrap.php');
 
-if(!isset($_SESSION['user_id'])) {
-    
+if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
@@ -24,7 +24,7 @@ $quantity_posts = get_quantity_post($connection, (int) $user_profile["id"]);
 
 $quantity_followers = get_quantity_followers($connection, (int) $user_profile["id"]);
 
-$posts = get_posts($connection, NULL, NULL, $user_profile['id']);
+$posts = get_posts($connection, null, null, $user_profile['id']);
 
 $post_id_comments = get_data_from_params('comments-post');
 
@@ -47,45 +47,39 @@ $filter_form_data = null;
 $form_errors = null;
 
 
-if(!isset($tabs_active)){
+if (!isset($tabs_active)) {
     $tabs_active = 'posts';
 }
 
-if(isset($subcrtions_user)) 
-{
+if (isset($subcrtions_user)) {
     toggle_subscription_db($connection, $user_profile['id'], $_SESSION['user_id']);
 };
 
 
-if(isset($post_id_likes))
-{
+if (isset($post_id_likes)) {
     toggle_likes_db($connection, $_SESSION['user_id'], $post_id_likes);
-    
 };
 
 if ($_POST) {
-
     $filter_form_data = array_map('filtered_form_data', $_POST);
 
     $form_errors = check_filled_value($filter_form_data, 'comment');
 
     $error_length_heading = check_length_str($filter_form_data["comment-text"], null, 4);
 
-    
 
-    if(isset($error_length_heading)) {
 
+    if (isset($error_length_heading)) {
         $form_errors += ["comment-text" => "Текст комментария. {$error_length_heading}"];
     };
 
-    if(!$form_errors){
-
-        add_comment_post_db($connection,$filter_form_data["comment-text"], $user['id'], $post_id_comments);
+    if (!$form_errors) {
+        add_comment_post_db($connection, $filter_form_data["comment-text"], $user['id'], $post_id_comments);
     }
 };
 
-switch($tabs_active) {
-    case "posts" :
+switch ($tabs_active) {
+    case "posts":
         $tabs_active_content =  [
             'connection' => $connection,
             'user_profile' => $user_profile,
@@ -98,14 +92,14 @@ switch($tabs_active) {
             'form_errors' => $form_errors
         ];
     break;
-    case "likes" :
+    case "likes":
         $tabs_active_content =  [
             'connection' => $connection,
-            'posts_likes' => $posts_likes 
+            'posts_likes' => $posts_likes
         ];
     break;
 
-    case "subscriptions" :
+    case "subscriptions":
 
         $tabs_active_content =  [
             'connection' => $connection,
@@ -114,12 +108,11 @@ switch($tabs_active) {
         ];
     break;
 
-    
+
 
 }
 
-if($repost) {
-
+if ($repost) {
     $key_post = get_data_from_params('key');
 
     add_repost($connection, $posts[$key_post], $user['id']);
@@ -128,8 +121,9 @@ if($repost) {
 $tab_content = include_template("profile-{$tabs_active}.php", $tabs_active_content);
 
 
-$page_content = include_template('profile.php', 
-[
+$page_content = include_template(
+    'profile.php',
+    [
     'user_profile' => $user_profile,
     'quantity_posts' => $quantity_posts,
     'quantity_followers' => $quantity_followers,
@@ -138,13 +132,14 @@ $page_content = include_template('profile.php',
     'connection' => $connection,
     'user' => $user
 
-] 
+]
 );
 
-$layout_content = include_template('layout.php', 
+$layout_content = include_template(
+    'layout.php',
     [
-     'user' => $user,  
-     'content' => $page_content, 
+     'user' => $user,
+     'content' => $page_content,
      'title' => $title,
      'header_user_nav' => ADD_POST,
      'main_class' => 'profile'
