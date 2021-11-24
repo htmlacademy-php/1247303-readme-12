@@ -131,20 +131,20 @@ $add_post_form = include_template(
 $add_post = include_template(
     'adding-post.php',
     [
-     'types_content' => $types_content,
-     'get_id' => $get_id,
-     'add_post_form' => $add_post_form
+        'types_content' => $types_content,
+        'get_id' => $get_id,
+        'add_post_form' => $add_post_form
     ]
 );
 
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $add_post,
-     'title' => 'Добавить публикацию',
-     'header_user_nav' => CLOSE_BTN,
-     'main_class' => 'adding-post'
+        'user' => $user,
+        'content' => $add_post,
+        'title' => 'Добавить публикацию',
+        'header_user_nav' => CLOSE_BTN,
+        'main_class' => 'adding-post'
     ]
 );
 

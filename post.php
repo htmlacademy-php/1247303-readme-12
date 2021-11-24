@@ -78,20 +78,20 @@ if ($repost) {
 $post = include_template(
     'post-details.php',
     [
-     'post_content' => $post_content,
-     'post' => $posts,
-     'user' => $user,
-     'quantity_likes' => $quantity_likes,
-     'quantity_comments' => $quantity_comments,
-     'comments' => $comments,
-     'quantity_post_author' => $quantity_post_author,
-     'followers_author' => $followers_author,
-     'count_views' => $count_views,
-     'tags' => $tags,
-     'view_all_comments' => $view_all_comments,
-     'filter_form_data' => $filter_form_data,
-     'form_errors' => $form_errors,
-     'connection' => $connection
+        'post_content' => $post_content,
+        'post' => $posts,
+        'user' => $user,
+        'quantity_likes' => $quantity_likes,
+        'quantity_comments' => $quantity_comments,
+        'comments' => $comments,
+        'quantity_post_author' => $quantity_post_author,
+        'followers_author' => $followers_author,
+        'count_views' => $count_views,
+        'tags' => $tags,
+        'view_all_comments' => $view_all_comments,
+        'filter_form_data' => $filter_form_data,
+        'form_errors' => $form_errors,
+        'connection' => $connection
 
     ]
 );
@@ -99,11 +99,11 @@ $post = include_template(
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $post,
-     'title' => $title,
-     'header_user_nav' => ADD_POST,
-     'main_class' => 'publication'
+        'user' => $user,
+        'content' => $post,
+        'title' => $title,
+        'header_user_nav' => ADD_POST,
+        'main_class' => 'publication'
     ]
 );
 

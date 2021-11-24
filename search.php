@@ -53,16 +53,16 @@ if (isset($posts)) {
     $page_content = include_template(
         'search-results.php',
         [
-        'search_query' => $search_query,
-         'posts' => $posts,
-         'connection' => $connection
+            'search_query' => $search_query,
+            'posts' => $posts,
+            'connection' => $connection
         ]
     );
 } else {
     $page_content = include_template(
         'search-no-results.php',
         [
-        'search_query' => $search_query
+            'search_query' => $search_query
         ]
     );
 }
@@ -72,11 +72,11 @@ if (isset($posts)) {
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $page_content,
-     'title' => 'readme: блог, каким он должен быть',
-     'header_user_nav' => ADD_POST,
-     'main_class' => 'search-results'
+        'user' => $user,
+        'content' => $page_content,
+        'title' => 'readme: блог, каким он должен быть',
+        'header_user_nav' => ADD_POST,
+        'main_class' => 'search-results'
     ]
 );
 

@@ -26,7 +26,7 @@ function include_template($name, array $data = [])
 
 * Если длина строки ($str) менше установленного количества символов ($length) - будет возвращена исходная строка.
 */
-function cutStr(string $str, int $length = 300, ?int $post_id): string
+function cutStr(string $str, ?int $post_id, int $length = 300): string
 {
     if (mb_strlen($str) > $length) {
         $words = explode(" ", $str);
@@ -102,7 +102,7 @@ function extract_youtube_id(string $youtube_url)
  *
  * @return array Ошибку если валидация не прошла
  */
-function check_youtube_url(string $url): array
+function check_youtube_url(string $url)
 {
     $id = extract_youtube_id($url);
 
@@ -128,6 +128,7 @@ function check_youtube_url(string $url): array
  * Возвращает наименование типа контента ('text','quote', 'photo', 'video', 'link')
  * @param array $types_content массив вида [id => 'тип контента']
  * @param int $id - id типа контента
+ * @return string
  */
 function get_type_from_id(array $types_content, ?int $id): string
 {

@@ -60,24 +60,24 @@ if ($sort) {
 $page_content = include_template(
     'popular.php',
     [
-     'posts' => $posts,
-     'types_content' => $types_content,
-     'get_id' => $get_id,
-     'page' => $page,
-     'sorting' => $sorting,
-     'sort_type' => $sort_type,
-     'connection' => $connection
+        'posts' => $posts,
+        'types_content' => $types_content,
+        'get_id' => $get_id,
+        'page' => $page,
+        'sorting' => $sorting,
+        'sort_type' => $sort_type,
+        'connection' => $connection
     ]
 );
 
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $page_content,
-     'title' => 'readme: блог, каким он должен быть',
-     'header_user_nav' => ADD_POST,
-     'main_class' => 'popular'
+        'user' => $user,
+        'content' => $page_content,
+        'title' => 'readme: блог, каким он должен быть',
+        'header_user_nav' => ADD_POST,
+        'main_class' => 'popular'
     ]
 );
 

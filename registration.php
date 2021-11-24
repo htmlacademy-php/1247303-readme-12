@@ -32,10 +32,10 @@ $registration_form = include_template(
 $layout_content = include_template(
     'layout.php',
     [
-     'content' => $registration_form,
-     'title' => 'Регистрация',
-     'header_user_nav' => HEADER_AUTH_REG,
-     'main_class' => 'registration'
+        'content' => $registration_form,
+        'title' => 'Регистрация',
+        'header_user_nav' => HEADER_AUTH_REG,
+        'main_class' => 'registration'
     ]
 );
 

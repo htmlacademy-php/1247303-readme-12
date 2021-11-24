@@ -64,6 +64,7 @@ function check_email_autn(mysqli $connection, string $email): ?array
  * Проверяет длину строки, возвращает текст ошибки, если символов в строке больше запрашиваемых
  * @param string $str строка, которую необходимо проверить
  * @param int $length_str максимальное количество символов в строке
+ * @return ?string
  */
 function check_length_str(string $str, ?int $max_length_str = null, ?int $min_length_str = null): ?string
 {
@@ -81,6 +82,7 @@ function check_length_str(string $str, ?int $max_length_str = null, ?int $min_le
  * Если ошибок нет - возвращает пустой массив
  * @param string $link ссылка, которую необходимо проверить
  * @param string $type_fields тип поля, для поставления в текст ошибки
+ * @return array
  */
 function check_link(string $link, string $type_fields): array
 {
@@ -95,6 +97,7 @@ function check_link(string $link, string $type_fields): array
  * Проверяет ссылку на файл на валидность и файл по ссылку на доступность для скачивания.
  * В случае ошибок возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param string  $str_url ссылка для проверки
+ * @return @array
  */
 function check_link_file(string $str_url): array
 {
@@ -113,6 +116,7 @@ function check_link_file(string $str_url): array
 /**
  * Проверяет MIME тип файла, если тип файл не 'gif', 'jpeg', 'png' вернет текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param string $type_file строка, содержащая MIME тип файла
+ * @return @array
  */
 function check_type_file(string $type_file): array
 {
@@ -131,6 +135,7 @@ function check_type_file(string $type_file): array
  * Проверяет данные из формы добавления поста "ВИДЕО",если данные не корректны
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param array $text_inputs массив с данным из формы добавления поста "ВИДЕО"
+ * @return array
  */
 function check_video_form(array $text_inputs): array
 {
@@ -146,7 +151,7 @@ function check_video_form(array $text_inputs): array
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param array $text_inputs массив с данным из формы добавления поста "ФОТО"
  * @param array $files_arr массив $_FILES
- * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
+ * @return array 
  */
 function check_photo_form(array $files_arr, array $text_inputs): array
 {
@@ -173,7 +178,7 @@ function check_photo_form(array $files_arr, array $text_inputs): array
 /**
  * Проверяет строку на наличие допустимых символов. Массив с недопустимы символоми в константе UNALLOWABLE_SYMBOLS
  * @param string $value строка
- * @return string возвращает строку с найденными недопустими символами или null если недопустимых символов не обнаружено
+ * @return ?string возвращает строку с найденными недопустими символами или null если недопустимых символов не обнаружено
  */
 function check_symbols(string $value): ?string
 {
@@ -203,6 +208,7 @@ function check_symbols(string $value): ?string
  * массив обязательных поле в константе массиве REQUIRED_FIELDS
  * @param array $text_inputs массив с данным из формы добавления поста
  * @param string $type_form тип формы ('text','quote', 'photo', 'video', 'link', полный список типов форм в REQUIRED_FIELDS/bootstrap.php)
+ * @return ?array
  */
 function check_filled_value(array $text_inputs, string $type_form): ?array
 {
@@ -221,7 +227,7 @@ function check_filled_value(array $text_inputs, string $type_form): ?array
 /**
  * Фильтрует текстовые данные
  * Если строка пустая - присваивает null + работа htmlspecialchars
- * @param string $value
+ * @param string 
  */
 function filtered_form_data(?string $value): string
 {

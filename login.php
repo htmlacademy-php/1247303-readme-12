@@ -44,10 +44,10 @@ $login_form = include_template(
 $layout_content = include_template(
     'layout.php',
     [
-     'content' => $login_form ,
-     'title' => 'Регистрация',
-     'header_user_nav' => HEADER_AUTH_REG,
-     'main_class' => 'login'
+        'content' => $login_form ,
+        'title' => 'Регистрация',
+        'header_user_nav' => HEADER_AUTH_REG,
+        'main_class' => 'login'
     ]
 );
 

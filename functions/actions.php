@@ -5,7 +5,7 @@
  * Возвращает массив, содержащий хеш пароля обернутый в принятую в проекте структуру данных.
  * В случае ошибки формирования хеша пароля выводит на экран ошибку.
  * @param string $password Строка, содержащая пользовательский пароль
- * @return array
+ * @return string
  *
  */
 function set_password_hash(string $password): string
@@ -17,7 +17,7 @@ function set_password_hash(string $password): string
     } else {
         print("Ошибка формирования пароля");
         exit();
-    };
+    }
 }
 
 
@@ -27,6 +27,7 @@ function set_password_hash(string $password): string
  * Возвращает подстроку идущую после заданного символа.
  * @param string $str Строка, из которую нужно извлечь подстроку
  * @param string $separ разделитель
+ * @return string
  */
 function get_last_elem(string $str, string $separ): string
 {
@@ -39,8 +40,9 @@ function get_last_elem(string $str, string $separ): string
  * Скачивает внешний файл по ссылке в папку 'uploads'. При успешном скачивании возвращает внутренную ссылку на файл.
  * При ошибке - возвращает false
  * @param string $link ссылка, по которой размещен файл
+ * @return array | bool
  */
-function download_out_files($link)
+function download_out_files(string $link): array | bool
 {
     $previous_file_name = get_last_elem($link, "/");
 
@@ -67,8 +69,9 @@ function download_out_files($link)
  * Скачивает и переименовывает файл прикрепленный к форме. При успешном скачивании возвращает внутренную ссылку на файл.
  * При ошибке - возвращает false
  * @param array $files_arr массив $_FILES
+ * @return array | bool
  */
-function upload_files($files_arr)
+function upload_files(array $files_arr): array | bool
 {
     $random_name = mt_rand();
 
@@ -92,6 +95,7 @@ function upload_files($files_arr)
  * Если $form_data - пуст - возвращает null
  * @param array $form_data массив данных из формы
  * @param string $type_form тип формы добавления поста ('text','quote', 'photo', 'video', 'link')
+ * @return ?array
  */
 function get_tags_form(array $form_data, string $type_form): ?array
 {
@@ -99,10 +103,11 @@ function get_tags_form(array $form_data, string $type_form): ?array
 
     $tag_low = mb_convert_case($tags_str, MB_CASE_LOWER, "UTF-8");
 
+
     if ($tag_low) {
         $tags_arr = explode(" ", $tag_low);
         return $tags_arr;
-    };
+    }
 
     return null;
 }
@@ -137,6 +142,7 @@ function register(mysqli $connection, array $filter_form_data): bool
  * @param mysqli $connection объект соединения с БД
  * @param string $email е-мейл пользователя, по которому нужно проверить совпадения паролей
  * @param string $password_form пароль, который необходимо проверить
+ * @return bool
  */
 function check_user_db_hash(mysqli $connection, string $email, string $password_form): bool
 {

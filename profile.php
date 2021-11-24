@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
 };
 
+
 $id_user_profile = get_string_from_params('id');
 
 $tabs_active = get_string_from_params('tabs');
@@ -17,6 +18,8 @@ $tabs_active_content = [];
 $user = get_user($connection, $_SESSION['user_id']);
 
 $user_profile = get_user($connection, $id_user_profile);
+
+$is_follow = get_id_from_followers_id_and_from_user_id($connection, $user_profile['id'], $user['id']);
 
 $title = "readme. Профиль пользователя {$user_profile['first_name']} {$user_profile['last_name']}";
 
@@ -130,7 +133,8 @@ $page_content = include_template(
     'tabs_active' => $tabs_active,
     'tab_content' => $tab_content,
     'connection' => $connection,
-    'user' => $user
+    'user' => $user,
+    'is_follow' => $is_follow
 
 ]
 );

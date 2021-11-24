@@ -13,7 +13,7 @@
                       </div>
                     <?php elseif ($post['class_name'] === 'text'):?>
                       <p>
-                        <?=cutStr($post['content'], 300, $post['id'])?>
+                        <?=cutStr($post['content'], $post['id'], 300)?>
                       </p>
                     <?php elseif ($post['class_name'] === 'video'):?>
                       <div class="post-video__preview">

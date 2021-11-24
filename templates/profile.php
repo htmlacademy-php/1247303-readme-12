@@ -22,8 +22,8 @@
               </p>
             </div>
             <div class="profile__user-buttons user__buttons">
-              <?php if ($user_profile['id'] != $user['id']):?>
-              <a class="profile__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$user_profile['id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $user_profile['id']) === $user_profile['id']) ? "Отписаться" : "Подписаться" ?></a>
+              <?php if ((int) $user_profile['id'] != (int) $user['id']):?>
+              <a class="profile__user-button user__button user__button--subscription button <?= ($is_follow) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$user_profile['id']?>&subscriptions=1"><?= ($is_follow) ? "Отписаться" : "Подписаться" ?></a>
               <?php endif; ?>
             </div>
           </div>

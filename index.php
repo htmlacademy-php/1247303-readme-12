@@ -34,9 +34,9 @@ if ($_POST) {
 $layout_content = include_template(
     'main.php',
     [
-     'title' => 'readme: блог, каким он должен быть',
-     'filter_form_data' => $filter_form_data,
-     'form_errors' => $form_errors
+        'title' => 'readme: блог, каким он должен быть',
+        'filter_form_data' => $filter_form_data,
+        'form_errors' => $form_errors
     ]
 );
 

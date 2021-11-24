@@ -53,22 +53,22 @@ if ($repost) {
 $page_content = include_template(
     'feed.php',
     [
- 'posts' => $posts,
- 'types_content' => $types_content,
- 'get_id' => $get_id,
- 'connection' => $connection,
- 'user' => $user
-]
+        'posts' => $posts,
+        'types_content' => $types_content,
+        'get_id' => $get_id,
+        'connection' => $connection,
+        'user' => $user
+    ]
 );
 
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $page_content,
-     'title' => 'readme. Лента публикаций',
-     'header_user_nav' => ADD_POST,
-     'main_class' => 'feed'
+        'user' => $user,
+        'content' => $page_content,
+        'title' => 'readme. Лента публикаций',
+        'header_user_nav' => ADD_POST,
+        'main_class' => 'feed'
     ]
 );
 

@@ -28,7 +28,7 @@
                   <?php elseif ($post['class_name'] === 'text'):?>
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
                     <p>
-                      <?=cutStr($post['content'], 300, $post['id'])?>
+                      <?=cutStr($post['content'], $post['id'], 300)?>
                     </p>
                   <?php elseif ($post['class_name'] === 'video'):?>
                     <div class="post-video__preview">
