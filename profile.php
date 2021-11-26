@@ -127,26 +127,26 @@ $tab_content = include_template("profile-{$tabs_active}.php", $tabs_active_conte
 $page_content = include_template(
     'profile.php',
     [
-    'user_profile' => $user_profile,
-    'quantity_posts' => $quantity_posts,
-    'quantity_followers' => $quantity_followers,
-    'tabs_active' => $tabs_active,
-    'tab_content' => $tab_content,
-    'connection' => $connection,
-    'user' => $user,
-    'is_follow' => $is_follow
+        'user_profile' => $user_profile,
+        'quantity_posts' => $quantity_posts,
+        'quantity_followers' => $quantity_followers,
+        'tabs_active' => $tabs_active,
+        'tab_content' => $tab_content,
+        'connection' => $connection,
+        'user' => $user,
+        'is_follow' => $is_follow
 
-]
+    ]
 );
 
 $layout_content = include_template(
     'layout.php',
     [
-     'user' => $user,
-     'content' => $page_content,
-     'title' => $title,
-     'header_user_nav' => ADD_POST,
-     'main_class' => 'profile'
+        'user' => $user,
+        'content' => $page_content,
+        'title' => $title,
+        'header_user_nav' => ADD_POST,
+        'main_class' => 'profile'
     ]
 );
 

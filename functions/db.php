@@ -106,6 +106,10 @@ function get_content_types(mysqli $connection): array
  * @param mysqli $connection объект соединения с БД
  * @param ?int $type_id id категории типа контента
  * @param ?int $post_id id поста
+ * @param ?int $user_id id автора поста
+ * @param ?int $offset смещения поста для пагинации
+ * @param ?array $sorting массив данных для сортировок
+ * 
  * @return array 
  */
 function get_posts(mysqli $connection, ?int $type_id = null, ?int $post_id = null, ?int $user_id = null, int $offset = null, ?array $sorting = null): array
@@ -274,6 +278,7 @@ function get_count_repost(mysqli $connection, int $post_id): ?int
  * Функция получает список комментариев из БД к конкретной публикации
  * @param mysqli $connection объект соединения с БД
  * @param ?int $post_id id публикации (поста), по которой нужно получить список комментариев
+ * @param ?int $limit лимит кол-ва комментариев 
  * @return array массив с списком комментариев
  */
 function get_comments(mysqli $connection, ?int $post_id = null, ?int $limit = 2): array
@@ -345,7 +350,7 @@ function get_tags_post(mysqli $connection, ?int $post_id = null): array
  * Возвращает id тэга из БД по текстовому запросу. Если совпадение в БД не найдено возвращет 0
  * @param mysqli $connection объект соединения с БД
  * @param string $tag строка запроса (тега, id которого, нужно получить)
- * @return int id тэга или 0, если совпадения не найдены
+ * @return int id тэга, если совпадения не найдены
  */
 function get_tags_id(mysqli $connection, string $tag): int
 {
@@ -409,7 +414,9 @@ function get_user(mysqli $connection, int $id): array
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом text(Текст).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
-* @param  array $form_data массив данных из формы добавления поста.
+* @param  array $form_data массив данных из формы добавления поста
+* @param  int $user_id id автора поста
+* @param  bool $repost булево значение, репост поста или нет
 * @return bool
 * В случае успешной отправки возвращает true
 */
@@ -471,7 +478,9 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом quote(Цитата).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
-* @param  array $form_data массив данных из формы добавления поста.
+* @param  array $form_data массив данных из формы добавления поста
+* @param  int $user_id id автора поста
+* @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
 function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
@@ -535,7 +544,9 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом photo(Фото).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
-* @param  array $form_data массив данных из формы добавления поста.
+* @param  array $form_data массив данных из формы добавления поста
+* @param  int $user_id id автора поста
+* @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
 function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
@@ -595,7 +606,9 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом video(Видео).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
-* @param  array $form_data массив данных из формы добавления поста.
+* @param  array $form_data массив данных из формы добавления поста
+* @param  int $user_id id автора поста
+* @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
 function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
@@ -655,7 +668,9 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом link(Ссылка).
 * Принимает следующие параметры:
 * @param  mysqli $connect обьект подключения к базе данных,
-* @param  array $form_data массив данных из формы добавления поста.
+* @param  array $form_data массив данных из формы добавления поста
+* @param  int $user_id id автора поста
+* @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
 function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
@@ -1217,7 +1232,8 @@ function get_followers_id_from_user_id(mysqli $connection, int $user_id): ?array
 /**
  * Функция проверяет подписан ли один пользователя на другого
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя
+ * @param ?int $user_id id пользователя
+ * @param int $followers_id id подписчика
  * @return ?array массив с списком постов
  */
 function get_id_from_followers_id_and_from_user_id(mysqli $connection, int $user_id, int $followers_id): bool
@@ -1253,7 +1269,7 @@ function get_follower_id_from_user_id(mysqli $connection, int $user_id, int $fol
 /**
  * Функция получает ID пользователя по ID подписчика
  * @param mysqli $connection объект соединения с БД
- * @param int $$user_id id пользователя
+ * @param int $user_id id пользователя
  * @param int $follower_id подписчика
  * @return ?array массив с списком постов
  */
@@ -1333,7 +1349,7 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
 * @param  mysqli $connect обьект подключения к базе данных,
 * @param  string $comment_text текст комментария.
 * @param  int $user_id ID автора комментария.
-* @param  int $$post_id ID комментируемого поста.
+* @param  int $post_id ID комментируемого поста.
 * @return bool
 */
 function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id, int $post_id): bool

@@ -55,7 +55,6 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * если от $date до текущего времени прошло больше 5 недель, то формат будет вида “% месяцев.
  * @param string $date дата публикации поста, cтрока даты в формате 'Y-m-d H:i:s'
  * @return string 
- *
  */
 function relativeDate(string $date): string
 {

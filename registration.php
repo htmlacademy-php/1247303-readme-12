@@ -26,7 +26,7 @@ $registration_form = include_template(
     [
         'filter_form_data' => $filter_form_data,
         'form_errors' => $form_errors
-     ]
+    ]
 );
 
 $layout_content = include_template(

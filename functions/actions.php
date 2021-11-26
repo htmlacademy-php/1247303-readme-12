@@ -59,7 +59,7 @@ function download_out_files(string $link): array | bool
     $result = file_put_contents($file_url, $current);
 
     if ($result) {
-        return ["img_path" => "{$file_url}"];
+        return ["img_path" => $file_url];
     }
     return false;
 }
@@ -84,7 +84,7 @@ function upload_files(array $files_arr): array | bool
     $result = move_uploaded_file($files_arr['file-photo']['tmp_name'], $file_url);
 
     if ($result) {
-        return ["img_path" => "{$file_url}"];
+        return ["img_path" => $file_url];
     }
     return false;
 }
@@ -115,10 +115,9 @@ function get_tags_form(array $form_data, string $type_form): ?array
 /**
  * Запускает процесс регистрации нового пользователя.
  * В случае успешной регистрации возвращает true
- * @param array $filter_form_data массив данных из формы регистрации пользователя и ссылка на файл аватара,
- * если он был добавлен в форму
  * @param mysqli $connection объект соединения с БД
- * @return bool
+ * @param array $filter_form_data массив данных из формы регистрации пользователя и ссылка на файл аватара,если он был добавлен в форму
+  * @return bool
  */
 function register(mysqli $connection, array $filter_form_data): bool
 {
