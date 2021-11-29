@@ -54,7 +54,8 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * если от $date до текущего времени прошло больше 7 дней, но меньше 5 недель, то формат будет вида “% недель;
  * если от $date до текущего времени прошло больше 5 недель, то формат будет вида “% месяцев.
  * @param string $date дата публикации поста, cтрока даты в формате 'Y-m-d H:i:s'
- * @return string 
+ * @return string
+ * @throws Exception
  */
 function relativeDate(string $date): string
 {
@@ -72,23 +73,23 @@ function relativeDate(string $date): string
     if ($days >= 35) {
         $months = floor($days/30);
         $declensionmonths = get_noun_plural_form($months, "месяц", "месяца", "месяцев");
-        return "{$months} {$declensionmonths}";
+        return "$months $declensionmonths";
     }
     if ($days >= 7 && $days < 35) {
         $weeks = floor($days/7);
         $declensionWeeks = get_noun_plural_form($weeks, "неделя", "недели", "недель");
-        return "{$weeks} {$declensionWeeks}";
+        return "$weeks $declensionWeeks";
     }
     if ($days < 7 && $days > 0) {
         $declensionDays = get_noun_plural_form($days, "день", "дня", "дней");
-        return "{$days} {$declensionDays}";
+        return "$days $declensionDays";
     }
 
     if ($hours < 24 && $hours > 0) {
         $declensionHours = get_noun_plural_form($hours, "час", "часа", "часов");
-        return "{$hours} {$declensionHours}";
+        return "$hours $declensionHours";
     }
 
     $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
-    return "{$minutes} {$declensionMinutes}";
+    return "$minutes $declensionMinutes";
 }

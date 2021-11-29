@@ -6,7 +6,7 @@ require_once('bootstrap.php');
 
 if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
-};
+}
 
 $types_content = get_content_types($connection);
 
@@ -35,14 +35,14 @@ if ($_POST) {
     $error_length_heading = check_length_str($filter_form_data["title"], 50);
 
     if (isset($error_length_heading)) {
-        $form_errors += ["title" => "Заголовок. {$error_length_heading}"];
-    };
+        $form_errors += ["title" => "Заголовок. $error_length_heading"];
+    }
 
-    $tags_field_error = check_symbols($filter_form_data["{$get_type_name}-tags"]);
+    $tags_field_error = check_symbols($filter_form_data["$get_type_name-tags"]);
 
     if (isset($tags_field_error)) {
-        $form_errors += ["{$get_type_name}-tags" => "Символы:  {$tags_field_error}  недопустимы для тегов"];
-    };
+        $form_errors += ["$get_type_name-tags" => "Символы:  $tags_field_error  недопустимы для тегов"];
+    }
 
     switch ($get_type_name) {
 
@@ -55,7 +55,7 @@ if ($_POST) {
                 $filter_form_data += upload_files($_FILES);
             } elseif (!$form_errors) {
                 $filter_form_data += download_out_files($filter_form_data["photo-url"]);
-            };
+            }
             break;
 
         case "video":
@@ -75,10 +75,10 @@ if ($_POST) {
             $error_quote_text = check_length_str($filter_form_data["content"], 70);
 
             if (isset($error_quote_text)) {
-                $form_errors +=  ["content" => "Цитата. {$error_quote_text}"];
-            };
+                $form_errors +=  ["content" => "Цитата. $error_quote_text"];
+            }
             break;
-    };
+    }
 
 
     if (!$form_errors) {
@@ -103,23 +103,23 @@ if ($_POST) {
             case "quote":
                 add_post_quote_db($connection, $filter_form_data, $user_id);
                 break;
-        };
+        }
 
         $post_id = mysqli_insert_id($connection);
 
         if ($tags_arr) {
             add_new_tags_db($connection, $tags_arr);
             add_relation_arr_db($connection, $post_id, $tags_arr);
-        };
+        }
 
-        header("Location: post.php?post-id={$post_id}");
+        header("Location: post.php?post-id=$post_id");
 
         exit();
-    };
-};
+    }
+}
 
 $add_post_form = include_template(
-    "add-post-form-{$get_type_name}.php",
+    "add-post-form-$get_type_name.php",
     [
         'get_id' => $get_id,
         'filter_form_data' => $filter_form_data,

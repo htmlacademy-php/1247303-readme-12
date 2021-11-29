@@ -35,7 +35,7 @@ $posts_likes = get_liked_posts($connection, $user_profile['id']);
 
 $post_id_likes = get_data_from_params('post-id-likes');
 
-$user_profile_subscriptions = get_subscritions($connection, $user_profile['id']);
+$user_profile_subscriptions = get_subscriptions($connection, $user_profile['id']);
 
 $subcrtions_user =  get_data_from_params('subscriptions');
 

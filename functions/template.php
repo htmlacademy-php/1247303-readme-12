@@ -45,10 +45,10 @@ function cutStr(string $str, ?int $post_id, int $length = 300): string
         }
         $cuttingStr = implode(" ", $strOut) . "...";
 
-        return "<p>{$cuttingStr}</p><a class='post-text__more-link' href='post.php?post-id={$post_id}'>Читать далее</a>";
+        return "<p>$cuttingStr</p><a class='post-text__more-link' href='post.php?post-id=$post_id'>Читать далее</a>";
     }
 
-    return "<p>{$str}</p>";
+    return "<p>$str</p>";
 }
 
 /**

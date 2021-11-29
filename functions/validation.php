@@ -15,10 +15,9 @@ function check_password(string $password, string $password_repeat): array
 {
     if ($password != $password_repeat) {
         return ['password' => 'Пароли и повтор пароля должны совпадать'];
-    };
+    }
     return [];
 }
-
 
 
 /**
@@ -26,17 +25,17 @@ function check_password(string $password, string $password_repeat): array
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param mysqli $connection объект соединения с БД
  * @param string $email строка, содержащая e-mail пользователя
- * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
+ * @return array|null
  */
 function check_email(mysqli $connection, string $email): ?array
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['email' => 'Введите корректный адрес электронной почты'];
-    };
+    }
 
     if (get_user_by_mail($connection, $email)) {
-        return ['email' => "Пользователь с адресом {$email} уже зарегистрирован"];
-    };
+        return ['email' => "Пользователь с адресом $email уже зарегистрирован"];
+    }
     return [];
 }
 /**
@@ -44,35 +43,35 @@ function check_email(mysqli $connection, string $email): ?array
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param mysqli $connection объект соединения с БД
  * @param string $email строка, содержащая e-mail пользователя
- * @return array массив с текстом ошибки или пустой массив, если все проверки пройдены
+ * @return ?array массив с текстом ошибки или пустой массив, если все проверки пройдены
  */
 function check_email_autn(mysqli $connection, string $email): ?array
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['email' => 'Введите корректный адрес электронной почты'];
-    };
+    }
 
     if (!get_user_by_mail($connection, $email)) {
-        return ['email' => "Пользователь с адресом {$email} не зарегистрирован. Необходима регистрация"];
-    };
+        return ['email' => "Пользователь с адресом $email не зарегистрирован. Необходима регистрация"];
+    }
     return [];
 }
-
 
 
 /**
  * Проверяет длину строки, возвращает текст ошибки, если символов в строке больше запрашиваемых
  * @param string $str строка, которую необходимо проверить
- * @param int $length_str максимальное количество символов в строке
+ * @param int|null $max_length_str максимальная длина символов строки
+ * @param int|null $min_length_str минимальная длина символов строки
  * @return ?string
  */
 function check_length_str(string $str, ?int $max_length_str = null, ?int $min_length_str = null): ?string
 {
     if ($max_length_str && mb_strlen($str) > $max_length_str) {
-        return "Количество символов не должно превышать {$max_length_str} знаков.";
+        return "Количество символов не должно превышать $max_length_str знаков.";
     } elseif ($min_length_str && mb_strlen($str) < $min_length_str) {
-        return "Количество символов не должно быть меньше {$min_length_str} знаков.";
-    };
+        return "Количество символов не должно быть меньше $min_length_str знаков.";
+    }
     return null;
 }
 
@@ -87,7 +86,7 @@ function check_length_str(string $str, ?int $max_length_str = null, ?int $min_le
 function check_link(string $link, string $type_fields): array
 {
     if (!filter_var($link, FILTER_VALIDATE_URL)) {
-        return ["{$type_fields}" => "Введенные данные не являются валидной ссылкой"];
+        return ["$type_fields" => "Введенные данные не являются валидной ссылкой"];
     }
     return [];
 }
@@ -96,8 +95,8 @@ function check_link(string $link, string $type_fields): array
 /**
  * Проверяет ссылку на файл на валидность и файл по ссылку на доступность для скачивания.
  * В случае ошибок возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
- * @param string  $str_url ссылка для проверки
- * @return @array
+ * @param string $str_url ссылка для проверки
+ * @return array @array
  */
 function check_link_file(string $str_url): array
 {
@@ -116,7 +115,7 @@ function check_link_file(string $str_url): array
 /**
  * Проверяет MIME тип файла, если тип файл не 'gif', 'jpeg', 'png' вернет текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param string $type_file строка, содержащая MIME тип файла
- * @return @array
+ * @return array @array
  */
 function check_type_file(string $type_file): array
 {
@@ -128,7 +127,7 @@ function check_type_file(string $type_file): array
             break;
         default:
             return ['file-photo' => 'Недопустимый тип файла. Поддерживаемые форматы изображений: png, jpeg, gif.'];
-    };
+    }
 }
 
 /**
@@ -151,7 +150,7 @@ function check_video_form(array $text_inputs): array
  * возвращает текст ошибки в виде массива, если ошибок нет - возвращает пустой массив
  * @param array $text_inputs массив с данным из формы добавления поста "ФОТО"
  * @param array $files_arr массив $_FILES
- * @return array 
+ * @return array
  */
 function check_photo_form(array $files_arr, array $text_inputs): array
 {
@@ -160,16 +159,16 @@ function check_photo_form(array $files_arr, array $text_inputs): array
                 'photo-url' => 'Добавьте файл изображения или вставьте ссылку на него',
                 'file-photo' => 'Добавьте файл изображения или вставьте ссылку на него',
               ];
-    };
+    }
 
 
     if ($text_inputs['photo-url'] && $files_arr["file-photo"]["error"]) {
         return check_link_file($text_inputs['photo-url']);
-    };
+    }
 
     if (!$files_arr["file-photo"]["error"]) {
         return check_type_file($files_arr["file-photo"]["type"]);
-    };
+    }
 
     return [];
 }
@@ -188,15 +187,13 @@ function check_symbols(string $value): ?string
         foreach (UNALLOWABLE_SYMBOLS as $symbol) {
             if ($value === $symbol) {
                 return true;
-            };
-        };
+            }
+        }
     });
 
     if ($finded_symbols) {
-        $finded_symbols_str = implode(" ", $finded_symbols);
-
-        return $finded_symbols_str;
-    };
+        return implode(" ", $finded_symbols);
+    }
 
     return null;
 }
@@ -217,8 +214,8 @@ function check_filled_value(array $text_inputs, string $type_form): ?array
     foreach (REQUIRED_FIELDS[$type_form] as $key => $field) {
         if (!$text_inputs[$key]) {
             $errors += [$key => $field];
-        };
-    };
+        }
+    }
 
     return $errors;
 }
@@ -227,15 +224,14 @@ function check_filled_value(array $text_inputs, string $type_form): ?array
 /**
  * Фильтрует текстовые данные
  * Если строка пустая - присваивает null + работа htmlspecialchars
- * @param string 
+ * @param string|null $value
+ * @return string
  */
 function filtered_form_data(?string $value): string
 {
     $data = $value ?? null;
 
-    $filtered = htmlspecialchars($data);
-
-    return $filtered;
+    return htmlspecialchars($data);
 }
 
 
@@ -259,7 +255,7 @@ function validate_registration_form(array $filter_form_data, array $files, mysql
 
     if (!$files["file-photo"]["error"]) {
         $form_errors += check_type_file($files["file-photo"]["type"]);
-    };
+    }
 
     return $form_errors;
 }
@@ -285,12 +281,12 @@ function validate_authentication_form(array $filter_form_data, mysqli $connectio
  * Осуществляет валидацию пароля пользователя.
  * Если при валидации возникли ошибки, возвращает их в виде массива с установленной в проекте структурой.
  * Если ошибок нет - возвращает пустой массив.
- * @param array $filter_form_data массив с данным из формы добавления регистрации пользователя
+ * @param mysqli $connection
  * @param string $email email пользователя
  * @param string $password_form пароль, который необходит проверить на соответствии
  * @return array массив с ошибками, или пустой массив, если ошибок нет
  */
-function validate_form_password($connection, $email, $password_form)
+function validate_form_password(mysqli $connection, string $email, string $password_form): array
 {
     $status_form_password = check_user_db_hash($connection, $email, $password_form);
 

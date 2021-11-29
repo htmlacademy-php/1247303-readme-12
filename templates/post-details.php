@@ -116,7 +116,7 @@
           </div>
           <div class="post-details__user-buttons user__buttons">
           <?php if ($user['id'] != $post[0]['user_id']):?>
-          <a class="user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$post[0]['user_id']?>&subscriptions=1"><?= (get_follower_id_from_user_id($connection, $user['id'], $post[0]['user_id']) === $post[0]['user_id']) ? "Отписаться" : "Подписаться" ?></a>
+          <a class="user__button user__button--subscription button <?= (get_id_from_followers_id_and_from_user_id($connection, $post[0]['user_id'], $user['id'])) ? "button--quartz" : "button--main" ?>" type="button" href="profile.php?id=<?=$post[0]['user_id']?>&subscriptions=1"><?= (get_id_from_followers_id_and_from_user_id($connection, $post[0]['user_id'], $user['id'])) ? "Отписаться" : "Подписаться" ?></a>
           <?php endif; ?>
         </div>
         </div>

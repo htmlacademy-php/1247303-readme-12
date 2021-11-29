@@ -26,8 +26,8 @@
                       </p>
                     </div>
                     <div class="post-mini__user-buttons user__buttons">
-                      <?php if ($follower['follower_user_id'] != $user['id']):?>
-                      <a href="profile.php?id=<?=$follower['follower_user_id']?>&subscriptions=1" class="post-mini__user-button user__button user__button--subscription button <?= (get_follower_id_from_user_id($connection, $user['id'], $follower['follower_user_id']) === $follower['follower_user_id']) ? "button--quartz" : "button--main" ?>" type="button"><?= (get_follower_id_from_user_id($connection, $user['id'], $follower['follower_user_id']) === $follower['follower_user_id']) ? "Отписаться" : "Подписаться" ?></a>
+                      <?php if ((int) $follower['follower_user_id'] != (int) $user['id']):?>
+                      <a href="profile.php?id=<?=$follower['follower_user_id']?>&subscriptions=1" class="post-mini__user-button user__button user__button--subscription button <?= (get_id_from_followers_id_and_from_user_id($connection, $follower['follower_user_id'], $user['id'])) ? "button--quartz" : "button--main" ?>" type="button"><?= (get_id_from_followers_id_and_from_user_id($connection, $follower['follower_user_id'], $user['id'])) ? "Отписаться" : "Подписаться" ?></a>
                       <?php endif;?>
                     </div>
                   </li>

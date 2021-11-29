@@ -6,7 +6,7 @@ require_once('bootstrap.php');
 
 if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
-};
+}
 
 $post_id = get_data_from_params('post-id');
 
@@ -45,7 +45,7 @@ $repost = get_data_from_params('repost');
 
 if (isset($post_id_likes)) {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
-};
+}
 
 if ($view_all_comments) {
     $comments = get_comments($connection, $post_id, null);
@@ -60,15 +60,15 @@ if ($_POST) {
 
 
     if (isset($error_length_heading)) {
-        $form_errors += ["comment-text" => "Текст комментария. {$error_length_heading}"];
-    };
+        $form_errors += ["comment-text" => "Текст комментария. $error_length_heading"];
+    }
 
     if (!$form_errors) {
         add_comment_post_db($connection, $filter_form_data["comment-text"], $user['id'], $posts[0]["id"]);
 
         redirect_to_back();
     }
-};
+}
 
 if ($repost) {
     add_repost($connection, $posts[0], $user['id']);

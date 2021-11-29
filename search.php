@@ -6,7 +6,7 @@ require_once('bootstrap.php');
 
 if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
-};
+}
 
 $user = get_user($connection, $_SESSION['user_id']);
 
@@ -30,15 +30,14 @@ $post_id_likes = get_data_from_params('post-id-likes');
 
 if (isset($post_id_likes)) {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
-};
-
+}
 
 
 if (isset($get_query)) {
     $search_query = trim($get_query);
 
     $posts = search_posts_db($connection, $search_query);
-};
+}
 
 if (isset($get_tag) && isset($get_tag_id)) {
     $posts_id = get_posts_id_for_tags_id($connection, $get_tag_id);

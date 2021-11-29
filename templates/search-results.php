@@ -34,9 +34,8 @@
                   <?php elseif ($post['class_name'] === 'text'):?>
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
                     <p>
-                      <?=$post['content']?>
-                    </p>
-                    <a class="post-text__more-link" href="#">Читать далее</a>
+                      <?=cutStr($post['content'], $post['id'], 300)?>
+                    </p>                 
                   <?php elseif ($post['class_name'] === 'link'):?>
                   <div class="post-link__wrapper">
                     <a class="post-link__external" href="<?=$post['site_path']?>" title="Перейти по ссылке">

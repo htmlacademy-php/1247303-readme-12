@@ -17,9 +17,9 @@ if ($_POST) {
     if (!$form_errors) {
         if (register($connection, $filter_form_data)) {
             header("Location: popular.php");
-        };
-    };
-};
+        }
+    }
+}
 
 $registration_form = include_template(
     'registration-new-user.php',

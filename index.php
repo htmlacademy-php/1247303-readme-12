@@ -11,7 +11,7 @@ $filter_form_data = null;
 
 if (isset($_SESSION['user_id'])) {
     header("Location: feed.php");
-};
+}
 
 
 if ($_POST) {
@@ -21,13 +21,13 @@ if ($_POST) {
 
     if (!$form_errors) {
         $form_errors = validate_form_password($connection, $filter_form_data['email'], $filter_form_data['password']);
-    };
+    }
 
     if (!$form_errors) {
         authorization_user($connection, $filter_form_data['email']);
 
         header("Location: feed.php");
-    };
+    }
 }
 
 

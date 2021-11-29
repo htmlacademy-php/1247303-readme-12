@@ -6,7 +6,7 @@ require_once('bootstrap.php');
 
 if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
-};
+}
 
 $posts = [];
 
@@ -36,18 +36,18 @@ $offset = 0;
 
 if ($page) {
     $offset = $page * 6;
-};
+}
 
 
 if (isset($post_id_likes)) {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
-};
+}
 
 $posts = get_posts($connection, $get_id, null, null, $offset);
 
 if ($sort_by && $sort_by === "desc") {
     $sorting = "asc";
-};
+}
 
 if ($sort) {
     $sorting_arr['type'] = $sort_type;

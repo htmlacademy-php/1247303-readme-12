@@ -8,7 +8,7 @@ require_once('bootstrap.php');
 
 if (!isset($_SESSION['user_id'])) {
     redirect_to_main();
-};
+}
 
 $user = get_user($connection, $_SESSION['user_id']);
 
@@ -28,7 +28,7 @@ $repost = get_data_from_params('repost');
 
 if (isset($post_id_likes)) {
     toggle_likes_db($connection, $user['id'], $post_id_likes);
-};
+}
 
 
 if (isset($posts_likes)) {
@@ -48,7 +48,7 @@ if ($repost) {
     $key_post = get_data_from_params('key');
 
     add_repost($connection, $posts[$key_post], $user['id']);
-};
+}
 
 $page_content = include_template(
     'feed.php',

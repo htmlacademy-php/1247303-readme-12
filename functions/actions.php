@@ -99,14 +99,13 @@ function upload_files(array $files_arr): array | bool
  */
 function get_tags_form(array $form_data, string $type_form): ?array
 {
-    $tags_str = $form_data["{$type_form}-tags"];
+    $tags_str = $form_data["$type_form-tags"];
 
     $tag_low = mb_convert_case($tags_str, MB_CASE_LOWER, "UTF-8");
 
 
     if ($tag_low) {
-        $tags_arr = explode(" ", $tag_low);
-        return $tags_arr;
+        return explode(" ", $tag_low);
     }
 
     return null;
@@ -125,7 +124,7 @@ function register(mysqli $connection, array $filter_form_data): bool
         $filter_form_data += upload_files($_FILES);
     } else {
         $filter_form_data += ['img_path' => 'img/no-avatar.jpg'];
-    };
+    }
 
     $filter_form_data['password'] = set_password_hash($filter_form_data['password']);
 
