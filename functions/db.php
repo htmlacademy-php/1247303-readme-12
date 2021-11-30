@@ -25,16 +25,16 @@ function db_connect(string $host, string $user, string $password, string $db): m
 /**
 * Сохраняет данные в БД, к которой уже произведено подключение на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 * @return bool
 */
-function set_request_db(mysqli $connect, string $request):bool
+function set_request_db(mysqli $connection, string $request):bool
 {
-    $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connection, $request);
 
     if ($query == false) {
-        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        print("Ошибка запроса в БД: " .  mysqli_error($connection));
         exit();
     } else {
         return true;
@@ -44,17 +44,17 @@ function set_request_db(mysqli $connect, string $request):bool
 /**
 * Возвращает массив с данными из базы данных, к которой уже произведено подключение на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 * @return array
 */
-function get_array_db(mysqli $connect, string $request): array
+function get_array_db(mysqli $connection, string $request): array
 {
 
-    $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connection, $request);
 
     if ($query == false) {
-        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        print("Ошибка запроса в БД: " .  mysqli_error($connection));
         exit();
     } else {
         return mysqli_fetch_all($query, MYSQLI_ASSOC);
@@ -64,17 +64,17 @@ function get_array_db(mysqli $connect, string $request): array
 /**
 * Возвращает значение из массива данных из БД по нулевому индексу, на основании строки запроса. В случае ошибки, выводит на экран код ошибки.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  string $request Строка запроса к базе данных.
 * @return ?string
 */
-function get_first_value(mysqli $connect, string $request): ?string
+function get_first_value(mysqli $connection, string $request): ?string
 {
 
-    $query =  mysqli_query($connect, $request);
+    $query =  mysqli_query($connection, $request);
 
     if ($query == false) {
-        print("Ошибка запроса в БД: " .  mysqli_error($connect));
+        print("Ошибка запроса в БД: " .  mysqli_error($connection));
         exit();
     } else {
 
@@ -411,14 +411,14 @@ function get_user(mysqli $connection, int $id): array
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом text(Текст).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы добавления поста
 * @param  int $user_id id автора поста
 * @param  bool $repost булево значение, репост поста или нет
 * @return bool
 * В случае успешной отправки возвращает true
 */
-function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null):bool
+function add_post_text_db(mysqli $connection, ?array $form_data, int $user_id, bool $repost = null):bool
 {
     $today = new DateTime('now');
 
@@ -445,7 +445,7 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
        {$form_data["orig_user_id"]}
       )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
 
     $request = "
@@ -468,20 +468,20 @@ function add_post_text_db(mysqli $connect, ?array $form_data, int $user_id, bool
          1
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом quote(Цитата).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы добавления поста
 * @param  int $user_id id автора поста
 * @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
-function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
+function add_post_quote_db(mysqli $connection, ?array $form_data, int $user_id, bool $repost = null): bool
 {
     $today = new DateTime('now');
 
@@ -510,7 +510,7 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
          {$form_data["orig_user_id"]}
         )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
 
     $request = "
@@ -535,19 +535,19 @@ function add_post_quote_db(mysqli $connect, ?array $form_data, int $user_id, boo
          1
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом photo(Фото).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы добавления поста
 * @param  int $user_id id автора поста
 * @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
-function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
+function add_post_photo_db(mysqli $connection, ?array $form_data, int $user_id, bool $repost = null): bool
 {
     $today = new DateTime('now');
 
@@ -574,7 +574,7 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
          '{$form_data["orig_user_id"]}'
         )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
 
     $request = "
@@ -597,19 +597,19 @@ function add_post_photo_db(mysqli $connect, ?array $form_data, int $user_id, boo
      1
     )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом video(Видео).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы добавления поста
 * @param  int $user_id id автора поста
 * @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
-function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
+function add_post_video_db(mysqli $connection, ?array $form_data, int $user_id, bool $repost = null): bool
 {
     $today = new DateTime('now');
 
@@ -636,7 +636,7 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
        '{$form_data["orig_user_id"]}'
       )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
 
     $request = "
@@ -659,19 +659,19 @@ function add_post_video_db(mysqli $connect, ?array $form_data, int $user_id, boo
          1
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 /**
 * Сохраняет в таблицу БД `posts` запись - публикацию (пост) с типом link(Ссылка).
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы добавления поста
 * @param  int $user_id id автора поста
 * @param  bool $repost булево значение, репост поста или нет
 * @return bool
 */
-function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool $repost = null): bool
+function add_post_link_db(mysqli $connection, ?array $form_data, int $user_id, bool $repost = null): bool
 {
     $today = new DateTime('now');
 
@@ -698,7 +698,7 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
           '{$form_data["orig_user_id"]}'
         )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
 
 
@@ -722,12 +722,12 @@ function add_post_link_db(mysqli $connect, ?array $form_data, int $user_id, bool
          1
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 /**
 * Обновляет в таблице БД `posts` счетчик количества репостов.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $post_id id поста, количество репостов которого нужно увеличить.
 * @param  int $count_repost текущее количество репостов.
 * @return bool
@@ -742,7 +742,7 @@ function update_count_repost(mysqli $connection, int $post_id, int $count_repost
 /**
 * Сохраняет в таблицу БД `posts` запись - репост уже имеющегося поста.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  array $post массив данных поста, который репостится.
 * @param  int $user_id id пользователя, который выполняет репост.
 * @return void
@@ -819,13 +819,13 @@ function add_repost(mysqli $connection, array $post, int $user_id): void
 /**
 * Сохраняет в таблицу БД `tags` запись - тег.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  string $tag_title наименование тега
 * @return bool
 */
-function add_tag_db(mysqli $connect, string $tag_title): bool
+function add_tag_db(mysqli $connection, string $tag_title): bool
 {
-    $safety_tag_title = mysqli_real_escape_string($connect, $tag_title);
+    $safety_tag_title = mysqli_real_escape_string($connection, $tag_title);
 
     $request = "
         INSERT INTO
@@ -836,18 +836,18 @@ function add_tag_db(mysqli $connect, string $tag_title): bool
          '$safety_tag_title'
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 /**
 * Сохраняет в таблицу БД `relations_posts_tags` запись - связь поста и тега.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $tag_id id тега, которого необходимо связать с постом
 * @param  int $post_id id поста, которого необходимо связать с тегом
 * @return bool
 */
-function add_relations_db(mysqli $connect, int $tag_id, int $post_id):bool
+function add_relations_db(mysqli $connection, int $tag_id, int $post_id):bool
 {
 
     $request = "
@@ -864,7 +864,7 @@ function add_relations_db(mysqli $connect, int $tag_id, int $post_id):bool
          $tag_id
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 
 /**
@@ -906,11 +906,11 @@ function add_relation_arr_db(mysqli $connection, int $post_id, array $tags_arr)
 /**
 * Сохраняет в таблицу БД `users` запись - учетную запись нового пользователя.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  ?array $form_data массив данных из формы регистрации пользователя.
 * @return bool В случае успешной отправки возвращает true
 */
-function add_user_db(mysqli $connect, ?array $form_data): bool
+function add_user_db(mysqli $connection, ?array $form_data): bool
 {
     $today = new DateTime('now');
 
@@ -937,7 +937,7 @@ function add_user_db(mysqli $connect, ?array $form_data): bool
           '{$form_data["last_name"]}'
         )";
 
-    return set_request_db($connect, $request);
+    return set_request_db($connection, $request);
 }
 /**
  * Функция возвращает список постов из БД, по поисковому текстовому запросу,
@@ -1079,7 +1079,7 @@ function get_likes_for_user_id_post_id(mysqli $connection, int $user_id, int $po
 /**
 * Создает или удаляет (тоглит) в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $user_id, ID пользователя, необходимо связать с постом
 * @param  int $post_id id поста, которого необходимо связать с пользователем в части лайка
 * @return void
@@ -1120,7 +1120,7 @@ function toggle_likes_db(mysqli $connection, int $user_id, int $post_id):void
 /**
 * Удаляет в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $id записи, которую нужно удалить
 * @return bool
 */
@@ -1183,7 +1183,7 @@ function get_liked_posts(mysqli $connection, ?int $user_id = null): ?array
 /**
  * Функция получает список подписчиков пользователя
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя
+ * @param ?int $user_id id пользователя
  * @return ?array массив с списком постов
  */
 function get_subscriptions(mysqli $connection, ?int $user_id = null): ?array
@@ -1261,7 +1261,7 @@ function get_id_subscriptions_from_user_id(mysqli $connection, int $user_id, int
 /**
 * Удаляет в таблице БД `likes` запись - связь поста и ID пользователя поставившего лайка.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $id записи, которую нужно удалить
 * @return bool
 */
@@ -1275,7 +1275,7 @@ function delete_subscriptions_db(mysqli $connection, int $id): bool
 /**
 * Создает или удаляет (тоглит) в таблице БД `subscriptions` запись - связь ID пользователя и ID пользователя-подписчика.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  int $user_id, ID пользователя, на которого нужно подписаться
 * @param  int $follower_id  id пользователя-подписчика
 * @return void
@@ -1316,15 +1316,15 @@ function toggle_subscription_db(mysqli $connection, int $user_id, int $follower_
 /**
 * Сохраняет в таблицу БД `comments` запись - комментарий к посту.
 * Принимает следующие параметры:
-* @param  mysqli $connect обьект подключения к базе данных,
+* @param  mysqli $connection обьект подключения к базе данных,
 * @param  string $comment_text текст комментария.
 * @param  int $user_id ID автора комментария.
 * @param  int $post_id ID комментируемого поста.
 * @return bool
 */
-function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id, int $post_id): bool
+function add_comment_post_db(mysqli $connection, string $comment_text, int $user_id, int $post_id): bool
 {
-    $commented_post_is_valid = (int) get_posts($connect, null, $post_id)[0]['id'];
+    $commented_post_is_valid = (int) get_posts($connection, null, $post_id)[0]['id'];
 
     if ($commented_post_is_valid === $post_id) {
         $today = new DateTime('now');
@@ -1346,7 +1346,7 @@ function add_comment_post_db(mysqli $connect, string $comment_text, int $user_id
             $post_id
           )";
 
-        return set_request_db($connect, $request);
+        return set_request_db($connection, $request);
     }
     print("Системная ошибка. Пост не найден");
     exit();
