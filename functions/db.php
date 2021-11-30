@@ -1214,7 +1214,7 @@ function get_subscriptions(mysqli $connection, ?int $user_id = null): ?array
 /**
  * Функция получает список подписок пользователя
  * @param mysqli $connection объект соединения с БД
- * @param ?int $$user_id id пользователя
+ * @param ?int $user_id id пользователя
  * @return ?array массив с списком постов
  */
 function get_followers_id_from_user_id(mysqli $connection, int $user_id): ?array
