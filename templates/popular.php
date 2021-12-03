@@ -7,7 +7,7 @@
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
                     <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--<?=($sort_type === "count_view")?"active":""?>" href="popular.php?sort=true&type=count_view&by=<?=$sorting?>">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "count_view") ? "active" : ""?>" href="popular.php?sort=true&type=count_view&by=<?=$sorting?>">
                             <span>Популярность</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link sorting__link--<?=($sort_type === "likes")?"active":""?>" href="popular.php?sort=true&type=likes&by=<?=$sorting?>">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "likes") ? "active" : ""?>" href="popular.php?sort=true&type=likes&by=<?=$sorting?>">
                             <span>Лайки</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -23,7 +23,7 @@
                         </a>
                     </li>
                     <li class="sorting__item">
-                        <a class="sorting__link sorting__link--<?=($sort_type === "publication_date")?"active":""?>" href="popular.php?sort=true&type=publication_date&by=<?=$sorting?>">
+                        <a class="sorting__link sorting__link--<?=($sort_type === "publication_date") ? "active" : ""?>" href="popular.php?sort=true&type=publication_date&by=<?=$sorting?>">
                             <span>Дата</span>
                             <svg class="sorting__icon" width="10" height="12">
                                 <use xlink:href="#icon-sort"></use>
@@ -63,20 +63,20 @@
                     </a>
                 </header>
                 <div class="post__main">
-                <?php if($post['class_name'] === 'quote'):?>
+                <?php if ($post['class_name'] === 'quote'):?>
                     <blockquote>
                         <p>
                             <?=htmlspecialchars($post['content']);?>
                         </p>
                     <cite><?=htmlspecialchars($post['author_quote']);?></cite>
                 </blockquote>
-                <?php elseif($post['class_name'] === 'text'):?>
-                    <?=cutStr($post['content'], 300, $post['id']);?>
-                <?php elseif($post['class_name'] === 'photo'):?>
+                <?php elseif ($post['class_name'] === 'text'):?>
+                    <?=cutStr($post['content'], $post['id'], 300);?>
+                <?php elseif ($post['class_name'] === 'photo'):?>
                     <div class="post-photo__image-wrapper"> 
                         <img src="<?=htmlspecialchars($post['img_path']);?>" alt="Фото от пользователя" width="360" height="240"> 
                     </div>
-                <?php elseif($post['class_name'] === 'link'):?>
+                <?php elseif ($post['class_name'] === 'link'):?>
                     <div class="post-link__wrapper">
                     <a class="post-link__external" href="<?=htmlspecialchars($post['site_path']);?>" title="Перейти по ссылке">
                         <div class="post-link__info-wrapper">
@@ -90,7 +90,7 @@
                         <span><?=$post['content'];?></span>
                     </a>
                 </div>
-                <?php elseif($post['class_name'] === 'video'):?>
+                <?php elseif ($post['class_name'] === 'video'):?>
                     <div class="post-video__block">
                         <div class="post-video__preview">
                         <?= embed_youtube_video($post['video_path']) ?>
@@ -101,12 +101,12 @@
                 <?php $publicationsDate = $post['publication_date']?>
                 <footer class="post__footer">
                     <div class="post__author">
-                        <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?>">
+                        <a class="post__author-link" href="profile.php?id=<?=$post['user_id']?>" title="<?=htmlspecialchars($post['first_name']. " " . $post['last_name']); ?>">
                             <div class="post__avatar-wrapper">
                                 <img class="post__author-avatar" src="<?=htmlspecialchars($post['avatar_path']); ?>" alt="Аватар пользователя">
                             </div>
                             <div class="post__info">
-                                <b class="post__author-name"><?=htmlspecialchars($post['first_name']. " " . $post['last_name'] ); ?></b>
+                                <b class="post__author-name"><?=htmlspecialchars($post['first_name']. " " . $post['last_name']); ?></b>
                                 <time class="post__time" title="<?=substr($publicationsDate, 0, -3)?>" datetime="<?=$publicationsDate?>"><?=relativeDate($publicationsDate) . " назад" ?></time>
                             </div>
                         </a>
@@ -137,10 +137,10 @@
             <?php endforeach; ?>
         </div>
         <div class="popular__page-links">
-            <?php if($page):?>
+            <?php if ($page):?>
             <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page=<?=$page-1?>">Предыдущая страница</a>
             <?php endif;?>
-            <?php if(count($posts) >= 6 && count(get_posts($connection)) > 6):?>
+            <?php if (count($posts) >= 6 && count(get_posts($connection)) > 6):?>
             <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page=<?=$page+1?>">Следующая страница</a>
             <?php endif;?>
         </div>

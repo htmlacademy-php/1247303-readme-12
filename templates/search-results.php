@@ -24,20 +24,19 @@
                   </a>
                 </header>
                 <div class="post__main">
-                  <?php if($post['class_name'] === 'quote'):?>
+                  <?php if ($post['class_name'] === 'quote'):?>
                     <blockquote>
                     <p>
                       <?=$post['content']?>
                     </p>
                     <cite><?=$post['author_quote']?></cite>
                   </blockquote>
-                  <?php elseif($post['class_name'] === 'text'):?>
+                  <?php elseif ($post['class_name'] === 'text'):?>
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
                     <p>
-                      <?=$post['content']?>
-                    </p>
-                    <a class="post-text__more-link" href="#">Читать далее</a>
-                  <?php elseif($post['class_name'] === 'link'):?>
+                      <?=cutStr($post['content'], $post['id'], 300)?>
+                    </p>                 
+                  <?php elseif ($post['class_name'] === 'link'):?>
                   <div class="post-link__wrapper">
                     <a class="post-link__external" href="<?=$post['site_path']?>" title="Перейти по ссылке">
                       <div class="post-link__icon-wrapper">
@@ -51,7 +50,7 @@
                       </svg>
                     </a>
                   </div>
-                  <?php elseif($post['class_name'] === 'video'):?>
+                  <?php elseif ($post['class_name'] === 'video'):?>
                   <div class="post-video__block">
                     <div class="post-video__preview">
                       <img src="img/coast.jpg" alt="Превью к видео" width="760" height="396">
@@ -74,7 +73,7 @@
                       <span class="visually-hidden">Запустить проигрыватель</span>
                     </button>
                   </div>
-                  <?php elseif($post['class_name'] === 'photo'):?>
+                  <?php elseif ($post['class_name'] === 'photo'):?>
                     <h2><a href="post.php?post-id=<?=($post['id']); ?>"><?=$post['title']?></a></h2>
                     <div class="post-photo__image-wrapper">
                       <img src="<?=$post['img_path']?>" alt="Фото от пользователя" width="760" height="396">

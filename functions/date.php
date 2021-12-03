@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 /**
  * Возвращает корректную форму множественного числа
@@ -19,12 +20,11 @@
  * @param string $one Форма единственного числа: яблоко, час, минута
  * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
  * @param string $many Форма множественного числа для остальных чисел
- *
- * @return string Рассчитанная форма множественнго числа
+ * @return string Рассчитанная форма множественного числа
  */
 function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int)$number;
+
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -48,22 +48,21 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
 
 /**
  * Возвращает количество прошедшего времени от даты публикации поста
- *
- * @param string $date дата публикации поста, cтрока даты в формате 'Y-m-d H:i:s'
- * @return string Относительное количество времени в формате:
- *
  * если от $date до текущего времени прошло меньше 60 минут, то формат будет вида “% минут;
  * если от $date до текущего времени прошло больше 60 минут, но меньше 24 часов, то формат будет вида “% часов;
  * если от $date до текущего времени прошло больше 24 часов, но меньше 7 дней, то формат будет вида “% дней;
  * если от $date до текущего времени прошло больше 7 дней, но меньше 5 недель, то формат будет вида “% недель;
  * если от $date до текущего времени прошло больше 5 недель, то формат будет вида “% месяцев.
+ * @param string $date дата публикации поста, cтрока даты в формате 'Y-m-d H:i:s'
+ * @return string
+ * @throws Exception
  */
-function relativeDate(string $date): string 
+function relativeDate(string $date): string
 {
     $today = new DateTime('now');
     $timePublication = new DateTime($date);
     $interval = $today->diff($timePublication);
-    
+
     $days = intval($interval->format("%a"));
     $hours = intval($interval->format("%H"));
     $minutes = intval($interval->format("%i"));
@@ -71,27 +70,26 @@ function relativeDate(string $date): string
     if ($timePublication->getTimestamp() >= $today->getTimestamp()) {
         return '0 минут';
     }
-    if($days >= 35) { 
+    if ($days >= 35) {
         $months = floor($days/30);
         $declensionmonths = get_noun_plural_form($months, "месяц", "месяца", "месяцев");
-        return "{$months} {$declensionmonths}";
+        return "$months $declensionmonths";
     }
-    if($days >= 7 && $days < 35) {
+    if ($days >= 7 && $days < 35) {
         $weeks = floor($days/7);
         $declensionWeeks = get_noun_plural_form($weeks, "неделя", "недели", "недель");
-        return "{$weeks} {$declensionWeeks}";
+        return "$weeks $declensionWeeks";
     }
-    if($days < 7 && $days > 0) {
+    if ($days < 7 && $days > 0) {
         $declensionDays = get_noun_plural_form($days, "день", "дня", "дней");
-        return "{$days} {$declensionDays}";
+        return "$days $declensionDays";
     }
 
-    if($hours < 24 && $hours > 0) {
+    if ($hours < 24 && $hours > 0) {
         $declensionHours = get_noun_plural_form($hours, "час", "часа", "часов");
-        return "{$hours} {$declensionHours}";  
+        return "$hours $declensionHours";
     }
-    
-    $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
-    return "{$minutes} {$declensionMinutes}";  
-}
 
+    $declensionMinutes = get_noun_plural_form($minutes, "минута", "минуты", "минут");
+    return "$minutes $declensionMinutes";
+}

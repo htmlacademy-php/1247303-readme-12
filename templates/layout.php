@@ -21,7 +21,7 @@
                 micro blogging
             </p>
         </div>
-        <?php if(isset($user)): ?>
+        <?php if (isset($user)): ?>
         <form class="header__search-form form" action="search.php" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
@@ -36,23 +36,23 @@
         </form>
         <?php endif; ?>
         <div class="header__nav-wrapper">
-            <?php if(isset($user)): ?>
+            <?php if (isset($user)): ?>
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link <?= ($main_class === "popular")? "header__page-link--active":""?>" href="popular.php" title="Популярный контент">
+                        <a class="header__page-link <?= ($main_class === "popular") ? "header__page-link--active" : ""?>" href="popular.php" title="Популярный контент">
                             <span class="visually-hidden">Популярный контент</span>
                         </a>
                     </li>
                     <li class="header__my-page header__my-page--feed">
-                        <a class="header__page-link <?= ($main_class === "feed")? "header__page-link--active":""?>"  href="feed.php" title="Моя лента">
+                        <a class="header__page-link <?= ($main_class === "feed") ? "header__page-link--active" : ""?>"  href="feed.php" title="Моя лента">
                             <span class="visually-hidden">Моя лента</span>
                         </a>
                     </li>
                 </ul>
                 <?php endif; ?>
                 <ul class="header__user-nav">
-                <?php if(isset($user)): ?>
+                <?php if (isset($user)): ?>
                     <li class="header__profile">
                         <a class="header__profile-link" href="profile.php?id=<?=$user['id']?>">
                             <div class="header__avatar-wrapper">
