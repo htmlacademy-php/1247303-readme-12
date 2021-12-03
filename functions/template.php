@@ -128,13 +128,14 @@ function check_youtube_url(string $url)
  * Возвращает наименование типа контента ('text','quote', 'photo', 'video', 'link')
  * @param array $types_content массив вида [id => 'тип контента']
  * @param int $id - id типа контента
- * @return string
+ * @return ?string
  */
-function get_type_from_id(array $types_content, ?int $id): string
+function get_type_from_id(array $types_content, int $id): ?string
 {
     foreach ($types_content as $type) {
         if ((int) $type['id'] === $id) {
             return $type['class_name'];
         }
     }
+    return null;
 }

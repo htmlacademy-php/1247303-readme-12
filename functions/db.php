@@ -252,7 +252,7 @@ function get_quantity_followers(mysqli $connection, int $user_id): int
 function get_count_views(mysqli $connection, int $post_id): ?int
 {
 
-    $sql = "SELECT SUM(count_view) FROM `posts` WHERE id = $post_id";
+    $sql = "SELECT count_view FROM `posts` WHERE id = $post_id";
 
     return get_first_value($connection, $sql);
 }
@@ -1214,7 +1214,7 @@ function get_subscriptions(mysqli $connection, ?int $user_id = null): ?array
 /**
  * Функция получает список подписок пользователя
  * @param mysqli $connection объект соединения с БД
- * @param ?int $user_id id пользователя
+ * @param int $user_id id пользователя
  * @return ?array массив с списком постов
  */
 function get_followers_id_from_user_id(mysqli $connection, int $user_id): ?array
