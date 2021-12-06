@@ -40,9 +40,9 @@ function get_last_elem(string $str, string $separ): string
  * Скачивает внешний файл по ссылке в папку 'uploads'. При успешном скачивании возвращает внутренную ссылку на файл.
  * При ошибке - возвращает false
  * @param string $link ссылка, по которой размещен файл
- * @return array | bool
+ * @return ?array
  */
-function download_out_files(string $link): array | bool
+function download_out_files(string $link): ?array
 {
     $previous_file_name = get_last_elem($link, "/");
 
@@ -61,7 +61,7 @@ function download_out_files(string $link): array | bool
     if ($result) {
         return ["img_path" => $file_url];
     }
-    return false;
+    return null;
 }
 
 
@@ -69,9 +69,9 @@ function download_out_files(string $link): array | bool
  * Скачивает и переименовывает файл прикрепленный к форме. При успешном скачивании возвращает внутренную ссылку на файл.
  * При ошибке - возвращает false
  * @param array $files_arr массив $_FILES
- * @return array | bool
+ * @return ?array
  */
-function upload_files(array $files_arr): array | bool
+function upload_files(array $files_arr): ?array
 {
     $random_name = mt_rand();
 
@@ -86,7 +86,7 @@ function upload_files(array $files_arr): array | bool
     if ($result) {
         return ["img_path" => $file_url];
     }
-    return false;
+    return null;
 }
 
 
