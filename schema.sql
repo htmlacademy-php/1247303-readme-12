@@ -1,21 +1,19 @@
--- phpMyAdmin SQL Dump
--- version 5.0.2
--- https://www.phpmyadmin.net/
---
--- Хост: 127.0.0.1:3306
--- Время создания: Ноя 21 2021 г., 20:12
--- Версия сервера: 5.7.29
--- Версия PHP: 7.3.17
+DROP
+DATABASE IF EXISTS readme;
+
+CREATE
+DATABASE readme
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+
+USE
+readme;
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `readme`

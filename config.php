@@ -5,6 +5,6 @@ return [
         'host' => 'localhost',
         'user' => 'root',
         'password' => '',
-        'name' => 'schema'
+        'name' => 'readme'
     ]
 ];
